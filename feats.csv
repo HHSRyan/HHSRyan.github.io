@@ -1,0 +1,106 @@
+id,name,featType,featPrereq,reqLevel,reqAbilities,reqClass,reqRaces,reqFeats,reqNotes,grantsChoice,choiceOptions,ranks,featDescription
+mbid,Ambidextrous,CBT,"STR 7, Brawler or Knight, LVL 2",2,STR:7,Brawler|Knight,,,,,,3,"You can attack with a M/U attack with each hand, taking a -2 on the off hand. At 2nd level you no longer take a penalty. At 3rd level, if both attack land deal an extra LVL damage."
+anda,And Again!,CBT,LVL 3,3,,,,,,,,2,Make an additional attack if your first attack hits. At 2nd level you can make an additional attack if your 2nd attack hits. Can not be taken twice in a row.
+aasb,"As Above, So Below",CBT,* See Desc,,,,,,Available to anyone but can only be used if you have an ally of differing size than you.,,,1,"When you flank with an ally significantly smaller or taller than you (eg Little & Human, Grey & Outlander, etc.), you can flank from any position, not just directly across"
+reak,Break the Line,CBT,"STR 7, LVL 2",2,STR:7,,,,,,,1,"When you move at least 10 feet and successfully hit an enemy with a melee or unarmed attack, that enemy cannot make Attacks of Opportunity until the start of your next turn. This does not prevent other reactions or actions, only Attacks of Opportunity."
+ruce,Bruce Leroy,CBT,"STR 6, AGI 6",,STR:6|AGI:6,,,,,,,2,"Unarmed attacks deal LVL additional damage. At level 2, deal 2xLVL additional damage."
+bumr,Bum Rush,CBT,Not a Little or Grey,,,,Human|Mutant|Outlander,,,,,3,"As long as you are at least 10 feet away, you can run up on a opponent and with a successful unarmed attack you can knock that opponent back five feet, making them land prone. This provokes an AoO from any characters it applies to. At level 2, you no longer provoke an AoO when bum rushing, you can choose to push your opponent 10 feet, and get +1 to the unarmed attack. At level 3 you get an additional +2 to the unarmed attack, and can start a bum rush from any distance. Can not be used on enemies > 100 pound heavier than you, and can not be taken twice in a row."
+cncm,Can't Catch Me!,CBT,"AGI 8/9 (1st/2nd rank), Assassin or Thief",,AGI:8,Assassin|Thief,,,,,,2,"You can move up to 50% of your normal speed, make an attack, and then finish your movement. Provokes an AoO at first level, but does not at 2nd. Can't be taken twice in a row."
+clrf,Cat Like Reflexes,CBT,AGI 7/8,,AGI:7,,,,,,,2,At first level you get one extra AoO per round. At 2nd level you gain up to LVL additional AoO's per round. Can't be taken twice in a row.
+leav,Cleaving,CBT,"Brawler or Knight, LVL 3",3,,Brawler|Knight,,,,,,3,"If you hit your opponent with a melee/unarmed attack, you make one additional m/u attack against another enemy within reach with a -2 to your attack. At 2nd level, additionally if any opponent is reduced to 0 HP you can make ANOTHER m/u attack on an additional opponent with the same -2. At rank 3 you can continue attacking additional opponents for every opponent knocked to 0 HP at a -2 attack until you don't knock someone out. Can not be taken twice in a row."
+"ead,","Dead, From Here",CBT,LVL 3,3,,,,,,,,2,You can add five feet to the range of your sneak attack. At 2nd level you can make a sneak attack with a bow or crossbow.
+deae,Deadeye,CBT,Hunter or Assassin,,,Hunter|Assassin,,,,,,2,"You can make your attacks with a rifle or a bow/crossbow more deadly with a sacrifice to their accuracy. You must choose to use Deadeye before attacking, and when using it you get -1 to your attack but +2 on your damage. At 2nd level you sacrifice 2 to accuracy for an extra 4 damage."
+dowh,Do what I Do,CBT,CHA 7,,CHA:7,,,,,,,1,"When you hit a flanked opponent or when you hit an opponent with a critical non-ranged hit, any other allies attacking the same get +2 to their attacks for the rest of the round."
+rop ,Drop It,CBT,"INT 7, AGI 7",,INT:7|AGI:7,,,,,,,1,"When you hit your opponent with a critical hit, they drop the weapon in their hand."
+ollo,Follow that Guy,CBT,AGI 8,,AGI:8,,,,,,,1,Others in your party can take your stealth roll as long as they stay 5 feet or more behind you while moving.
+ggtg,Good Goddamn That's Gross!!,CBT,"AGI 9, Good Goddamn They're Good!, Brawler or Knight",,AGI:9,,,good,,,,1,If you've shown of how goddamned good you are with your weapon in this combat and you knock an opponent to 0 HP with that weapon you immediately kill your opponent in a supry gory fashion which has a chance to intimidate any of their allies within sight of the gore.
+ood ,Good Goddamn They're Good!,CBT,AGI 7,,AGI:7,,,,,,,2,"As a LA you can show off with your weapon in a way that requires your opponents to make a check or be intimidated. Works on all opponents within 30 feet of you that can see you. At 2nd level all opponents within 50 feet that can see you are affected, and your allies get a +2 to their attack this round as your opponents are focused on you. Can't be taken twice in a row."
+hyyy,"Hey, You! Yeah, You!!",CBT,CHA 7,,CHA:7,,,,,,,1,As a SA you can attempt to intimidate an opponent within 50 feet that can see and hear your taunts. They must make a DC12+LVL Resist save or be intimidated.
+tfo,KTFO,CBT,"LVL 2, Brawler or Knight",2,,,,,,,,1,A critical hit with a Hand 2 Hand or Melee attack knocks your opponent unconscious for one round of combat.
+myey,My Eye!,CBT,AGI 7,,AGI:7,,,,,,,1,"As a SA, reflect light from any polished surface, blinding an opponent for one round."
+nowi,Now I'm Mad,CBT,"STR 7, Brawler or Knight, LVL 2",2,STR:7,Brawler|Knight,,,,,,2,"You are just so gd angry that you can't focus but you hit real hard. -1 to your attack roll but +2 DMG. At 2nd level you no longer get a -1, and you get a chance (Resist vs LVL?) to intimidate the opponent you hit."
+heer,Sheer Persistence,RCE,"Human, END 7",,END:7,,Human,,,,,1,"When reduced to 0 HP, you do not lose 1 HP per round while unconscious; death still occurs at (STR+END)×–1 HP."
+shoe,Shô,CBT,AGI 8,,AGI:8,,,,,,,1,"When you make a successful sneak attack, get 1dLVL additional damage."
+mash,Smash!,CBT,STR 8,,STR:8,,,,,,,2,A critical hit on an unarmed attack sends a opponent flying backwards 5 feet. At level two they fly 10ft and take an additional 1d3 DMG.
+neak,Sneaky,CBT,"Assassin, Thief, or Deadbang",,,Assassin|Thief|Deadbang,,,,,,1,"When you are either unseen, or your opponent is preoccupied with an ally flanking them, you deal an additional LVL worth of damage to melee / unarmed attacks."
+sosl,So Slick,CBT,AGI 7,,AGI:7,,,,,,,2,"You are so smooth that you gain an extra +1 to your TAC. Can be taken twice, but not twice in a row."
+prin,Spring,CBT,AGI 8,,AGI:8,,,,,,,1,You can hop up from prone as a SA instead of a LA
+uper,Super Sneaky,CBT,"Sneaky, LVL 3",3,,,,snea,,,,1,Increases sneak attack by to 1dLVL*2
+adom,Yadomejutsu (矢留術),CBT,"LVL 5, AGI 7",5,AGI:7,,,,,,,3,矢留術 is the “Arrow Stopping Art;” you are able to avoid one Bolt attack per round. At 2nd and 3rd levels avoid an additional bolt per round.
+ygro,You've Got Red on You,CBT,Brawler or Knight,,,Brawler|Knight,,,,,,1,"When you score a critical hit with a Piercing or Slashing weapon, your opponent takes 1d3 Bleed DMG"
+rcan,Arcane Familiarity,CLA,Wizard,,,Wizard,,,,,,1,"WIZARD CLASS FEAT. Once per day, when casting a spell, the Wizard may treat their caster level as +1 for the effects of that spell."
+rom ,From Within,CLA,Warlock,,,Warlock,,,,,,1,"WARLOCK CLASS FEAT. A Warlock's power comes from their bloodline, and this makes all of their spells Simple."
+gots,Got Slugs?,CLA,Deadbang or Hunter,,,Deadbang|Hunter,,,,,,2,"You can make/reload cartridges from found materials at a rate of 5 min per cartridge and 1/2 purchase cost. At 2nd level with the correct components you can make special cartridges, and your time is reduce to 3 min per cartridge."
+gnsl,Gunslinger,CLA,"AGI 8, Hunter or Deadbang, LVL 2",2,AGI:8,Hunter|Deadbang,,,,,,2,Reloading a weapon becomes a FA and unjamming a weapon becomes a SA; at 2nd level unjamming becomes a FA. Can't be taken twice in a row.
+gnsm,Gunsmith,CLA,Deadbang or Hunter,,,Deadbang|Hunter,,,,,,1,"HUNTER/DEADBANG CLASS FEAT. Allows you to fix a gun that is broken, and add to / upgrade weapons with components"
+hehs,"Hit 'em Hard, Son",CLA,Knight,,,Knight,,,,,,2,"KNIGHT CLASS FEAT. You are able to hits so hard that you substitute accuracy for strength; take a -1 on your attack roll, but add LVL to your damage roll. At 2nd level, take a -2 for a +LVL*2 bonus to damage."
+howi,How I Could Just Kill a Man,CLA,Assassin,,,Assassin,,,,,,1,"ASSASSIN CLASS FEAT. If a enemy drops to 0 HP they are instantly dead, no unconscious stage"
+itsa,It's a Trap!,CLA,Thief,,,Thief,,,,,,2,"If a trap goes off, you get +1 to applicable dodge saves. At 2nd level if you discover a trap you can make a skill check to disarm it with a +LVL bonus."
+immy,Jimmy,CLA,Thief,,,Thief,,,,,,2,"THIEF CLASS FEAT. When you attempt to lockpick, you can reroll a failed attempt. And 2nd level, adds +1 to your roll(s) as well as allowing a re-roll if necessary. Can't be taken twice in a row."
+myes,MY EYES!,CLA,Assassin or Thief,,,Assassin|Thief,,,,,,1,"When dealing a sneak attack to an opponent in the dark, you hit them in the eyeballs, blinding them for 1d3 rounds."
+isto,Pistol Whipped,CLA,Deadbang or Hunter,,,Deadbang|Hunter,,,,,,1,The gunslinger can use a gun as a melee weapon with 1dLVL damage
+ight,Right In the Kisser,CLA,Brawler,,,Brawler,,,,,,2,BRAWLER CLASS FEAT. Any unarmed attack to an opponent's head deals LVL extra damage. At 2nd level it deals 2*LVL damage.
+mite,Smite,CLA,Priest,,,Priest,,,,,,1,"PRIEST CLASS FEAT. You point at an opponent and they are hit by otherworldly energy from your god, unerringly, for LVL worth of DMG. Your opponent does get a Dodge save for 1/2 DMG."
+beve,Be Vewwy Vewwy Quiet,GEN,None,,,,,,,,,1,You are an experienced hunter of game. +2 on checks to track anything that leaves prints.
+byth,By the Power of...,GEN,LVL 2,2,,,,,,,,3,"Get an extra ability point. Can not be taken twice in a row, but can be taken up to 3 times"
+old ,Cold Read,GEN,PER 7,,PER:7,,,,,,,1,"After observing a creature for one full round, you gain +2 on your next Insight or Sense Motive check against that creature this scene."
+ast ,Fast AF,GEN,LVL 2,2,,,,,,,,2,You get +2 to your initiative roll because you're always paying attention to your surroundings. At 2nd level you get +4. Can't be taken twice in a row.
+ard-,Hard-Learned Lessons,GEN,LVL 2,2,,,,,,,,1,"After failing a skill check or save, gain a +2 bonus to the same type of check for the rest of the scene."
+imgo,"I'm Gonna Get You, Sucka!",GEN,PER 6,,PER:6,,,,,,,1,Using the Aim SA on a target within 30 ft allows to to spot their weaknesses. Treat as a sneak attack.
+mpro,Improvised Authority,GEN,CHA 6,,CHA:6,,,,,,,1,"Once per scene, as a Small Action, you may issue a quick command to one ally who can see or hear you. That ally gains +1 on their next roll before the end of their next turn."
+ast ,Last Known Position,GEN,PER 7,,PER:7,,,,,,,1,"When a visible enemy becomes Hidden, you gain +1 to attack rolls and Perception checks against that enemy until they move again."
+ike ,Like a Cat,GEN,AGI 7,,AGI:7,,,,,,,1,"You take 1/2 damage from falling, and always land on your feet (unless you choose not to)"
+azem,Mazemaster,GEN,INT 8,,INT:8,,,,,,,2,You can make an INT based skill check to get hints on any maze like structure you are lost in. At 2nd level you can make additional checks using a Team Point if available.
+enta,Mental Calluses,GEN,INT 6,,INT:6,,,,,,,1,"The first time each scene you would suffer a penalty from a fear, terror, or mind-affecting effect, reduce that penalty by 1 (minimum 0)."
+nobo,No B.O.,GEN,None,,,,,,,,,1,Your scent can not be tracked
+oooo,Noooooo!,GEN,None,,,,,,,,,1,"The first time each scene an ally within line of sight is reduced to 0 HP or killed, you immediately gain +1 to attack rolls and +1 to Dodge saves until the end of your next turn."
+nowy,Now You Don't!,GEN,AGI 7,,AGI:7,,,,,,,1,You can use sleight of hand to conceal evidence of simple spellcasting from others.
+aran,Paranoid,GEN,None,,,,,,,,,1,#ERROR!
+repa,Prepared for the Worst,GEN,LVL 2,2,,,,,,,,1,"Once per scene, when you would be reduced to half HP or less by a single source of damage, reduce that damage by 1d3."
+esou,Resourceful Scavenger,GEN,None,,,,,,,,,1,"Once per session, you may declare that you retained a small, mundane but useful item from earlier scavenging. The GM must approve the item, and it cannot directly deal damage or replicate a feat."
+hey',THEY'LL NEVER TAKE AWAY OUR FREEEEEDOM,GEN,CHA 6,,CHA:6,,,,,,,1,You let out a scream or give a quick motivational speech that gives your allies +1 on attack and +2 vs fear.
+hrow,Throw Stuff,GEN,None,,,,,,,,,1,You are accustomed to throwing most anything. +1 on all thrown attacks.
+tooq,Too Quick,GEN,LVL 3,3,,,,,,,,1,"As long as you are wearing less than 10 pounds of armor, any dodge saves that would normally inflict 1/2 damage are now 0."
+ough,Tough as Nails,GEN,None,,,,,,,,,1,"You are a tough dude, you have an extra 3 HP to start, and an additional point at every level up."
+oyda,Toydarian Junk Dealer,GEN,CHA 7,,CHA:7,,,,,,,2,"When you buy or sell items you get 10% better prices for 1st rank, 15% better for 2."
+ccou,Accoutrements,MAG,"LVL 3, LVL 6",3,,,,,Rank 2 requires LVL 6,,,2,You get one additional 1st level spell per day. At 2nd level you get 1 additionl spell of each level per day.
+arcn,Arcane,MAG,LVL 2,2,,,,,,,,2,Once per day can add +1 to a spell's damage or healing affect. At 2nd leevel can do this twice per day.
+leme,Elemental Flair,MAG,None,,,,,,,,,2,"Choose an elemental damage (Fire, Ice, Acid, Electricity) and all spells cast of that type of damage get +1 dmg. At level 2 all spells of the chosen type get +LVL of that type of damage. Can't be taken twice in a row."
+ocus,Focus,MAG,LVL 2,2,,,,,,,,2,"When casting a spell that affects multiple targets or an area, you may reduce the area or number of targets by half to increase the spell’s damage or duration."
+nten,Intensity,MAG,LVL 2,2,,,,,,,,2,Increases damage done by spells by +1 per 2 LVLs. At 2nd rank becomes +1 per LVL. Can't be taken twice in a row.
+inge,Lingering Magic,MAG,None,,,,,,,,,2,"Spells with round-based durations fade gradually instead of ending immediately, lingering briefly after their normal duration."
+agic,Magic Bubble,MAG,LVL 3,3,,,,,,,,1,"Once per day, a magic user can create a protective bubble of 5ft + 5ft/LVL which gives +1 TAC to all allies in the bubble."
+ysti,Mystic Bracing,MAG,LVL 2,2,,,,,,,,2,"After casting a spell, you gain a short-lived defensive bonus, reinforcing yourself or a nearby ally against incoming harm."
+ontf,On the Fly,MAG,AGI 7,,AGI:7,,,,,,,1,"When you use acrobatics to prevent AoO or move through a space, enemies also can not get an AoO if you cast a spell after."
+uick,Quickened Gesture,MAG,LVL 3,3,,,,,,,,1,"Once per level per day, you may cast a Complex spell as a Simple spell, requiring only a single action and no components."
+till,Stillness,MAG,LVL 3,3,,,,,,,,2,"Reduce a complex spell from a LA to a SA once per LVL per day. At 2nd rank, this also gets rid of any compnoents required to cast a complex spell. Can't be taken twice in a row."
+usta,Sustained Power,MAG,LVL 2,2,,,,,,,,2,"Casting spells in consecutive rounds builds magical momentum, increasing the damage or duration of later spells."
+adab,Adaptive Aberration,RCE,"Mutant, LVL 2; Worships a Primordial",2,,,,,,,,1,"Your mutation expresses primordial wrongness—gain a +2 bonus to Intimidation, and intelligent NPCs react with fear or disgust in social and combat encounters."
+dapt,Adaptive Thinking,RCE,Human,,,,Human,,,,,1,"Once per scene, after failing a skill check, you may reroll the check and must take the new result, but must use a different combination of ABI+Skill."
+albe,Alien Bearing,RCE,Outlander,,,,Outlander,,,,,1,"Enemies suffer a –2 penalty to attack rolls against you during the first round of combat, due to misjudged posture, reach, and movement. Applies only to creatures relying on visual cues."
+alde,Alien Detachment,RCE,Grey,,,,Grey,,,,,1,Fear conditions inflicted on you are reduced by one step (Horrified → Frightened → Shaken → none).
+ancu,Analytical Curiosity,RCE,Grey,,,,Grey,,,,,1,"When studying unfamiliar creatures, objects, or phenomena, the GM provides clearer observable details."
+nony,Anonymous,RCE,Grey,,,,Grey,,,,,1,"GREY RACE FEAT. Add +1 to Bluff, Local Knowledge, and Sneak skills."
+etwe,Between Bodies,RCE,"Little, LVL 2",2,,,Little,,,,,2,"Rank 1: If you begin and end movement hidden, you may move your full speed without automatically breaking Stealth; +2 to Stealth checks during this movement. Rank 2: Once per encounter, ignore one Attack of Opportunity caused by movement."
+hrom,Chromatic Mimicry,RCE,Outlander; Rank 2: LVL 3; Rank 3: LVL 4,,,,Outlander,,Rank 2 requires LVL 3; Rank 3 requires LVL 4,,,3,"Rank 1: If not wearing clothing or armor, gain +2 to Stealth checks against visual detection. Rank 2: Observers suffer –2 to Perception checks to visually detect you. Rank 3: While stationary or moving slowly, you are functionally invisible to normal visual observation."
+ebri,Debris Runner,RCE,"Little, AGI 7",,AGI:7,,Little,,,,,1,Gain improved benefit from partial or improvised cover; may move through spaces small enough for your head to fit through.
+xosk,Exoskeleton,RCE,Outlander,,,,Outlander,,,,,1,OUTLANDER RACE FEAT. An Outlander can control its chitin plating colors much like an octopus and can change them with mood or as desired. This chitin also provides a +2 to an Outlander's initial TAC.
+amil,Familiar With Ruin,RCE,Human,,,,Human,,,,,1,"Gain a +2 bonus to skill checks related to navigating, searching, or operating in ruins or abandoned structures."
+ene ,Gene Damage,RCE,Mutant LVL 3,3,,,Mutant,,,TRUE,eyes_back|grows_back|scaly|whippy_tail,2,This feat includes selectable gene damage options; see the full Gene Damage feat entry for complete descriptions and mechanical details. (can be taken twice but not twice in a row)
+gdup,Good Upbringing,RCE,Human,,,,Human,,,,,1,HUMAN RACE FEAT. Add +1 to an ability score of your choice.
+hrdt,Hard Target,RCE,"Little, As Above, So Below, LVL 2",2,,,Little,aasb,,,,1,"When you are flanking an enemy using As Above, So Below, that enemy suffers a –2 penalty on attack rolls made against you."
+hrrd,Hard to Read,RCE,Outlander,,,,Outlander,,,,,1,"Opponents and NPCs suffer a –2 penalty to Insight checks made to read your intent, emotions, or honesty. Applies in social and combat scenes involving intelligent humanoids."
+nher,Inherited Circumstance,RCE,Human,,,,Human,,,,,2,"Represents how your family survived the Fall, shaping learned advantages rather than biology."
+utat,Mutation,RCE,Mutant,,,,Mutant,,,TRUE,claws|extra_limb|prehensile_tail|sixth_sense,2,MUTANT RACE FEAT. This feat includes selectable mutation options; see the full Mutation feat entry for complete descriptions and mechanical details. Choose randomly or just select your favorite (can be taken twice but not twice in a row)
+imbl,Nimble Access,RCE,Little,,,,Little,,,,,1,"LITTLE RACE FEAT. Add +1 to Pick Lock/Pocket, Repair, and Sneak skills"
+onli,Nonlinear Reasoning,RCE,"Grey, Analytical Curiosity, INT 7",,INT:7,,Grey,ancu,,,,1,"Gain a +2 bonus to skill checks involving analysis, inference, or interpretation in unfamiliar situations."
+eact,Reactive Physiology,RCE,"Mutant, Mutation, LVL 2",2,,,Mutant,muta,,,,1,Enhances your chosen mutation: It Grows Back mitigates bleeding conditions; Scaly improves damage mitigation; Whippy Tail gains added control utility; Eyes in the Back… improves threat awareness without duplicating its anti-flanking effect.
+ocia,Social Baseline,RCE,Human,,,,Human,,,,,1,"Gain a permanent +2 bonus to Bluff, Insight, and Linguistics."
+isib,Visible Aberration,RCE,"Mutant, Mutation",,,,Mutant,,,,,1,"When your mutation is visible, you gain a +2 bonus to Bluff, Insight, and Intimidation checks against NPCs affected by your appearance."
+inpl,In Plain Sight,STL,"AGI 9, LVL 3",3,AGI:9,,,,,,,1,"As long as you remain perfectly still (and have been still for at least 1 full round), you are considered hidden until you move again."
+speo,Shadow People,STL,LVL 3,3,,,,,,,,1,"When you successfully hit an enemy with a sneak attack while Hidden, that enemy must make a Resist save or become Shaken for 1dLVL rounds. The Shaken condition persists for the full duration unless removed by an effect that explicitly ends fear or mental conditions."
+swalk,Shadow Walker,STL,AGI 8,,AGI:8,,,,,,,1,"When you successfully hit an enemy with a sneak attack while Hidden, that enemy must make a Resist save or become Shaken for 1dLVL rounds. The Shaken condition persists for the full duration unless removed by an effect that explicitly ends fear or mental conditions."
+snaf,Sneaky AF,STL,LVL 3,3,,,,,,,,1,When performing a sneak attack you ignore armor bonuses
+teal,Stealthy,STL,AGI 6,,AGI:6,,,,,,,2,You're naturally stealthy; +2 to stealth checks. At 2nd lelvel you get +4. Can't be taken twice in a row.
+tuff,Stuffy,STL,LVL 2,2,,,,,,,,1,"When being stealthy, you also are not able to be tracked by scent."
+here,Where'd They Go?,STL,"AGI 7, LVL 2",2,AGI:7,,,,,,,1,"If you end your move in full cover, darkness, or other concelament, you remain hidden until your next movement."

@@ -1,0 +1,5089 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>After the Fall Character Sheet</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+body {
+      font-family: Roboto, sans-serif;
+      Font-size: 1.5em:
+      margin: 20px;
+      background: linear-gradient(#634fa2, #000000);
+    }
+
+.panel-header {
+  background: linear-gradient(to right, #48752c, #bdd6ac);
+  color: #bdd6ac;
+  padding: 12px 16px;
+  margin: -20px -20px 12px -20px;
+  border-radius: 6px 6px 0 0;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-header[style*="#634fa2"],
+#bookOfMagicPanel .panel-header {
+  background: linear-gradient(to right, #634fa2, #d8d2e7) !important;
+  color: #d8d2e7 !important;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  grid-auto-flow: row;
+}
+
+
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    #step0Layout { display: none; }
+
+.panel {
+  background: #bdd6ac;
+  border: 5px solid #9dc384;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* ===== RIGHT PANEL SUBHEADERS ===== */
+#rightPanel .right-subheader,
+#rightPanel .right-subheader * {
+  background: linear-gradient(to right, #9dc384, #48752c) !important;
+  color: #48752c !important;
+  padding: 10px 14px;
+  font-weight: bold;
+  font-style: italic;
+  border-radius: 6px;
+}
+/* ===== RIGHT PANEL SUBHEADERS END===== */
+
+/* ===== ROLL RESULTS HEADERS LOCK START ===== */
+#rollResultsPanel .panel-header {
+  background: linear-gradient(to right, #634fa2, #d8d2e7) !important;
+  color: #d8d2e7 !important;
+  font-weight: bold;
+  font-style: italic;
+}
+/* ===== ROLL RESULTS HEADERS LOCK END ===== */
+
+
+
+/* Lock Attacks panel to right column */
+#attacksPanel {
+  grid-column: 2 / 3;
+  align-self: start;
+}
+
+/* ===== LEFT PANEL HEADER OVERRIDE START ===== */
+#statsPanel > .panel-header {
+  background: linear-gradient(to right, #48752c, #9dc384);
+  color: #bdd6ac;
+}
+/* ===== LEFT PANEL HEADER OVERRIDE END ===== */
+
+
+    h1, h2 { margin-top: 0; }
+
+.step h2 {
+  background: #48752c;
+  color: #bdd6ac;
+  padding: 12px 16px 12px 16px;
+  margin: -20px -20px 12px -20px;   /* adds spacing below the header */
+  border-radius: 6px 6px 0 0;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+    select, input, textarea {
+      padding: 8px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+#characterSelect {
+  background: #634fa2;
+  color: #d8d2e7;
+  border: 2px solid #8b7dbe;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 16px;
+  background: #634fa2;
+  color: #d8d2e7;
+  border: 2px solid #8b7dbe;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Save Character should be light purple */
+#saveCharBtn {
+  background: #d8d2e7;
+  color: #634fa2;
+  border: 2px solid #8b7dbe;
+  font-weight: bold;
+}
+
+    button:hover { background: #8b7dbe; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+button:hover { background: #8b7dbe; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* === Clickable text styling (global) === */
+.clickable {
+  color: #634fa2;               /* dark purple text */
+  background: #d8d2e7;          /* light purple background */
+  padding: 2px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable:hover {
+  background: #8b7dbe;          /* medium purple on hover */
+  color: #ffffff;
+}
+
+.conditionBtn {
+  font-weight: bold;
+}
+
+/* ===== EDITABLE FIELDS START ===== */
+.editable-field {
+  background: #634fa2;
+  color: #d8d2e7;
+  padding: 2px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid #8b7dbe;
+  font-weight: bold;
+}
+/* ===== EDITABLE FIELDS END ===== */
+
+/* ===== ARMOR MATERIAL ROUNDED START ===== */
+[id$="-material"],
+[id$="-bonus"],
+[id$="-weakness"] {
+  border-radius: 8px;
+  padding: 2px 6px;
+}
+/* ===== ARMOR MATERIAL ROUNDED END ===== */
+
+/* ===== ARMOR MATERIAL COLORS START ===== */
+.armor-bonus {
+  background: #48752c;
+  color: #bdd6ac;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.armor-weakness {
+  background: #d6acbb;
+  color: #a4003b;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+/* ===== ARMOR MATERIAL COLORS END ===== */
+
+/* ===== ARMOR AC BUTTON STYLE START ===== */
+#armor-ac-notes,
+#armor-ac-added {
+  background: #634fa2 !important;
+  color: #d8d2e7 !important;
+  border: 2px solid #8b7dbe;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 16px;
+}
+/* ===== ARMOR AC BUTTON STYLE END ===== */
+
+.editable-field:focus {
+  outline: none;
+}
+
+
+
+    .step { display: none; }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      margin: 6px 0 12px 0;
+    }
+
+/* ===============================
+   SUMMARY PANEL – PAPER SHEET
+   =============================== */
+
+#summaryContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* Section wrapper */
+.summary-sheet {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* ---------- 1) Identity Grid ---------- */
+.summary-identity {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+.summary-identity .full { grid-column: 1 / 3; }
+
+/* ---------- 3) Core Stats Grid ---------- */
+.summary-core {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 12px;
+}
+
+.summary-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  border-bottom: none;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.summary-skills {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+
+/* ---------- Common cell style ---------- */
+.sheet-cell {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #48752c;
+}
+
+.sheet-title {
+  background: #48752c;
+  color: #bdd6ac;
+  padding: 4px 6px;
+  text-align: center;
+  font-weight: 400;      /* force normal */
+  font-style: normal;   /* force non-italic */
+}
+
+.sheet-value {
+  background: #9dc384;
+  padding: 6px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Description block */
+.sheet-description {
+  background: #9dc384;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* Feats & Equipment */
+.sheet-lines div {
+  margin-bottom: 4px;
+}
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .help-text {
+      font-size: 0.9em;
+      opacity: 0.85;
+      margin: 6px 0 8px 0;
+    }
+
+    .error-text {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #b00020;
+      background: #ffe6ea;
+      border-radius: 8px;
+    }
+
+/* ===== Step 6 Feat Checkboxes ===== */
+#featsPanel label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+#featsPanel input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  accent-color: #d8d2e7; /* light purple when unchecked */
+}
+
+#featsPanel input[type="checkbox"]:checked {
+  accent-color: #634fa2; /* dark purple when checked */
+}
+
+/* ===== Step 7 Equipment Radios ===== */
+#weaponChoices label,
+#armorChoices label,
+#gearChoices label {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: start;
+  column-gap: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+#weaponChoices input[type="radio"],
+#armorChoices input[type="radio"],
+#gearChoices input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #d8d2e7; /* light purple */
+}
+
+#weaponChoices input[type="radio"]:checked,
+#armorChoices input[type="radio"]:checked,
+#gearChoices input[type="radio"]:checked {
+  accent-color: #634fa2; /* dark purple */
+}
+
+/* === Lock all green headers to the same height === */
+.step h2,
+#contextPanel .panel-header,
+#summaryPanel .panel-header {
+  min-height: 48px;
+  line-height: 1;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* ===== Lock all 3 green headers to the same height ===== */
+.panel-header,
+.step h2 {
+  min-height: 52px;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* Keep header buttons from changing header height */
+.panel-header button,
+.step h2 button {
+  line-height: 1;
+  padding: 6px 12px !important;
+  font-size: 14px !important;
+}
+
+/* === Normalize inner layout so all three headers size the same === */
+.panel-header,
+.step h2 {
+  display: flex;
+  align-items: center;
+}
+
+.panel-header > span,
+.step h2 > span {
+  line-height: 1;
+  padding-top: 2px;
+}
+
+/* Prevent nav and buttons from stretching header height */
+.step h2 .nav,
+.panel-header button {
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+/* ===== Step 8: Two-panel layout (Summary replaces Context) ===== */
+.container.step8 {
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: row;
+}
+
+.container.step8 #stepPanel {
+  grid-column: 1 / 2;
+}
+
+.container.step8 #summaryPanel {
+  grid-column: 2 / 3;
+  display: block;
+}
+
+.container.step8 #contextPanel {
+  display: none;
+}
+
+#topBarContent {
+  font-size: clamp(14px, 1.4vw, 20px);
+  line-height: 1.25;
+}
+
+#topBarContent strong {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+#topBarPanel {
+  container-type: inline-size;
+}
+
+#topBarGrid {
+  font-size: clamp(16px, 2.2cqw, 26px);
+  line-height: 1.25;
+}
+
+#topBarGrid strong {
+  font-size: 0.85em;
+}
+
+#logoBox {
+  width: 160px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#logoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ===== PURPLE TABLE STRIPING START ===== */
+#equipmentBookContent tbody tr:nth-child(even),
+#spellbookContent tbody tr:nth-child(even) {
+  background: linear-gradient(to right, #d8d2e7, #8b7dbe);
+}
+
+#equipmentBookContent tbody tr:nth-child(odd),
+#spellbookContent tbody tr:nth-child(odd) {
+  background: #d8d2e7;
+}
+/* ===== PURPLE TABLE STRIPING END ===== */
+
+/* ===== SPELLBOOK GREEN STRIPING START ===== */
+.spellbookStriped tr:nth-child(even) {
+  background: linear-gradient(to right, #bdd6ac, #9dc384);
+}
+
+.spellbookStriped tr:nth-child(odd) {
+  background: #bdd6ac;
+}
+/* ===== SPELLBOOK GREEN STRIPING END ===== */
+
+/* ===== WIZARD BACKGROUND GRADIENT START ===== */
+body.wizard-progress {
+  background: linear-gradient(
+    to bottom,
+    #48752c var(--wizard-progress, 0%),
+    #bdd6ac var(--wizard-progress, 0%)
+  );
+}
+/* ===== WIZARD BACKGROUND GRADIENT END ===== */
+
+  </style>
+</head>
+
+<body>
+<div class="container" style="display:grid; grid-template-columns:1fr 1fr; grid-auto-flow:row; gap:20px; align-items:start;">
+
+  <!-- TOP BAR (Row 1) -->
+  <div class="panel" id="topBarPanel" style="grid-column: 1 / 3;">
+<div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+  <span>Character Info</span>
+
+  <div style="display:flex; gap:8px; align-items:center;">
+    <button id="saveCharBtn">Save</button>
+<button id="downloadCharacterBtn">Download</button>
+
+    <select id="characterSelect" style="width:320px; margin:0; padding:6px 10px; font-size:14px;">
+      <option value="">-- Select Saved Character --</option>
+    </select>
+  </div>
+</div>
+
+
+    <div id="topBarContent"></div>
+  </div>
+
+  <!-- CONDITIONS PANEL -->
+<div class="panel" id="conditionsPanel" style="grid-column: 1 / 3;">
+  <div class="panel-header">
+    <span>Combat & Conditions</span>
+    <button id="toggleConditionsPanel">Hide</button>
+  </div>
+  <div id="conditionsContent"><em>None</em></div>
+</div>
+
+<!-- ROLL RESULTS (Always Visible, Full Width) -->
+  <div class="panel" id="rollResultsPanel" style="grid-column: 1 / 3; border:5px solid #8b7dbe; background:#d8d2e7;">
+    <div class="panel-header" style="background:#634fa2; color:#d8d2e7;">
+      <span>Roll Results</span>
+    </div>
+<div id="rollResultsContent"
+     style="font-size:22px; line-height:1.4; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+
+  <!-- MOST RECENT ROLL -->
+  <div id="rollCol0"
+       style="background:#634fa2; color:#d8d2e7; border:3px solid #8b7dbe; border-radius:10px; overflow:hidden; display:flex; flex-direction:column;">
+
+<div style="
+      background:linear-gradient(to right, #634fa2, #d8d2e7);
+      color:#d8d2e7;
+      padding:10px 14px;
+      font-weight:bold;
+      font-style:italic;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      white-space:nowrap;
+      min-height:44px;
+      box-sizing:border-box;
+    ">
+      <span>Current Roll</span>
+      <button id="copyCurrentRollBtn"
+              style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:6px; padding:4px 10px; font-size:14px;">
+        Copy
+      </button>
+    </div>
+
+    <div id="rollCol0Body" style="padding:14px; flex:1;"></div>
+  </div>
+
+  <!-- PREVIOUS ROLL -->
+  <div id="rollCol1"
+       style="background:#8b7dbe; color:#d8d2e7; border:3px solid #634fa2; border-radius:10px; overflow:hidden; display:flex; flex-direction:column;">
+
+    <div style="
+      background:linear-gradient(to right, #634fa2, #d8d2e7);
+      color:#d8d2e7;
+      padding:10px 14px;
+      font-weight:bold;
+      font-style:italic;
+      white-space:nowrap;
+      min-height:44px;
+      box-sizing:border-box;
+    ">
+      Previous Roll
+    </div>
+
+    <div id="rollCol1Body" style="padding:14px; flex:1;"></div>
+  </div>
+
+  <!-- OLDER ROLL -->
+  <div id="rollCol2"
+       style="background:#d8d2e7; color:#8b7dbe; border:3px solid #8b7dbe; border-radius:10px; overflow:hidden; display:flex; flex-direction:column;">
+
+<div style="
+      background:linear-gradient(to right, #634fa2, #d8d2e7);
+      color:#d8d2e7;
+      padding:10px 14px;
+      font-weight:bold;
+      font-style:italic;
+      white-space:nowrap;
+      min-height:44px;
+      box-sizing:border-box;
+    ">
+      Roll
+    </div>
+
+
+    <div id="rollCol2Body" style="padding:14px; flex:1;"></div>
+  </div>
+
+</div>
+
+
+  </div>
+
+
+  <!-- ===== LEFT PANEL START ===== -->
+  <div class="panel" id="statsPanel" style="grid-column:1 / 2; grid-row:auto;">
+
+    <div class="panel-header">
+      <span>Left</span>
+          </div>
+
+    <!-- ===== LEFT: STATS SUBHEADER ===== -->
+    <div style="
+      background: linear-gradient(to right, #48752c, #9dc384);
+      color: #bdd6ac;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-style: italic;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    ">
+      Stats
+    </div>
+
+    <div id="statsContent"></div>
+
+    <!-- ===== LEFT: CONTAINERS SUBHEADER ===== -->
+    <div style="
+      background: linear-gradient(to right, #48752c, #9dc384);
+      color: #bdd6ac;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-style: italic;
+      border-radius: 6px;
+      margin: 20px 0 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    ">
+      <span>Containers</span>
+      <button id="dropItemBtn"
+        style="
+          background:#48752c;
+          color:#bdd6ac;
+          border:2px solid #bdd6ac;
+          border-radius:6px;
+          padding:6px 12px;
+          font-weight:bold;
+          cursor:pointer;
+        ">
+        Drop
+      </button>
+    </div>
+
+    <!-- ===== LEFT: CONTAINERS CONTENT START ===== -->
+<div id="containerContent">
+
+  <div style="display:grid; grid-template-columns:2fr 1fr; gap:16px; align-items:start;">
+
+    <!-- BACKPACK (16 SLOTS) -->
+    <div style="border:4px solid #48752c; border-radius:10px; overflow:hidden;">
+      <div style="background:#48752c; color:#bdd6ac; padding:12px 16px; font-weight:bold; font-style:italic;">
+        Backpack (16 Slots)
+      </div>
+
+      <div style="padding:12px; font-size:1.25em;">
+<!-- LEFT: BACKPACK GRID START -->
+<div id="backpackGrid" style="display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px;">
+
+  <div id="backpackSlot0"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">1</div>
+  <div id="backpackSlot1"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">2</div>
+  <div id="backpackSlot2"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">3</div>
+  <div id="backpackSlot3"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">4</div>
+
+  <div id="backpackSlot4"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">5</div>
+  <div id="backpackSlot5"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">6</div>
+  <div id="backpackSlot6"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">7</div>
+  <div id="backpackSlot7"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">8</div>
+
+  <div id="backpackSlot8"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">9</div>
+  <div id="backpackSlot9"  style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">10</div>
+  <div id="backpackSlot10" style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">11</div>
+  <div id="backpackSlot11" style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">12</div>
+
+  <div id="backpackSlot12" style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">13</div>
+  <div id="backpackSlot13" style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">14</div>
+  <div id="backpackSlot14" style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">15</div>
+  <div id="backpackSlot15" style="width:105px; height:70px; background:#9dc384; border:2px solid #48752c; border-radius:8px; display:flex; align-items:flex-start; justify-content:flex-start; padding:6px; color:#48752c; font-weight:bold; font-size:0.85em; cursor:pointer;">16</div>
+
+</div>
+<!-- LEFT: BACKPACK GRID END -->
+
+      </div>
+    </div>
+
+    <!-- CLOTHING (3 SLOTS) -->
+    <div style="border:4px solid #48752c; border-radius:10px; overflow:hidden;">
+      <div style="background:#48752c; color:#bdd6ac; padding:12px 16px; font-weight:bold; font-style:italic;">
+        Clothing (3 Slots)
+      </div>
+
+      <div style="padding:12px; font-size:1.25em;">
+<!-- LEFT: CLOTHING SLOTS START -->
+<div
+  style="
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:12px;
+    align-items:stretch;
+  "
+>
+
+  <!-- ===== CLOTHING SLOT: RIGHT ===== -->
+  <div
+    id="clothingSlot0"
+    style="
+      background:#9dc384;
+      border:2px solid #48752c;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#48752c;
+      font-weight:bold;
+      font-size:0.5em;
+      min-height:70px;
+      cursor:pointer;
+    "
+  >
+    Right<br>Pocket
+  </div>
+
+  <!-- ===== CLOTHING SLOT: LEFT ===== -->
+  <div
+    id="clothingSlot1"
+    style="
+      background:#9dc384;
+      border:2px solid #48752c;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#48752c;
+      font-weight:bold;
+      font-size:0.5em;
+      min-height:70px;
+      cursor:pointer;
+    "
+  >
+    Left<br>Pocket
+  </div>
+
+  <!-- ===== CLOTHING SLOT: TORSO ===== -->
+  <div
+    id="clothingSlot2"
+    style="
+      background:#9dc384;
+      border:2px solid #48752c;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#48752c;
+      font-weight:bold;
+      font-size:0.5em;
+      min-height:70px;
+      cursor:pointer;
+    "
+  >
+    Torso<br>Pocket
+  </div>
+
+</div>
+<!-- LEFT: CLOTHING SLOTS END -->
+
+      </div>
+    </div>
+  </div>
+<!-- CLOTHING (3 SLOTS) END -->
+  <!-- ITEM DETAILS -->
+  <div style="margin-top:12px; background:#48752c; color:#bdd6ac; padding:10px 14px; font-weight:bold; font-style:italic; border-radius:6px 6px 0 0;">
+    Item Details
+  </div>
+
+  <div style="border:2px solid #48752c; border-top:none; padding:10px; font-size:1.1em;">
+    <div style="display:grid; grid-template-columns:1fr 2fr 80px 80px; gap:8px; font-weight:bold; margin-bottom:6px;">
+      <div>Item</div>
+      <div>Description</div>
+      <div>Slots</div>
+      <div>Weight</div>
+    </div>
+
+    <div id="backpackItemsList">
+      <em>No items.</em>
+    </div>
+  </div>
+
+  <!-- WEIGHT & MOVEMENT (UNCHANGED) -->
+  <div style="margin-top:16px; border:4px solid #8b7dbe; background:#d8d2e7; border-radius:10px; overflow:hidden;">
+    <div style="background:linear-gradient(to right, #634fa2, #8b7dbe); color:#d8d2e7; padding:12px 16px; font-weight:bold; font-style:italic;">
+      Weight and Movement
+    </div>
+    <div id="weightMovementContent" style="padding:12px; font-size:1.1em;">
+      <em>No data.</em>
+    </div>
+  </div>
+
+</div>
+<!-- ===== LEFT: CONTAINERS CONTENT END ===== -->
+
+  </div>
+  <!-- ===== LEFT PANEL END ===== -->
+  
+<!-- ===== RIGHT PANEL START ===== -->
+<div class="panel" id="rightPanel" style="grid-column:2 / 3; grid-row:auto;">
+
+  <div class="panel-header">
+    <span>Right</span>
+  </div>
+
+  <!-- ===== RIGHT: ARMOR SUBHEADER ===== -->
+  <div class="right-subheader" style="margin-bottom:12px;">
+    Armor
+  </div>
+
+
+
+<!-- ===== RIGHT: ARMOR CONTENT START ===== -->
+
+<div id="armorContent"
+  style="
+    display:grid;
+    grid-template-columns: 1fr 1.4fr 0.5fr 1fr 1.5fr 1fr 0.8fr 0.8fr;
+    gap:8px;
+    align-items:center;
+    font-size:1.25em;
+  "
+>
+
+<!-- Base AC row (replaces Clothing label) -->
+<div style="font-size:1.0em; font-weight:bold; font-style:italic;">
+  <span style="color:#48752c;">Base AC: </span>
+  <span id="armorBaseACValue" style="color:#000;"></span>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div id="armor-clothing-bonus">
+  <span class="armor-bonus">+1 Against</span>
+</div>
+<div id="armor-clothing-weakness">
+  <span class="armor-weakness">-1 Against</span>
+</div>
+<div></div>
+<div></div>
+
+<!-- Clothing -->
+<div><strong>Clothing</strong></div>
+<button id="armor-clothing-name"
+        style="background:#634fa2; color:#d8d2e7; border:none; padding:4px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">
+  None
+</button>
+
+<div id="armor-clothing-ac">AC +0</div>
+<div id="armor-clothing-material"></div>
+<div id="armor-clothing-bonus"></div>
+<div id="armor-clothing-weakness"></div>
+<div></div>
+<div id="armor-clothing-weight">Wt.</div>
+
+  <!-- Head -->
+  <div><strong>Head</strong></div>
+  <div id="armor-head-name">None</div>
+  <div id="armor-head-ac"></div>
+  <div id="armor-head-material"></div>
+  <div id="armor-head-bonus"></div>
+  <div id="armor-head-weakness"></div>
+  <div id="armor-head-tac">TAC</div>
+  <div id="armor-head-weight">Wt.</div>
+
+  <!-- Torso -->
+  <div><strong>Torso</strong></div>
+  <div id="armor-torso-name">None</div>
+<div id="armor-torso-ac"></div>
+  <div id="armor-torso-material"></div>
+  <div id="armor-torso-bonus"></div>
+  <div id="armor-torso-weakness"></div>
+  <div id="armor-torso-tac">TAC</div>
+  <div id="armor-torso-weight">Wt.</div>
+
+  <!-- Left Arm -->
+  <div><strong>Left Arm</strong></div>
+  <div id="armor-leftarm-name">None</div>
+<div id="armor-leftarm-ac"></div>
+  <div id="armor-leftarm-material"></div>
+  <div id="armor-leftarm-bonus"></div>
+  <div id="armor-leftarm-weakness"></div>
+  <div id="armor-leftarm-tac">TAC</div>
+  <div id="armor-leftarm-weight">Wt.</div>
+
+  <!-- Right Arm -->
+  <div><strong>Right Arm</strong></div>
+  <div id="armor-rightarm-name">None</div>
+<div id="armor-rightarm-ac"></div>
+  <div id="armor-rightarm-material"></div>
+  <div id="armor-rightarm-bonus"></div>
+  <div id="armor-rightarm-weakness"></div>
+  <div id="armor-rightarm-tac">TAC</div>
+  <div id="armor-rightarm-weight">Wt.</div>
+
+  <!-- Left Leg -->
+  <div><strong>Left Leg</strong></div>
+  <div id="armor-leftleg-name">None</div>
+<div id="armor-leftleg-ac"></div>
+  <div id="armor-leftleg-material"></div>
+  <div id="armor-leftleg-bonus"></div>
+  <div id="armor-leftleg-weakness"></div>
+  <div id="armor-leftleg-tac">TAC</div>
+  <div id="armor-leftleg-weight">Wt.</div>
+
+  <!-- Right Leg -->
+  <div><strong>Right Leg</strong></div>
+  <div id="armor-rightleg-name">None</div>
+<div id="armor-rightleg-ac"></div>
+  <div id="armor-rightleg-material"></div>
+  <div id="armor-rightleg-bonus"></div>
+  <div id="armor-rightleg-weakness"></div>
+  <div id="armor-rightleg-tac">TAC</div>
+  <div id="armor-rightleg-weight">Wt.</div>
+
+</div>
+<!-- ===== RIGHT: ARMOR CONTENT END ===== -->
+
+  <!-- ===== RIGHT: ATTACKS SUBHEADER ===== -->
+  <div class="right-subheader" style="margin:20px 0 12px 0;">
+    Attacks
+  </div>
+
+  <!-- ===== RIGHT: ATTACKS CONTENT START ===== -->
+  <div id="attacksContent"
+       style="display:grid; grid-template-columns:1fr; gap:16px; font-size:1.25em;">
+  </div>
+  <!-- ===== RIGHT: ATTACKS CONTENT END ===== -->
+
+  <!-- ===== RIGHT: FEATS SUBHEADER ===== -->
+  <div class="right-subheader" style="margin:20px 0 12px 0;">
+    Feats
+  </div>
+
+<!-- ===== RIGHT: FEATS CONTENT START ===== -->
+<div>
+
+  <!-- ===== FEATS LIST (JS TARGET) START ===== -->
+  <div id="featsContent">
+    <em>No character loaded.</em>
+  </div>
+  <!-- ===== FEATS LIST (JS TARGET) END ===== -->
+
+  <!-- ===== BOOK OF FEATS PANEL START ===== -->
+  <div style="margin-top:16px; border:4px solid #8b7dbe; background:#d8d2e7; border-radius:10px; overflow:hidden;">
+
+<!-- ===== BOOK OF FEATS HEADER START ===== -->
+<div style="
+  background:linear-gradient(to right, #8b7dbe, #634fa2);
+  color:#d8d2e7;
+  padding:12px 16px;
+  font-weight:bold;
+  font-style:italic;
+  font-size:inherit;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+">
+
+  <span>The Book of Feats</span>
+
+  <button id="toggleFeatsPanelBtn" style="
+    background:#634fa2;
+    color:#d8d2e7;
+    border:2px solid #8b7dbe;
+    border-radius:8px;
+    font-weight:bold;
+    padding:4px 10px;
+    cursor:pointer;
+  ">
+    Hide
+  </button>
+
+</div>
+<!-- ===== BOOK OF FEATS HEADER END ===== -->
+
+<!-- ===== BOOK OF FEATS BODY START ===== -->
+<div id="bookOfFeatsContent" style="padding:12px; font-size:1.1em; display:none;">
+
+  <!-- ===== BOOK OF FEATS: FILTER + TABLE START ===== -->
+
+<div style="margin-bottom:10px; display:flex; align-items:center; gap:12px; white-space:nowrap;">
+
+  <style>
+    #featsEligibleBtn,
+    #featsTypeFilter {
+      margin: 0;
+      vertical-align: middle;
+    }
+  
+</style>
+
+<span id="featsEligibleLabel" style="font-weight:bold; line-height:1;">
+  Filter by feats I am currently eligible for?
+</span>
+
+  <button id="featsEligibleBtn" style="
+    background:#634fa2;
+    color:#d8d2e7;
+    border:2px solid #8b7dbe;
+    border-radius:8px;
+    font-weight:bold;
+    padding:6px 12px;
+    cursor:pointer;
+  ">
+    YES
+  </button>
+
+  <span style="font-weight:bold; line-height:1;">Filters:</span>
+
+<select id="featsTypeFilter" style="
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background:#634fa2;
+  color:#d8d2e7;
+  border:2px solid #8b7dbe;
+  border-radius:8px;
+  font-weight:bold;
+  padding:6px 12px;
+  line-height:1;
+  height:32px;
+  display:inline-flex;
+  align-items:center;
+">
+  <option value="">All</option>
+</select>
+
+</div>
+
+  <table style="width:100%; border-collapse:collapse; font-size:1.2em;">
+
+    <thead>
+      <tr style="
+        background:#8b7dbe;
+        color:#d8d2e7;
+        font-weight:bold;
+        text-align:left;
+      ">
+        <th></th>
+        <th>Name</th>
+        <th>Feat Type</th>
+        <th>Prerequisites</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody id="featsTableBody">
+      <!-- blank | name | featType | featPrereq | featDescription | blank -->
+    </tbody>
+
+  </table>
+
+  <!-- ===== BOOK OF FEATS: FILTER + TABLE END ===== -->
+
+</div>
+<!-- ===== BOOK OF FEATS BODY END ===== -->
+
+  </div>
+  <!-- ===== BOOK OF FEATS PANEL END ===== -->
+
+</div>
+<!-- ===== RIGHT: FEATS CONTENT END ===== -->
+
+
+</div>
+
+<!-- ===== RIGHT PANEL END ===== -->
+
+  <!-- SPELL RESULTS PANEL -->
+  <div class="panel" id="spellResultsPanel" style="grid-column:1 / 3; border:5px solid #8b7dbe; background:#d8d2e7;">
+    <div class="panel-header" style="background:#634fa2; color:#d8d2e7;">
+      <span>Spell Results</span>
+    </div>
+    <div id="spellResultsContent" style="font-size:22px; line-height:1.4; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+      <div id="spellCol0" style="background:#634fa2; color:#d8d2e7; border:3px solid #8b7dbe; padding:14px; border-radius:10px;"></div>
+      <div id="spellCol1" style="background:#8b7dbe; color:#d8d2e7; border:3px solid #634fa2; padding:14px; border-radius:10px;"></div>
+      <div id="spellCol2" style="background:#d8d2e7; color:#8b7dbe; border:3px solid #8b7dbe; padding:14px; border-radius:10px;"></div>
+    </div>
+  </div>
+
+  <!-- SPELLCASTING PANEL -->
+  <div class="panel" id="spellcastingPanel" style="grid-column:1 / 3; grid-row:auto;">
+    <div class="panel-header">
+      <span>Spellcasting</span>
+      <button id="toggleSpellcastingPanel">Hide</button>
+    </div>
+    <div id="spellcastingContent" style="font-size:1.25em; display:grid; gap:12px;"></div>
+<div id="spellbookPanel" style="margin-top:20px; border:4px solid #8b7dbe; background:#d8d2e7; border-radius:10px; overflow:hidden;">
+  <div style="background:linear-gradient(to right, #634fa2, #8b7dbe); color:#d8d2e7; padding:12px 16px; font-weight:bold; font-style:italic; display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:120%;">The Book of Magic</span>
+    <button id="toggleSpellbookPanel" style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:8px; font-weight:bold; padding:4px 10px; cursor:pointer;">Show</button>
+  </div>
+<div id="spellbookContent" style="padding:12px; font-size:1.5em; display:none;">
+    <em>No spellbook loaded.</em>
+  </div>
+</div>
+
+</div>
+  </div>
+
+  <!-- EQUIPMENT PANEL -->
+<div class="panel" id="equipmentPanel" style="grid-column:1 / 2; margin-top:20px;">
+    <div class="panel-header">
+      <span>Equipment</span>
+      <button id="toggleEquipmentPanel">Hide</button>
+    </div>
+
+    <div id="equipmentContent" style="font-size:1.25em; display:grid; gap:12px;"></div>
+
+    <div id="equipmentBookPanel" style="margin-top:20px; border:4px solid #8b7dbe; background:#d8d2e7; border-radius:10px; overflow:hidden;">
+      <div style="background:linear-gradient(to right, #634fa2, #8b7dbe); color:#d8d2e7; padding:12px 16px; font-weight:bold; font-style:italic; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:120%;">The Book of Things</span>
+        <button id="toggleEquipmentBookPanel" style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:8px; font-weight:bold; padding:4px 10px; cursor:pointer;">Hide</button>
+      </div>
+<div id="equipmentBookContent" style="padding:12px; display:none;">
+
+<!-- ===== EQUIPMENT FILTER BUTTONS START ===== -->
+<div style="margin-bottom:12px; display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; width:100%;">
+
+<button onclick="toggleEquipmentFilter('alch', this)">Alchemical</button>
+
+<button onclick="toggleEquipmentFilter('ammo', this)">Ammunition</button>
+
+<button onclick="toggleCompositeFilter(['armr','arpk'], this)">Armor</button>
+
+<button onclick="toggleEquipmentFilter('clth', this)">Clothing</button>
+
+<button onclick="toggleEquipmentFilter('cont', this)">Containers</button>
+
+<button onclick="toggleEquipmentFilter('genr', this)">General Gear</button>
+
+<button onclick="toggleEquipmentFilter('kits', this)">Kits</button>
+
+<button onclick="toggleCompositeFilter(['potn','tome'], this)">Potions/Tomes</button>
+
+<button onclick="toggleCompositeFilter(['guns','ha2h','mele','rngd','thrw'], this)">Weapons</button>
+
+</div>
+<!-- ===== EQUIPMENT FILTER BUTTONS END ===== -->
+
+  <table style="width:100%; border-collapse:collapse; font-size:1.2em;">
+
+<colgroup>
+  <col style="width:20px;">
+  <col style="width:150px;">
+  <col style="width:340px;">
+  <col style="width:100px;">
+  <col style="width:100px;">
+  <col style="width:50px;">
+  <col style="width:50px;">
+  <col style="width:50px;">
+  <col style="width:50px;">
+  <col style="width:20px;">
+</colgroup>
+
+<thead>
+<tr style="background:#8b7dbe; color:#d8d2e7;">
+  <th></th>
+  <th style="text-align:left;">Name</th>
+  <th style="text-align:left;">Description</th>
+  <th style="text-align:center;">Type</th>
+  <th style="text-align:center;">Damage / TAC</th>
+  <th style="text-align:center;">Damage Type / Material</th>
+  <th style="text-align:center;">Cost</th>
+  <th style="text-align:center;">Slots</th>
+  <th style="text-align:center;">Weight</th>
+  <th></th>
+</tr>
+</thead>
+
+<tbody id="alchemicalItemsBody"></tbody>
+<tbody id="ammunitionBody"></tbody>
+<tbody id="armorBody"></tbody>
+<tbody id="generalGearBody"></tbody>
+<tbody id="magicalItemsBody"></tbody>
+<tbody id="weaponsBody"></tbody>
+  </table>
+
+</div>
+
+  <script>
+
+/* ===== BOOK OF THINGS TOGGLE START ===== */
+document.getElementById("toggleEquipmentBookPanel").addEventListener("click", () => {
+  const panel = document.getElementById("equipmentBookContent");
+  const btn = document.getElementById("toggleEquipmentBookPanel");
+
+  const isHidden = panel.style.display === "none" || panel.style.display === "";
+
+  if (isHidden) {
+    panel.style.display = "block";
+    btn.textContent = "Hide";
+  } else {
+    panel.style.display = "none";
+    btn.textContent = "Show";
+  }
+});
+
+/* ===== INITIAL BOOK OF THINGS BUTTON STATE ===== */
+(function(){
+  const panel = document.getElementById("equipmentBookContent");
+  const btn = document.getElementById("toggleEquipmentBookPanel");
+  const isHidden = panel.style.display === "none" || panel.style.display === "";
+  btn.textContent = isHidden ? "Show" : "Hide";
+})();
+/* ===== BOOK OF THINGS TOGGLE END ===== */
+
+/* ===== TOP TRACE START ===== */
+console.log("TRACE: script start");
+/* ===== TOP TRACE END ===== */
+
+/* ===== EQUIP FILTERS START ===== */
+let activeEquipmentFilters = globalThis.activeEquipmentFilters || new Set();
+globalThis.activeEquipmentFilters = activeEquipmentFilters;
+/* ===== EQUIP FILTERS END ===== */
+
+(async function(){
+    const raceURL = "races.csv";
+    const classURL = "classes.csv";
+    const featsURL = "feats.csv";
+    const deitiesURL = "deities.csv";
+    const equipmentURL = "equipment.csv";
+    const classAdvURL = "classadv.csv";
+    const spellbookURL = "spellbook.csv";
+    const conditionsURL = "conditions.csv";
+
+    let races = [];
+    let classes = [];
+/* ===== ROUND STATE START ===== */
+let roundState = {
+  active: false,
+  round: 0
+};
+/* ===== ROUND STATE END ===== */
+    let classAdv = [];
+let advancement = [];
+let spellbook = [];
+    let feats = [];
+    let deities = [];
+    let equipment = [];
+let conditionsData = [];
+
+/* ===== EQUIPMENT FILTER STATE START ===== */
+let activeEquipmentFilters = new Set();
+/* ===== EQUIPMENT FILTER STATE END ===== */
+
+/* ===== LANGUAGES TABLE START ===== */
+const LANGUAGES = [
+  { name: "Common", nativeRace: null, cost: 1, nonNativeCost: 1 },
+  { name: "Panya Common", nativeRace: null, cost: 1, nonNativeCost: 1 },
+  { name: "Skeldar Common", nativeRace: null, cost: 1, nonNativeCost: 1 },
+  { name: "Zhon Common", nativeRace: null, cost: 1, nonNativeCost: 1 },
+
+  { name: "Parallax", nativeRace: "grey", cost: 1, nonNativeCost: 2 },
+  { name: "Zhaǂkareth", nativeRace: "outlander", cost: 1, nonNativeCost: 2 },
+
+  { name: "Abyssal Cant", nativeRace: null, cost: 1, nonNativeCost: 1 },
+  { name: "Deep Speech", nativeRace: null, cost: 1, nonNativeCost: 1 },
+  { name: "Lost Glyphs", nativeRace: null, cost: 1, nonNativeCost: 1 }
+];
+/* ===== LANGUAGES TABLE END ===== */
+
+let currentStep = 999;
+let character = null;
+globalThis.character = character;
+
+/* ===== LANGUAGE STORAGE INIT START ===== */
+if (!character) {
+  character = {};
+  globalThis.character = character;
+}
+if (!Array.isArray(character.languages)) character.languages = [];
+if (!character.languageCosts) character.languageCosts = {};
+
+/* ===== DEFAULT LANGUAGE WIRING START ===== */
+if (Array.isArray(LANGUAGES)) {
+
+  /* All characters get Common free */
+  const common = LANGUAGES.find(l => l.name === "Common");
+  if (common && !character.languages.includes(common.name)) {
+    character.languages.push(common.name);
+    character.languageCosts[common.name] = 0;
+  }
+
+  /* Grey → Parallax free */
+  if (character.raceId === "grey") {
+    const p = LANGUAGES.find(l => l.name === "Parallax");
+    if (p && !character.languages.includes(p.name)) {
+      character.languages.push(p.name);
+      character.languageCosts[p.name] = 0;
+    }
+  }
+
+  /* Outlander → Zhaǂkareth free */
+  if (character.raceId === "outlander") {
+    const z = LANGUAGES.find(l => l.name === "Zhaǂkareth");
+    if (z && !character.languages.includes(z.name)) {
+      character.languages.push(z.name);
+      character.languageCosts[z.name] = 0;
+    }
+  }
+}
+/* ===== DEFAULT LANGUAGE WIRING END ===== */
+
+/* ===== LANGUAGE STORAGE INIT END ===== */
+
+/* ===== INVENTORY STORAGE INIT START ===== */
+if (!character.inventory) {
+  character.inventory = {
+    backpack: new Array(16).fill(null),
+    clothing: new Array(3).fill(null)
+  };
+}
+/* ===== INVENTORY STORAGE INIT END ===== */
+
+const conditionEffects = {
+  Shaken: { ATK:-1 },
+  Frightened: { ATK:-2 },
+  Horrified: { ATK:-3 },
+  Fuzzy: { PER:-2 },
+  Blinded: { PER:-4 },
+  Hidden: { ATK:2 },
+};
+
+/* ===== GLOBAL CONDITION STAGES START ===== */
+const stages = {
+  Bleeding: [
+    { name:"Bleeding", bg:"#d86991", fg:"#000000" },
+    { name:"Gushing",  bg:"#e7123d", fg:"#000000" }
+  ],
+  Fuzzy: [
+    { name:"Fuzzy",   bg:"#2e2e2e", fg:"#c3c3c3" },
+    { name:"Blinded", bg:"#000000", fg:"#e7123d" }
+  ],
+  Shaken: [
+    { name:"Shaken",    bg:"#d4ce00", fg:"#000000" },
+    { name:"Frightened",bg:"#e77000", fg:"#000000" },
+    { name:"Horrified", bg:"#000000", fg:"#d8d2e7" }
+  ],
+  Hidden:   [{ name:"Hidden",   bg:"#ffffff", fg:"#634fa2" }],
+  Poisoned: [{ name:"Poisoned", bg:"#9dc384", fg:"#48752c" }],
+  Prone:    [{ name:"Prone",    bg:"#008e77", fg:"#000000" }],
+  Winded:   [{ name:"Winded",   bg:"#7fafc2", fg:"#000000" }]
+};
+/* ===== GLOBAL CONDITION STAGES END ===== */
+
+/* ===== INVENTORY PLACEMENT ENGINE START ===== */
+
+function findBackpackSpace(size) {
+  if (!character || !character.inventory) return -1;
+
+  const pack = character.inventory.backpack;
+
+  for (let i = 0; i <= pack.length - size; i++) {
+    let fits = true;
+
+    for (let j = 0; j < size; j++) {
+      if (pack[i + j] !== null) {
+        fits = false;
+        break;
+      }
+    }
+
+    if (fits) return i;
+  }
+
+  return -1;
+}
+
+function findClothingSpace() {
+  if (!character || !character.inventory) return -1;
+
+  const clothing = character.inventory.clothing;
+
+  for (let i = 0; i < clothing.length; i++) {
+    if (clothing[i] === null) return i;
+  }
+
+  return -1;
+}
+
+function placeItemInInventory(itemId, size) {
+  if (!character || !character.inventory) return false;
+
+  const pack = character.inventory.backpack;
+  const clothing = character.inventory.clothing;
+
+  const start = findBackpackSpace(size);
+
+  if (start !== -1) {
+    for (let j = 0; j < size; j++) {
+      pack[start + j] = {
+        itemId: itemId,
+        size: size,
+        anchor: j === 0
+      };
+    }
+    return { container: "backpack", index: start };
+  }
+
+  if (size === 1) {
+    const c = findClothingSpace();
+    if (c !== -1) {
+      clothing[c] = {
+        itemId: itemId,
+        size: 1,
+        anchor: true
+      };
+      return { container: "clothing", index: c };
+    }
+  }
+
+  return false;
+}
+
+/* ===== INVENTORY PLACEMENT ENGINE END ===== */
+
+/* ===== INVENTORY DEBUG EXPORTS START ===== */
+globalThis.findBackpackSpace = findBackpackSpace;
+globalThis.findClothingSpace = findClothingSpace;
+globalThis.placeItemInInventory = placeItemInInventory;
+/* ===== INVENTORY DEBUG EXPORTS END ===== */
+
+/* ===== EQUIPMENT PURCHASE HANDLER START ===== */
+function purchaseEquipment(itemId) {
+  if (!character || !equipment) return;
+
+  const item = equipment.find(e => e.id === itemId);
+  if (!item) return;
+
+  if (!character.equipment) character.equipment = {};
+
+  // ===== WEAPON AUTO-EQUIP =====
+  const weaponMap = {
+    mele: "melee",
+    ha2h: "melee",
+    rngd: "ranged",
+    guns: "firearms",
+    thrw: "thrown"
+  };
+
+  const atkType = weaponMap[item.eqpType];
+
+  if (atkType) {
+    if (!Array.isArray(character.equipment.weapons))
+      character.equipment.weapons = [];
+
+    const hasType = character.equipment.weapons.some(w => {
+      const wid = typeof w === "string" ? w : w.id;
+      const eq = equipment.find(e => e.id === wid);
+      return eq && weaponMap[eq.eqpType] === atkType;
+    });
+
+    if (!hasType) {
+character.equipment.weapons.push(itemId);
+
+if (Array.isArray(character.selectedEquipment)) {
+  character.selectedEquipment =
+    character.selectedEquipment.filter(x => x !== itemId);
+}
+
+update();
+return;
+    }
+
+  }
+
+  // ===== ARMOR AUTO-EQUIP =====
+  if (item.eqpType === "armr") {
+    if (!character.equipment.armor)
+      character.equipment.armor = {};
+
+    const slot = (item.armorSlot || item.slot || "").toLowerCase();
+
+    const applyArmor = key => {
+      character.equipment.armor[key] = itemId;
+      update();
+    };
+
+    if (slot === "arms" || slot === "legs") {
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.inset = "0";
+      overlay.style.background = "rgba(0,0,0,0.6)";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.zIndex = "9999";
+
+      const box = document.createElement("div");
+      box.style.background = "#d8d2e7";
+      box.style.border = "4px solid #8b7dbe";
+      box.style.borderRadius = "10px";
+      box.style.padding = "16px";
+
+      const title = document.createElement("div");
+      title.innerHTML = `<strong>Apply to which ${slot.slice(0,-1)}?</strong>`;
+      title.style.marginBottom = "12px";
+      box.appendChild(title);
+
+      const mkBtn = label => {
+        const b = document.createElement("button");
+        b.textContent = label;
+        b.style.display = "block";
+        b.style.width = "100%";
+        b.style.marginBottom = "8px";
+        b.onclick = () => {
+          document.body.removeChild(overlay);
+          applyArmor(label.toLowerCase() + slot.slice(0,-1));
+        };
+        return b;
+      };
+
+      box.appendChild(mkBtn("Right"));
+      box.appendChild(mkBtn("Left"));
+
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+      return;
+    }
+
+    if (slot && !character.equipment.armor[slot]) {
+applyArmor(slot);
+
+if (Array.isArray(character.selectedEquipment)) {
+  character.selectedEquipment =
+    character.selectedEquipment.filter(x => x !== itemId);
+}
+
+return;
+    }
+// ===== REMOVE FROM SELECTED AFTER ADD =====
+if (Array.isArray(character.selectedEquipment)) {
+  character.selectedEquipment =
+    character.selectedEquipment.filter(x => x !== itemId);
+}
+  }
+
+
+  // ===== FALLBACK: CONTAINER =====
+  const size = Number(item.slots) || 1;
+
+  const result = placeItemInInventory(itemId, size);
+
+  if (!result) {
+    alert("No space available in containers.");
+    return;
+  }
+
+  if (Array.isArray(character.selectedEquipment)) {
+    character.selectedEquipment =
+      character.selectedEquipment.filter(x => x !== itemId);
+  }
+
+  update();
+}
+
+globalThis.purchaseEquipment = purchaseEquipment;
+
+/* ===== EQUIPMENT PURCHASE HANDLER END ===== */
+
+function getConditionModifiers() {
+  const mods = {};
+  if (!character || !character.conditionStates) return mods;
+
+  Object.entries(character.conditionStates).forEach(([base, idxRaw]) => {
+  const idx = Number(idxRaw);
+  if (!Number.isFinite(idx)) return;
+    const stage = stages?.[base]?.[idx];
+    if (!stage) return;
+
+const eff = conditionEffects[stage.name];
+if (!eff) return;
+
+// copy effects directly
+Object.entries(eff).forEach(([k,v]) => {
+  const key = k.toUpperCase();
+  mods[key] = (mods[key] || 0) + v;
+});
+
+  });
+
+  console.log("condMods:", mods);
+return mods;
+}
+
+/* ===== LANGUAGE COST HELPER START ===== */
+function getLanguageCost(lang, raceId) {
+  if (!lang) return 1;
+
+  return lang.nativeRace && lang.nativeRace !== raceId
+    ? lang.nonNativeCost
+    : lang.cost;
+}
+/* ===== LANGUAGE COST HELPER END ===== */
+
+/* ===== ADD LANGUAGE BUTTON HANDLER START ===== */
+document.addEventListener("click", e => {
+  if (e.target.id !== "addLanguageBtn") return;
+  if (!character) return;
+
+  if (!Array.isArray(character.languages)) character.languages = [];
+  if (!character.languageCosts) character.languageCosts = {};
+
+  const raceId = character.raceId;
+  const totalSlots = Math.floor(character.abilities?.INT.value / 3);
+  const usedSlots = Object.values(character.languageCosts)
+    .reduce((a,b) => a + Number(b || 0), 0);
+
+  if (usedSlots >= totalSlots) return;
+
+  const remaining = totalSlots - usedSlots;
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.6)";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.zIndex = "9999";
+
+  const box = document.createElement("div");
+  box.style.background = "#d8d2e7";
+  box.style.border = "4px solid #8b7dbe";
+  box.style.borderRadius = "10px";
+  box.style.padding = "16px";
+  box.style.maxWidth = "420px";
+  box.style.width = "90%";
+  box.style.maxHeight = "70vh";
+  box.style.overflowY = "auto";
+
+  const title = document.createElement("div");
+  title.innerHTML = "<strong>Select Language</strong>";
+  title.style.marginBottom = "12px";
+  box.appendChild(title);
+
+  const known = new Set(character.languages);
+
+  LANGUAGES.forEach(lang => {
+    if (known.has(lang.name)) return;
+
+    const cost = getLanguageCost(lang, raceId);
+    if (cost > remaining) return;
+
+    const btn = document.createElement("button");
+    btn.style.display = "block";
+    btn.style.width = "100%";
+    btn.style.marginBottom = "8px";
+    btn.style.textAlign = "left";
+
+    const isAlien =
+      (lang.name === "Parallax" && raceId !== "grey") ||
+      (lang.name === "Zhaǂkareth" && raceId !== "outlander");
+
+    if (isAlien) {
+      btn.innerHTML =
+        `<strong>${lang.name}</strong><br>` +
+        `<em>Takes 2 Language Slots</em>`;
+    } else {
+      btn.textContent = lang.name;
+    }
+
+    btn.onclick = () => {
+      character.languages.push(lang.name);
+      character.languageCosts[lang.name] = cost;
+      document.body.removeChild(overlay);
+      update();
+    };
+
+    box.appendChild(btn);
+  });
+
+  const close = document.createElement("button");
+  close.textContent = "Cancel";
+  close.style.marginTop = "8px";
+  close.onclick = () => document.body.removeChild(overlay);
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+});
+/* ===== ADD LANGUAGE BUTTON HANDLER END ===== */
+
+/* ===== INVENTORY SLOT CLICK HANDLER START ===== */
+document.addEventListener("click", e => {
+
+  if (!character || !character.inventory) return;
+
+  const slotEl = e.target.closest("[id^='backpackSlot'],[id^='clothingSlot']");
+  if (!slotEl) return;
+
+  const getTarget = () => {
+    const packMatch = slotEl.id.match(/^backpackSlot(\d+)$/);
+    if (packMatch) return { container: "backpack", index: Number(packMatch[1]) };
+
+    const clothMatch = slotEl.id.match(/^clothingSlot(\d+)$/);
+    if (clothMatch) return { container: "clothing", index: Number(clothMatch[1]) };
+
+    return null;
+  };
+
+  const target = getTarget();
+  if (!target) return;
+
+  const sel = character.inventorySelection;
+
+  const containers = character.inventory;
+  const targetArr = containers[target.container];
+  const targetSlot = targetArr[target.index];
+
+  // If nothing selected: select clicked item (anchor-aware)
+  if (!sel || sel.container == null) {
+
+    if (!targetSlot) return;
+
+    // find anchor of clicked item
+    let anchorIndex = target.index;
+    while (anchorIndex > 0 &&
+           targetArr[anchorIndex] &&
+           !targetArr[anchorIndex].anchor) {
+      anchorIndex--;
+    }
+
+    character.inventorySelection = {
+      container: target.container,
+      index: anchorIndex
+    };
+
+    update();
+    return;
+  }
+
+  // If clicking same anchor: deselect
+  if (sel.container === target.container && sel.index === target.index) {
+    character.inventorySelection = { container: null, index: null };
+    update();
+    return;
+  }
+
+  // Move item
+  const sourceArr = containers[sel.container];
+  const sourceSlot = sourceArr[sel.index];
+  if (!sourceSlot || !sourceSlot.anchor) {
+    character.inventorySelection = { container: null, index: null };
+    update();
+    return;
+  }
+
+  const size = sourceSlot.size;
+
+  const canFit = (arr, start, size) => {
+    if (start + size > arr.length) return false;
+    for (let i = 0; i < size; i++) {
+      if (arr[start + i] !== null) return false;
+    }
+    return true;
+  };
+
+  if (!canFit(targetArr, target.index, size)) {
+    alert("Not enough space there.");
+    return;
+  }
+
+  // clear source
+  for (let i = 0; i < size; i++) {
+    sourceArr[sel.index + i] = null;
+  }
+
+  // place in target
+  for (let i = 0; i < size; i++) {
+    targetArr[target.index + i] = {
+      itemId: sourceSlot.itemId,
+      size,
+      anchor: i === 0
+    };
+  }
+
+  character.inventorySelection = { container: null, index: null };
+  update();
+
+});
+/* ===== INVENTORY SLOT CLICK HANDLER END ===== */
+
+/* ===== NEW: computeCurrentStats engine ===== */
+function computeCurrentStats() {
+  if (!character) return null;
+
+  const mods = getConditionModifiers();
+
+  const abilities = {};
+  const skills = {};
+
+  Object.entries(character.abilities || {}).forEach(([k, v]) => {
+    const base = Number(v.value) || 0;
+    const delta = mods[k] || 0;
+    abilities[k] = {
+      base,
+      delta,
+      total: base + delta
+    };
+  });
+
+  Object.entries(character.skills || {}).forEach(([k, v]) => {
+    const base = Number(v.value) || 0;
+    const delta =
+      (mods.ATK &&
+        ["melee","ranged","guns","handtohand","thrown"].includes(k))
+        ? mods.ATK
+        : 0;
+
+    skills[k] = {
+      base,
+      delta,
+      total: base + delta
+    };
+  });
+
+  return { abilities, skills };
+}
+
+function parseDelimited(text) {
+      const rows = [];
+      let cur = "";
+      let row = [];
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        const n = text[i + 1];
+
+        if (c === '"' && inQuotes && n === '"') { cur += '"'; i++; continue; }
+        if (c === '"') { inQuotes = !inQuotes; continue; }
+
+        if (c === "," && !inQuotes) { row.push(cur); cur = ""; continue; }
+
+        if ((c === "\n" || c === "\r") && !inQuotes) {
+          if (cur.length || row.length) { row.push(cur); rows.push(row); }
+          row = []; cur = ""; continue;
+        }
+
+        cur += c;
+      }
+
+      if (cur.length || row.length) { row.push(cur); rows.push(row); }
+
+      const headers = rows.shift().map(h => h.trim());
+
+      return rows
+        .map(r => {
+          const o = {};
+          headers.forEach((h, i) => { o[h] = (r[i] || "").trim(); });
+          return o;
+        });
+
+
+    }
+
+async function loadCSV(url) {
+      const res = await fetch(url);
+      const text = await res.text();
+      return parseDelimited(text);
+    }
+
+function formatStartingOptions(raw) {
+      if (!raw) return "—";
+      return raw
+        .split("||")
+        .map(group =>
+          group
+            .split("|")
+            .map(s => s.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()))
+            .join(" & ")
+        )
+        .join(" OR ");
+    }
+
+const ABILITIES = ["STR", "PER", "AGI", "END", "INT", "CHA"];
+
+const SKILLS = [
+      "Acrobatics","Acquisition","Athletics","Bluff","Craft","Engineering","Explosives","Guns","Hand to Hand",
+      "Handle Animal","Linguistics","Local Knowledge","Pick Lock / Pocket","Melee","Ranged","Repair","Science",
+      "Sense Motive","Sneak","Survival / Medicine","Tolerance","Theology","Thrown","Use Device"
+    ];
+
+function renderTopBar() {
+  if (!character) {
+    document.getElementById("topBarContent").innerHTML = "";
+    return;
+  }
+
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === character.classId);
+  const deity = deities.find(d => d.id === character.deityId);
+
+document.getElementById("topBarContent").innerHTML = `
+  <div id="topBarGrid" style="display:grid; grid-template-columns:160px auto auto auto; column-gap:32px; align-items:start;">
+<div id="logoBox">
+  <img src="AtF Text Logo.png" id="logoImg">
+</div>
+
+<div>
+  <div>
+  <strong>Name</strong>
+  <span
+    id="editName"
+    class="editable-field"
+    tabindex="0"
+  >${character.appearance.name || "—"}</span>
+</div>
+  <div><strong>Race</strong> ${race ? race.name : "—"}</div>
+  <div><strong>Alignment</strong> ${character.alignment.order || "—"} ${character.alignment.moral || ""}</div>
+  <div><strong>Deity</strong> ${deity ? deity.name : "—"}</div>
+  <div>
+  <strong>Player Name</strong>
+  <span
+    id="editPlayer"
+    class="editable-field"
+    tabindex="0"
+  >${character.player || "—"}</span>
+</div>
+<!-- ===== REST BUTTONS UNDER PLAYER NAME START ===== -->
+<div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+  <button><strong>Quick Rest</strong></button>
+  <button><strong>Short Rest</strong></button>
+  <button><strong>Long Rest</strong></button>
+</div>
+<!-- ===== REST BUTTONS UNDER PLAYER NAME END ===== -->
+
+
+</div>
+
+<div>
+  <div><strong>Classes</strong></div>
+  ${
+    Array.isArray(character.classes)
+      ? character.classes
+          .filter(c => c && (c.name || c.classId))
+         /* ===== PRIEST HEADER LABEL START ===== */
+.map(c => {
+  const cls =
+    classes.find(x => x.id === c.classId) ||
+    classes.find(x => x.name === c.name);
+  const lvl = Number(c.level);
+
+  const isPriest = cls && cls.id && cls.id.toLowerCase() === "priest";
+  const deityName = deity ? deity.name : "—";
+
+  const classLabel = isPriest
+    ? `Priest of ${deityName}`
+    : (cls ? cls.name : c.name);
+
+  return `<div>${classLabel} ${Number.isFinite(lvl) ? lvl : Number(character.level || 0)}</div>`;
+})
+/* ===== PRIEST HEADER LABEL END ===== */
+
+          .join("")
+      : (() => {
+          const cls = classes.find(x => x.id === character.classId);
+          return `<div>${cls ? cls.name : "—"} ${character.level || 1}</div>`;
+        })()
+  }
+
+<div style="margin-top:6px;"><strong>Total Level</strong> ${
+  Array.isArray(character.classes)
+    ? character.classes.reduce((sum, c) => {
+        const lvl =
+          Number(c.level) ||
+          Number(c.lvl) ||
+          Number(character.level) ||
+          0;
+        return sum + lvl;
+      }, 0)
+    : Number(character.level || 0)
+}</div>
+
+
+
+<!-- ===== SAVES BUTTONS START ===== -->
+<div style="margin-top:6px;"><strong>Saves</strong></div>
+
+<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+
+  <button id="dodgeRollLabel" style="font-weight:bold;">Dodge</button>
+  <span>${computeSaves().dodge}</span>
+
+  <button id="resistRollLabel" style="font-weight:bold;">Resist</button>
+  <span>${computeSaves().resist}</span>
+
+  <button id="toughnessRollLabel" style="font-weight:bold;">Toughness</button>
+  <span>${computeSaves().toughness}</span>
+
+</div>
+<!-- ===== SAVES BUTTONS END ===== -->
+
+
+
+</div>
+
+    <div>
+      <div>
+  <strong>Hit Points</strong>
+  <span
+    id="editHpCurrent"
+    class="editable-field"
+    tabindex="0"
+  >${character.hpCurrent ?? character.baseHP}</span>
+  of ${character.baseHP}
+</div>
+
+      <div>
+  <strong>Experience Points</strong>
+  <span id="editXp" class="editable-field" tabindex="0">${character.xp || 0}</span>
+  of ${
+    (() => {
+      const totalLevel = Array.isArray(character.classes)
+        ? character.classes.reduce((sum, c) => sum + (Number(c.level) || 0), 0)
+        : Number(character.level || 0);
+      const next = advancement.find(a => Number(a.totalLevel) === totalLevel + 1);
+      return next ? next.XP : "—";
+    })()
+  }
+</div>
+
+
+<div>
+  <strong>Luck</strong>
+  <span id="editLuck" class="editable-field" tabindex="0">${character.luck || 0}</span>
+  of 3
+</div>
+
+    <div>
+  <strong>Team Points</strong>
+  <span id="editTeam" class="editable-field" tabindex="0">${character.team ?? 0}</span>
+  of 6
+</div>
+
+<div>
+  <strong>Silver</strong>
+  <span id="editSilver" class="editable-field" tabindex="0">${character.currency?.silver ?? 0}</span>
+  oz
+  &nbsp;
+  <strong>Gold</strong>
+  <span id="editGold" class="editable-field" tabindex="0">${character.currency?.gold ?? 1}</span>
+  oz
+<!-- ===== TOP BAR LANGUAGES START ===== -->
+<div>
+  <strong>Languages</strong>
+  ${(() => {
+
+    if (!Array.isArray(character.languages)) character.languages = [];
+    if (!character.languageCosts) character.languageCosts = {};
+
+    /* ===== DEFAULT LANGUAGES START ===== */
+    if (!character.languages.includes("Common")) {
+      character.languages.push("Common");
+      character.languageCosts["Common"] = 0;
+    }
+
+    if (character.raceId === "grey" && !character.languages.includes("Parallax")) {
+      character.languages.push("Parallax");
+      character.languageCosts["Parallax"] = 0;
+    }
+
+    if (character.raceId === "outlander" && !character.languages.includes("Zhaǂkareth")) {
+      character.languages.push("Zhaǂkareth");
+      character.languageCosts["Zhaǂkareth"] = 0;
+    }
+    /* ===== DEFAULT LANGUAGES END ===== */
+
+    const totalSlots = Math.floor(character.abilities?.INT.value / 3);
+    const usedSlots = Object.values(character.languageCosts)
+      .reduce((a,b) => a + Number(b || 0), 0);
+
+    const raceId = character.raceId;
+
+    let list = "—";
+    if (character.languages.length) {
+      list = character.languages.map(langName => {
+
+        const isAlien =
+          (langName === "Parallax" && raceId !== "grey") ||
+          (langName === "Zhaǂkareth" && raceId !== "outlander");
+
+        return isAlien
+          ? `<em>${langName}</em>`
+          : langName;
+
+      }).join(", ");
+    }
+
+    const slotText =
+      usedSlots < totalSlots
+        ? ` (${usedSlots} / ${totalSlots})`
+        : "";
+
+    const addBtn =
+      usedSlots < totalSlots
+        ? ` <button id="addLanguageBtn" style="font-size:0.6em; padding:2px 6px;">Add</button>`
+        : "";
+
+    return `${list}${slotText}${addBtn}`;
+  })()}
+</div>
+<!-- ===== TOP BAR LANGUAGES END ===== -->
+
+  </div>
+
+${character.appearance?.description
+  ? `<div style="grid-column:1 / -1; margin-top:12px;"><em>${character.appearance.description}</em></div>`
+  : ``}
+`;
+
+}
+
+function key(s) {
+  return s.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+function computeSaves() {
+  if (!character || !classAdv) return { dodge: 0, resist: 0, toughness: 0 };
+
+  let total = { dodge: 0, resist: 0, toughness: 0 };
+
+  const classList = Array.isArray(character.classes)
+    ? character.classes
+    : [{ classId: character.classId, level: character.level || 1 }];
+
+  classList.forEach(c => {
+    const cid = c.classId;
+    const lvl = Number(c.level) || 1;
+
+    const row = classAdv.find(r => r.classID === cid && Number(r.level) === lvl);
+    if (!row) return;
+
+    total.dodge += Number(row.dodge) || 0;
+    total.resist += Number(row.resist) || 0;
+    total.toughness += Number(row.toughness) || 0;
+  });
+
+  return total;
+}
+
+function rollDodgeSave() {
+  if (!character) return;
+
+  const current = computeCurrentStats();
+
+  const agiBase = current.abilities.AGI.base;
+  const agi = current.abilities.AGI.total;
+
+  const dodge = computeSaves().dodge;
+  const d10 = Math.floor(Math.random() * 10) + 1;
+
+  const base = agi + dodge;
+  const total = base + d10;
+
+  const col0 = document.getElementById("rollCol0Body");
+  const col1 = document.getElementById("rollCol1Body");
+  const col2 = document.getElementById("rollCol2Body");
+
+  col2.innerHTML = col1.innerHTML;
+  col1.innerHTML = col0.innerHTML;
+
+  const delta = agi - agiBase;
+
+  col0.innerHTML = `
+<div>
+  <div><strong><em>Dodge Roll</em></strong></div>
+  <div>(AGI + Dodge) = ${
+    delta
+      ? `${agiBase} <span style="color:${delta > 0 ? "#634fa2" : "red"};">(${delta})</span>`
+      : agi
+  } + ${dodge} = ${base}</div>
+  <div>1d10 Roll = ${d10}</div>
+  <div>Dodge Save: ${total}</div>
+</div>
+`;
+}
+
+function rollResistSave() {
+  if (!character) return;
+
+  const current = computeCurrentStats();
+
+  const endBase = current.abilities.END.base;
+  const end = current.abilities.END.total;
+
+  const resist = computeSaves().resist;
+  const d10 = Math.floor(Math.random() * 10) + 1;
+
+  const base = end + resist;
+  const total = base + d10;
+
+const col0 = document.getElementById("rollCol0Body");
+const col1 = document.getElementById("rollCol1Body");
+const col2 = document.getElementById("rollCol2Body");
+
+col2.innerHTML = col1.innerHTML;
+col1.innerHTML = col0.innerHTML;
+
+col0.innerHTML = `
+<div>
+  <div><strong><em>Resist Roll</em></strong></div>
+<div>1d10 Roll = ${d10}</div>
+<div>Resist Save: ${total}</div>
+</div>
+`;
+}
+
+function rollToughnessSave() {
+  if (!character) return;
+
+  const current = computeCurrentStats();
+
+  const strBase = current.abilities.STR.base;
+  const str = current.abilities.STR.total;
+
+  const toughness = computeSaves().toughness;
+  const d10 = Math.floor(Math.random() * 10) + 1;
+
+  const base = str + toughness;
+  const total = base + d10;
+
+  const col0 = document.getElementById("rollCol0Body");
+  const col1 = document.getElementById("rollCol1Body");
+  const col2 = document.getElementById("rollCol2Body");
+
+  col2.innerHTML = col1.innerHTML;
+  col1.innerHTML = col0.innerHTML;
+
+  const delta = str - strBase;
+
+  col0.innerHTML = `
+<div>
+  <div><strong><em>Toughness Roll</em></strong></div>
+  <div>(STR + Toughness) = ${
+    delta
+      ? `${strBase} <span style="color:${delta > 0 ? "#634fa2" : "red"};">(${delta})</span>`
+      : str
+  } + ${toughness} = ${base}</div>
+  <div>1d10 Roll = ${d10}</div>
+  <div>Toughness Save: ${total}</div>
+</div>
+`;
+}
+
+function rollWeaponAttack(weaponId, weaponType) {
+  if (!character || !equipment) return;
+
+  const item =
+    equipment.find(e => e.id === weaponId) ||
+    equipment.find(e => e.eqpName === weaponId);
+
+  if (!item) return;
+
+const current = computeCurrentStats();
+
+const STR = current.abilities.STR.total;
+const PER = current.abilities.PER.total;
+
+  const skill = k => current.skills?.[k]?.total || 0;
+
+  let ability = 0;
+  let skillVal = 0;
+  let formulaLabel = "";
+
+  if (weaponType === "mele") {
+    ability = STR;
+    skillVal = skill("melee");
+    formulaLabel = "STR + Melee";
+  } else if (weaponType === "ha2h") {
+    ability = STR;
+    skillVal = skill("handtohand");
+    formulaLabel = "STR + H2H";
+  } else if (weaponType === "rngd") {
+    ability = PER;
+    skillVal = skill("ranged");
+    formulaLabel = "PER + Ranged";
+  } else if (weaponType === "guns") {
+    ability = PER;
+    skillVal = skill("guns");
+    formulaLabel = "PER + Guns";
+  } else if (weaponType === "thrw") {
+    ability = STR;
+    skillVal = skill("thrown");
+    formulaLabel = "STR + Thrown";
+  }
+
+const abilityPenalty = 0;
+const atkPenalty = 0;
+
+const base = ability + skillVal;
+
+  const col0 = document.getElementById("rollCol0");
+  const col1 = document.getElementById("rollCol1");
+  const col2 = document.getElementById("rollCol2");
+
+    /* ===== Ammo tracking ===== */
+  if (!character.weaponAmmo) character.weaponAmmo = {};
+
+  const usesAmmo = weaponType === "guns" || weaponType === "rngd" || weaponType === "thrw";
+
+  if (usesAmmo) {
+    if (character.weaponAmmo[weaponId] == null) character.weaponAmmo[weaponId] = 10;
+
+    if (character.weaponAmmo[weaponId] <= 0) {
+      const col0 = document.getElementById("rollCol0");
+      const col1 = document.getElementById("rollCol1");
+      const col2 = document.getElementById("rollCol2");
+
+      col2.innerHTML = col1.innerHTML;
+      col1.innerHTML = col0.innerHTML;
+
+      col0.innerHTML = `
+<div style="color:red; font-weight:bold;">
+OUT OF AMMO
+</div>
+`;
+      return;
+    }
+
+    character.weaponAmmo[weaponId]--;
+    renderAttacksPanel();
+
+  }
+
+  const d10 = Math.floor(Math.random() * 10) + 1;
+  const total = base + d10;
+
+  col2.innerHTML = col1.innerHTML;
+  col1.innerHTML = col0.innerHTML;
+
+  let critStyle = "";
+  let critText = "";
+
+  if (d10 === 10) {
+    const part = rollBodyPart();
+
+    let effect = "";
+    if (part === "Head") effect = "the target is knocked unconscious";
+    else if (part === "Right Arm" || part === "Left Arm") effect = "the target drops anything held in that arm";
+    else if (part === "Right Leg" || part === "Left Leg") effect = "the target is knocked prone";
+    else effect = "the target is winded";
+
+    critStyle = "border:3px solid #9dc384; box-shadow:0 0 16px #9dc384;";
+    critText = `<div style="color:#9dc384; font-weight:bold;">
+Critical Success! The attack hits and ${effect}.
+</div>`;
+
+  } else if (d10 === 1 && weaponType === "guns") {
+    if (!character.weaponMisfire) character.weaponMisfire = {};
+    character.weaponMisfire[weaponId] = true;
+
+    critStyle = "border:3px solid red; box-shadow:0 0 16px red;";
+    critText = `<div style="color:red; font-weight:bold;">
+GUN MISFIRED, CLEAR TO CONTINUE USING
+</div>
+<button id="clearMisfireBtn" data-weapon="${weaponId}">Clear</button>`;
+  } else if (d10 === 1) {
+    critStyle = "border:3px solid red; box-shadow:0 0 16px red;";
+    critText = `<div style="color:red; font-weight:bold;">
+Critical Failure! The attack misses and causes a complication.
+</div>`;
+  }
+
+  col0.style.border = critStyle ? critStyle.split(";")[0].split(":")[1].trim() : "";
+  col0.style.boxShadow = critStyle ? critStyle.split(";")[1].split(":")[1].trim() : "";
+
+/* ===== ATTACK ROLL TEMPLATE START ===== */
+document.getElementById("rollCol0Body").innerHTML =
+  "<div>"
+  + "<div><strong><em>" + item.eqpName + " Attack</em></strong></div>"
+  + "<div><em>(" + formulaLabel + ")</em> = ("
+  + ability
+  + (abilityPenalty ? " (" + abilityPenalty + ")" : "")
+  + " + " + skillVal
+  + (atkPenalty ? " " + atkPenalty : "")
+  + ") = " + base + "</div>"
+  + "<div><em>1d10 Roll</em> = " + d10 + "</div>"
+  + "<div><strong>Attack Roll = " + total + "</strong></div>"
+  + "<div>Range: " + computeDistance(item.distance) + "</div>"
+  + critText
+  + (item.DMGorTAC
+      ? (function () {
+          const dmg = rollDamage(item.DMGorTAC);
+          const dmgValue = Number(dmg.split(" ")[0]);
+          const dmgType = dmg.split(" ")[1] || "";
+          if (d10 === 10) {
+            const doubled = dmgValue * 2;
+            return "<div style=\"color:#9dc384; font-weight:bold;\">Damage: "
+              + dmgValue + " * 2 = " + doubled + " " + dmgType
+              + " For Critical Success</div>";
+          } else {
+            return "<div>Damage: " + dmg + "</div>";
+          }
+        })()
+      : "<div>Damage: —</div>")
+  + "</div>";
+/* ===== ATTACK ROLL TEMPLATE END ===== */
+}
+
+/* === AUTO-SCROLL ROLL / SPELL RESULTS (GLOBAL HOOK) === */
+(function () {
+  const rollObserver = new MutationObserver(() => {
+    document
+      .getElementById("rollResultsPanel")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  const spellObserver = new MutationObserver(() => {
+    document
+      .getElementById("spellResultsPanel")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  [
+    ["rollCol0Body", rollObserver],
+    ["spellCol0Body", spellObserver]
+  ].forEach(([id, observer]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    observer.observe(el, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  });
+})();
+
+document.addEventListener("click", e => {
+
+  /* ===== Editable numeric fields ===== */
+  const editableMap = {
+    editXp:       { path: ["xp"], min: 0 },
+    editLuck:     { path: ["luck"], min: 0, max: 3 },
+    editTeam:     { path: ["team"], min: 0, max: 6 },
+    editSilver:   { path: ["currency","silver"], min: 0 },
+    editGold:     { path: ["currency","gold"], min: 0 },
+
+    /* Armor */
+    "armor-ac-added": { path: ["armorACAdded"], min: 0 }
+  };
+
+  /* ===== Ammo editable handler ===== */
+  if (e.target.dataset && e.target.dataset.ammo && character) {
+    const span = e.target;
+    const wid = span.dataset.ammo;
+
+    if (!character.weaponAmmo) character.weaponAmmo = {};
+    if (character.weaponAmmo[wid] == null) character.weaponAmmo[wid] = 10;
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = 0;
+    input.value = character.weaponAmmo[wid];
+    input.style.width = "80px";
+
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("keydown", ev => {
+      if (ev.key === "Enter") {
+        let val = Number(input.value);
+        if (!Number.isFinite(val) || val < 0) val = 0;
+
+        character.weaponAmmo[wid] = val;
+
+        renderAttacksPanel();
+      }
+    });
+
+    return;
+  }
+  if (editableMap[e.target.id] && character) {
+    const cfg = editableMap[e.target.id];
+    const span = e.target;
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = cfg.min ?? 0;
+    if (Number.isFinite(cfg.max)) input.max = cfg.max;
+    input.value = Number(span.textContent) || 0;
+    input.style.width = "80px";
+
+    span.replaceWith(input);
+    input.focus();
+
+input.addEventListener("keydown", ev => {
+  if (ev.key === "Enter") {
+    let val = Number(input.value);
+    if (!Number.isFinite(val)) val = cfg.min ?? 0;
+    if (val < (cfg.min ?? 0)) val = cfg.min ?? 0;
+    if (Number.isFinite(cfg.max) && val > cfg.max) val = cfg.max;
+
+    let obj = character;
+    for (let i = 0; i < cfg.path.length - 1; i++) {
+      obj[cfg.path[i]] = obj[cfg.path[i]] || {};
+      obj = obj[cfg.path[i]];
+    }
+    obj[cfg.path[cfg.path.length - 1]] = val;
+
+const span = document.createElement("span");
+span.id = cfg && cfg.path ? e.target.id : input.previousSibling?.id;
+span.className = "editable-field";
+span.tabIndex = 0;
+span.textContent = val;
+span.style.background = "#634fa2";
+span.style.color = "#d8d2e7";
+span.style.border = "2px solid #634fa2";
+span.style.borderRadius = "6px";
+span.style.padding = "4px 8px";
+span.style.fontWeight = "bold";
+span.style.cursor = "pointer";
+
+    input.replaceWith(span);
+
+    renderTopBar();
+    renderArmorPanel();
+  }
+});
+
+    return;
+  }
+
+
+
+  if (e.target.id === "editName" && character) {
+    const span = e.target;
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = span.textContent === "—" ? "" : span.textContent;
+    input.style.width = "200px";
+
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("keydown", ev => {
+      if (ev.key === "Enter") {
+        const val = input.value.trim() || "—";
+        character.appearance.name = val;
+
+        renderTopBar();
+      }
+    });
+  }
+
+  if (e.target.id === "editPlayer" && character) {
+    const span = e.target;
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = span.textContent === "—" ? "" : span.textContent;
+    input.style.width = "200px";
+
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("keydown", ev => {
+      if (ev.key === "Enter") {
+        const val = input.value.trim() || "—";
+        character.player = val;
+
+        renderTopBar();
+      }
+    });
+  }
+
+
+  if (e.target.id === "editHpCurrent" && character) {
+    const span = e.target;
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = 0;
+    input.max = character.baseHP;
+    input.value = Number(span.textContent) || character.baseHP;
+    input.style.width = "80px";
+
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("keydown", ev => {
+      if (ev.key === "Enter") {
+        let val = Number(input.value);
+        if (!Number.isFinite(val)) val = character.baseHP;
+        if (val < 0) val = 0;
+        if (val > character.baseHP) val = character.baseHP;
+
+        character.hpCurrent = val;
+
+        renderTopBar();
+      }
+    });
+  }
+
+});
+
+
+
+
+function skillKey(s) {
+  return s.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+function renderConditionsPanel() {
+  const el = document.getElementById("conditionsContent");
+  if (!el || !character) return;
+
+/* ===== COMBAT & CONDITIONS PANEL START ===== */
+el.innerHTML = `
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+
+    <!-- Box 1: Combat Encounter -->
+    <div style="background:#48752c; border:2px solid #9dc384;
+                border-radius:10px; overflow:hidden;
+                display:flex; flex-direction:column;">
+      <div style="padding:6px 10px; font-weight:bold;
+                  background:linear-gradient(to right,#48752c,#bdd6ac);
+                  color:#bdd6ac;
+                  border-radius:8px 8px 0 0;">
+        Combat Encounter
+      </div>
+      <div id="roundEngine" style="padding:8px;"></div>
+    </div>
+
+    <!-- Box 2: Conditions -->
+    <div style="background:#9dc384; border:2px solid #48752c;
+                border-radius:10px; overflow:hidden;
+                display:flex; flex-direction:column;">
+      <div style="padding:6px 10px; font-weight:bold;
+                  background:linear-gradient(to right,#48752c,#bdd6ac);
+                  color:#bdd6ac;
+                  border-radius:8px 8px 0 0;">
+        Conditions
+      </div>
+      <div id="conditionsButtons" style="padding:8px; display:flex; flex-wrap:wrap; gap:6px;"></div>
+    </div>
+
+    <!-- Box 3: Current Condition Effects -->
+    <div style="background:#bdd6ac; border:2px solid #9dc384;
+                border-radius:10px; overflow:hidden;
+                display:flex; flex-direction:column;">
+      <div style="padding:6px 10px; font-weight:bold;
+                  background:linear-gradient(to right,#48752c,#bdd6ac);
+                  color:#bdd6ac;
+                  border-radius:8px 8px 0 0;">
+        Current Condition Effects
+      </div>
+      <div id="conditionDescription" style="padding:8px; flex:1;"></div>
+    </div>
+
+  </div>
+`;
+/* ===== COMBAT & CONDITIONS PANEL END ===== */
+
+  /* ===== POPULATE ROUND ENGINE UI START ===== */
+  const re = document.getElementById("roundEngine");
+  if (re) {
+
+    if (!roundState.active) {
+
+      re.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:10px;">
+
+          <button id="roundStartBtn"
+            style="
+              font-size:1.25em;
+font-weight:bold;
+font-style:italic;
+padding:14px;
+background:linear-gradient(to right,#634fa2,#8b7dbe);
+color:#d8d2e7;
+border:2px solid #d8d2e7;
+border-radius:8px;
+cursor:pointer;
+            ">
+            Initiate Combat
+          </button>
+
+          ${
+            roundState.lastEncounterTime
+              ? `<div style="font-weight:bold; color:#bdd6ac;">
+                   Last Encounter: ${roundState.lastEncounterTime}
+                 </div>`
+              : ""
+          }
+
+        </div>
+      `;
+
+    } else {
+
+      re.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:2em;">
+
+<div style="font-weight:bold;">
+  <span style="color:#9dc384;">Round:</span>
+  <span style="color:#bdd6ac;">${roundState.round}</span>
+</div>
+
+          <div style="font-weight:bold;">
+  <span style="color:#9dc384;">Round Time:</span>
+  <span id="roundTimeDisplay" style="color:#bdd6ac;">00:00</span>
+</div>
+
+<div style="font-weight:bold;">
+  <span style="color:#9dc384;">Encounter Time:</span>
+  <span id="encounterTimeDisplay" style="color:#bdd6ac;">00:00</span>
+</div>
+
+          <div style="display:flex; gap:8px; margin-top:6px;">
+            <button id="roundNextBtn">Next</button>
+            <button id="roundEndBtn">End</button>
+          </div>
+
+        </div>
+      `;
+    }
+  }
+  /* ===== POPULATE ROUND ENGINE UI END ===== */
+
+/* ===== POPULATE CONDITIONS BUTTONS UI START ===== */
+const cb = document.getElementById("conditionsButtons");
+if (cb) {
+  const bases = ["Bleeding","Fuzzy","Shaken","Hidden","Poisoned","Prone","Winded"];
+
+  const activeBases = character.conditionStates
+    ? Object.keys(character.conditionStates)
+    : [];
+
+  const inactive = bases
+    .filter(n => !activeBases.includes(n))
+    .sort((a,b) => a.localeCompare(b));
+
+  const activeSorted = [...activeBases]
+    .sort((a,b) => a.localeCompare(b));
+
+  const inactiveBtns = inactive.map(n =>
+    `<button class="conditionBtn" data-cond="${n}" style="
+      background:#634fa2;
+      color:#d8d2e7;
+      border:2px solid #8b7dbe;
+      border-radius:6px;
+      font-weight:bold;">
+      ${n}
+    </button>`
+  ).join("");
+
+  const activeBtns = activeSorted.map(n => {
+    const stageIdx = character.conditionStates[n];
+    const stage = stages[n][stageIdx];
+
+    return `
+      <span style="display:flex; align-items:center; gap:4px;">
+        <button class="conditionBtn active" data-cond="${n}" style="
+          background:${stage.bg};
+          color:${stage.fg};
+          border-radius:6px;
+          font-weight:bold;">
+          ${stage.name}
+        </button>
+        <button class="resolveBtn"
+                data-base="${n}"
+                style="
+                  background:${stage.bg};
+                  color:${stage.fg};
+                  border-radius:6px;
+                  font-weight:bold;">
+          Resolve
+        </button>
+      </span>
+    `;
+  }).join("");
+
+  cb.innerHTML = `
+    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+      ${inactiveBtns}
+    </div>
+    <div id="activeConditionsRow" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+      ${activeBtns}
+    </div>
+  `;
+}
+
+/* ===== POPULATE CURRENT CONDITION EFFECTS UI START ===== */
+const box = document.getElementById("conditionDescription");
+if (box) {
+  const list = Array.isArray(character.conditions) ? character.conditions : [];
+  if (!list.length) {
+    box.innerHTML = `<em>No active conditions.</em>`;
+  } else {
+    box.innerHTML =
+      `<div style="font-weight:bold; color:#48752c; margin-bottom:8px;">Active Conditions</div>` +
+      list
+        .map((c, i) => {
+          let text = c;
+
+if (c === "Winded") {
+            text = `<strong>Winded:</strong> You can only take <strong>ONE SMALL ACTION</strong> per round, and <strong>NO LARGE ACTION</strong> until resolved.<br>
+<strong>Res.:</strong> Successful skill check (+1 DIF if on yourself), short or full rest, any magical healing.`;
+          }
+
+          return `<div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;">
+            <div style="flex:1;">${text}</div>
+            <button data-remove-condition="${i}" style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:6px; font-weight:bold;">
+              Resolve
+            </button>
+          </div>`;
+        })
+        .join("");
+  }
+}
+/* ===== POPULATE CURRENT CONDITION EFFECTS UI END ===== */
+
+  /* ===== ROUND DISPLAY SYNC START ===== */
+  const rd = document.getElementById("roundDisplay");
+  if (rd && typeof roundState !== "undefined") {
+    rd.textContent = "Round: " + (roundState.active ? roundState.round : 0);
+  }
+  /* ===== ROUND DISPLAY SYNC END ===== */
+}
+
+function renderStatsPanel() {
+  const el = document.getElementById("statsContent");
+  if (!character || !character.abilities || !character.skills) {
+    el.innerHTML = "<em>No character loaded.</em>";
+    return;
+  }
+
+  let html = "";
+
+const current = computeCurrentStats();
+const condMods = getConditionModifiers();
+
+const clsName = character.classes?.[0]?.name;
+const cls = classes.find(c => c.id === character.classId);
+const classAdvURL = "classadv.csv";
+const advancementURL = "advancement.csv";
+const classSkills = new Set(
+  cls?.classSkills
+    ? cls.classSkills.split(",").map(s => key(s))
+    : []
+);
+
+const racialSkills = new Set(
+  (
+    character.raceId === "grey"
+      ? ["Bluff", "Local Knowledge", "Sneak"]
+      : character.raceId === "little"
+      ? ["Pick Lock / Pocket", "Repair", "Sneak"]
+      : []
+  ).map(s => key(s))
+);
+
+// Abilities
+html += `<div class="summary-abilities">`;
+
+ABILITIES.forEach(a => {
+  const mod = condMods[a] || 0;
+
+  html += `<div class="sheet-title"${
+    mod ? ` style="color:red; font-weight:bold;"` : ""
+  }>${a}</div>`;
+});
+
+ABILITIES.forEach(a => {
+const base = current.abilities[a].base;
+const mod = current.abilities[a].delta;
+const total = current.abilities[a].total;
+
+html += `<div class="sheet-value">${
+  mod
+    ? `<span style="color:red; font-weight:bold;">${base} (${mod}) = ${total}</span>`
+    : base
+}</div>`;
+});
+
+html += `</div>`;
+
+  // Skills
+  html += `<div class="summary-skills" style="margin-top:12px;">`;
+  for (let i = 0; i < SKILLS.length; i += 6) {
+    const chunk = SKILLS.slice(i, i + 6);
+    chunk.forEach(s => {
+const k = key(s);
+const sk = skillKey(s);
+const isClass = classSkills.has(sk);
+const isRacial = racialSkills.has(sk);
+  let style = "";
+
+  if (isClass && isRacial) style = "font-weight:bold;font-style:italic;";
+  else if (isClass) style = "font-weight:bold;";
+  else if (isRacial) style = "font-style:italic;";
+
+  html += `<div class="sheet-title" style="${style}">${s}</div>`;
+});
+
+/* ===== SKILL VALUE RENDER START ===== */
+chunk.forEach(s => {
+  const k = skillKey(s);
+  const base = current.skills[k]?.base || 0;
+  const mod = current.skills[k]?.delta || 0;
+  const total = current.skills[k]?.total || base;
+
+  html += "<div class=\"sheet-value\">"
+    + (mod
+        ? base
+          + " <span style=\"color:"
+          + (mod > 0 ? "#634fa2" : "red")
+          + ";\">(" + mod + ") = " + total + "</span>"
+        : base)
+    + "</div>";
+});
+/* ===== SKILL VALUE RENDER END ===== */
+
+  }
+  html += `</div>`;
+
+  el.innerHTML = `
+${html}
+<div style="margin-top:10px; font-size:1.2em; color:#48752c;">
+  <strong><em>Class Skills:</em></strong>
+  <strong>${
+    cls?.classSkills
+      ? cls.classSkills.split(",").map(s => s.trim()).join(", ")
+      : "—"
+  }</strong>
+  ${
+    character.raceId === "grey" || character.raceId === "little"
+      ? ` &nbsp;&nbsp; <strong><em>Racial Skills:</em></strong>
+          <em>${
+            character.raceId === "grey"
+              ? "Bluff, Local Knowledge, Sneak"
+              : "Pick Lock / Pocket, Repair, Sneak"
+          }</em>`
+      : ""
+  }
+</div>`;
+}
+
+function computeDistance(expr) {
+  if (!expr) return "—";
+
+  let result = expr;
+
+  // Replace STR with character.abilities.STR.value
+  if (character && character.abilities && expr.includes("STR")) {
+    const strVal = Number(character.abilities.STR.value) || 0;
+    result = result.replace(/STR/g, strVal);
+  }
+
+  // Evaluate simple multiplication patterns: e.g., "10 x 10ft" => 100ft
+  // Look for "<number> x <number>ft"
+  const match = result.match(/(\d+)\s*x\s*(\d+)ft/i);
+  if (match) {
+    const val = Number(match[1]) * Number(match[2]);
+    // Check for max cap in parentheses
+    const maxMatch = result.match(/\(max\s*(\d+)ft/i);
+    const maxVal = maxMatch ? Number(maxMatch[1]) : null;
+    const finalVal = maxVal != null ? Math.min(val, maxVal) : val;
+    return `${finalVal} ft`;
+  }
+
+  // If no multiplication, just return the raw string
+  return result;
+}
+
+function renderAttacksPanel() {
+  const el = document.getElementById("attacksContent");
+  if (!el || !character || !character.equipment || !character.equipment.weapons) {
+    el.innerHTML = "<em>No weapons.</em>";
+    return;
+  }
+
+const weapons = Array.isArray(character.equipment.weapons)
+  ? character.equipment.weapons
+  : String(character.equipment.weapons || "")
+      .split("|")
+      .filter(Boolean);
+
+  const sections = {
+    melee: [],
+    ranged: [],
+    firearms: [],
+    thrown: []
+  };
+
+  weapons.forEach(w => {
+    const wid = typeof w === "string" ? w : w.id || w.eqpId || w.eqpName;
+
+    const item =
+  equipment.find(e => e.id === wid) ||
+  equipment.find(e => e.eqpName === wid) ||
+  equipment.find(e => e.eqpName && e.eqpName.toLowerCase() === String(wid).toLowerCase());
+
+    if (!item || !item.eqpType) return;
+
+    if (item.eqpType === "guns") sections.firearms.push(item);
+    else if (item.eqpType === "rngd") sections.ranged.push(item);
+    else if (item.eqpType === "thrw") sections.thrown.push(item);
+    else if (item.eqpType === "mele" || item.eqpType === "ha2h")
+      sections.melee.push(item);
+  });
+
+function sectionHeader(title, columns) {
+  return `
+    <div style="
+      display:grid;
+      grid-template-columns:${columns.map(c => c.fr).join(" ")};
+      gap:8px;
+      margin-top:12px;
+      padding-bottom:3px;
+      border-bottom:4px solid #48752c;
+      align-items:center;
+      font-style: italic;
+      font-weight: bold;
+      font-size: 100%;
+      color: #48752c;
+    ">
+      ${columns.map(c => `<div><em>${c.label}</em></div>`).join("")}
+    </div>
+  `;
+}
+
+
+
+function renderRow(w, columns) {
+    const ordered = columns;
+
+const cells = ordered.map(col => {
+  if (col.key === "weapon") return `<div><button class="clickable" data-weapon="${w.id || w.eqpName}" data-type="${w.eqpType}" style="background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;">${w.eqpName}</button></div>`;    
+  if (col.key === "damage") return `<div>${w.DMGorTAC || ""}</div>`;
+  if (col.key === "dtype") return `<div>${w.DMGTypeMaterial || w.DMGType || w.damageType || ""}</div>`;
+  if (col.key === "range") return `<div>${computeDistance(w.distance)}</div>`;
+  if (col.key === "misfire") return `<div>${w.Misfire || ""}</div>`;
+if (col.key === "ammo") return `<div><span id="ammo-${w.id || w.eqpName}" class="editable-field" data-ammo="${w.id || w.eqpName}" tabindex="0" style="display:inline-block; background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;">${(character.weaponAmmo && character.weaponAmmo[w.id || w.eqpName] != null) ? character.weaponAmmo[w.id || w.eqpName] : 10}</span></div>`;
+  if (col.key === "weight") return `<div>${w.weight || ""}</div>`;
+  return `<div></div>`;
+});
+
+  return `
+    <div style="
+      display:grid;
+      grid-template-columns:${ordered.map(c => c.fr).join(" ")};
+      gap:8px;
+      margin-top:4px;
+      align-items:center;
+    ">
+      ${cells.join("")}
+    </div>
+  `;
+}
+
+
+  function renderSection(title, list, columns) {
+    if (!list.length) return "";
+    return (
+      sectionHeader(title, columns) +
+      list.map(w => renderRow(w, columns)).join("")
+    );
+  }
+
+const meleeCols = [
+  { key: "weapon",  label: "Melee", fr: "1fr" },
+  { key: "damage",  label: "DMG", fr: "1fr" },
+  { key: "dtype",   label: "Type", fr: "1fr" },
+  { key: "", label: "", fr: "100px" },
+  { key: "",    label: "", fr: "100px" },
+  { key: "weight",  label: "Weight", fr: "100px" }
+];
+
+const rangedCols = [
+  { key: "weapon",  label: "Ranged", fr: "1fr" },
+  { key: "damage",  label: "DMG", fr: "1fr" },
+  { key: "dtype",   label: "Type", fr: "1fr" },
+  { key: "range",   label: "Range", fr: "0.8fr" },
+  { key: "ammo",    label: "Ammo", fr: "0.5fr" },
+  { key: "weight",  label: "Weight", fr: "100px" }
+];
+
+const firearmCols = [
+  { key: "weapon",  label: "Firearms", fr: "1fr" },
+  { key: "damage",  label: "DMG", fr: "1fr" },
+  { key: "dtype",   label: "Type", fr: "1fr" },
+  { key: "range",   label: "Range", fr: "0.8fr" },
+  { key: "misfire", label: "Misfire", fr: "0.5fr" },
+  { key: "ammo",    label: "Ammo", fr: "0.5fr" },
+  { key: "weight",  label: "Weight", fr: "100px" }
+];
+
+const thrownCols = [
+  { key: "weapon",  label: "Thrown", fr: "1fr" },
+  { key: "damage",  label: "DMG", fr: "1fr" },
+  { key: "dtype",   label: "Type", fr: "1fr" },
+  { key: "range",   label: "Range", fr: "0.8fr" },
+  { key: "ammo",    label: "Ammo", fr: "0.5fr" },
+  { key: "weight",  label: "Weight", fr: "100px" }
+];
+
+  let html =
+    renderSection("Melee", sections.melee, meleeCols) +
+    renderSection("Ranged", sections.ranged, rangedCols) +
+    renderSection("Firearms", sections.firearms, firearmCols) +
+    renderSection("Thrown", sections.thrown, thrownCols);
+
+  if (!html) {
+    html = `
+      <div style="margin-top:8px;">
+        <strong>Special Attacks</strong>
+        <div><em>No special attacks.</em></div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div style="margin-top:8px;">
+        <strong>Special Attacks</strong>
+        <div><em>No special attacks.</em></div>
+      </div>
+    `;
+  }
+
+  el.innerHTML = html;
+}
+
+function rollDamage(expr) {
+  if (!expr) return "—";
+
+  const totalLevel =
+    Array.isArray(character.classes)
+      ? character.classes.reduce((s, c) => s + (Number(c.level) || 0), 0)
+      : Number(character.level) || 0;
+
+  let text = expr.replace(/LVL/g, String(totalLevel));
+
+  const parts = text.split("+");
+  let total = 0;
+
+  parts.forEach(p => {
+    const m = p.trim().match(/^(\d*)d(\d+)/i);
+    if (m) {
+      const count = Number(m[1] || 1);
+      const sides = Number(m[2]);
+      for (let i = 0; i < count; i++) {
+        total += Math.floor(Math.random() * sides) + 1;
+      }
+    } else {
+      const n = Number(p.replace(/[^0-9\-]/g, ""));
+      if (Number.isFinite(n)) total += n;
+    }
+  });
+
+  const type = text.match(/[A-Za-z]+$/);
+  return type ? `${total} ${type[0]}` : String(total);
+}
+
+function rollBodyPart() {
+  const r = Math.floor(Math.random() * 10) + 1;
+
+  if (r <= 5) return "Torso";
+  if (r === 6) return "Right Arm";
+  if (r === 7) return "Left Arm";
+  if (r === 8) return "Right Leg";
+  if (r === 9) return "Left Leg";
+  if (r === 10)return "Head";
+}
+
+function renderArmorPanel() {
+  if (!character) return;
+
+  const race = races.find(r => r.id === character.raceId);
+  const baseAC = race ? Number(race.baseAC) : 0;
+document.getElementById("armorBaseACValue").textContent = baseAC;
+
+  const slots = [
+    "clothing","head","torso",
+    "leftarm","rightarm",
+    "leftleg","rightleg"
+  ];
+
+  /* initialize all slots with base AC */
+  const tacTotals = {
+    clothing: baseAC,
+    head: baseAC,
+    torso: baseAC,
+    leftarm: baseAC,
+    rightarm: baseAC,
+    leftleg: baseAC,
+    rightleg: baseAC
+  };
+
+  slots.forEach(s => {
+    const wtEl = document.getElementById(`armor-${s}-weight`);
+    if (wtEl) wtEl.textContent = "";
+  });
+
+  if (!character.equipment) return;
+
+  const armorList = Array.isArray(character.equipment.armor)
+    ? character.equipment.armor
+    : [character.equipment.armor];
+
+  const norm = s => s.replace(/_/g, " ").toLowerCase();
+
+  armorList.forEach(aid => {
+    const item =
+      equipment.find(e => e.id === aid) ||
+      equipment.find(e => norm(e.eqpName) === norm(aid));
+
+    if (!item || !item.Area) return;
+
+    const area = item.Area.toLowerCase().replace(/\s/g, "");
+
+const nameEl = document.getElementById(`armor-${area}-name`);
+const matEl  = document.getElementById(`armor-${area}-material`);
+const acEl   = document.getElementById(`armor-${area}-ac`);
+const tacEl  = document.getElementById(`armor-${area}-tac`);
+const wtEl   = document.getElementById(`armor-${area}-weight`);
+
+    if (nameEl) nameEl.textContent = item.eqpName || "—";
+    if (acEl) {
+  const v = Number(item.DMGorTAC);
+  acEl.textContent = Number.isFinite(v) && v !== 0 ? `AC +${v}` : "";
+}
+    if (matEl) {
+  const mat = (item.DMGTypeMaterial || "").trim();
+  matEl.textContent = mat || "—";
+
+  const bonusEl = document.getElementById(`armor-${area}-bonus`);
+  const weakEl  = document.getElementById(`armor-${area}-weakness`);
+
+  const MATERIALS = {
+    "Textile": {
+      bonus: "—",
+      weak: "Fire",
+      bg: "#f8f6f0",
+      color: "#000000"
+    },
+    "Ballistic": {
+      bonus: "Bullets & Bolts",
+      weak: "B/P/S, Ice",
+      bg: "#0047ab",
+      color: "#a6c8ff"
+    },
+    "Metal": {
+      bonus: "B/P/S",
+      weak: "B/B, Electricity",
+      bg: "#c0c0c0",
+      color: "#000000"
+    },
+    "Link": {
+      bonus: "B/P/S",
+      weak: "B/B, Acid",
+      bg: "#fff4a3",
+      color: "#cc5500"
+    }
+  };
+
+const data = MATERIALS[mat];
+
+  if (data) {
+    matEl.style.background = data.bg;
+    matEl.style.color = data.color;
+
+    if (bonusEl) {
+      bonusEl.textContent = data.bonus;
+      bonusEl.classList.add("armor-bonus");
+      bonusEl.classList.remove("armor-weakness");
+    }
+
+    if (weakEl) {
+      weakEl.textContent = data.weak;
+      weakEl.classList.add("armor-weakness");
+      weakEl.classList.remove("armor-bonus");
+    }
+  } else {
+    if (bonusEl) {
+      bonusEl.textContent = "";
+      bonusEl.classList.remove("armor-bonus");
+    }
+
+    if (weakEl) {
+      weakEl.textContent = "";
+      weakEl.classList.remove("armor-weakness");
+    }
+  }
+}
+        const bonus = Number(item.DMGorTAC || 0);
+
+    if (area === "clothing") {
+      ["torso","leftarm","rightarm","leftleg","rightleg"].forEach(a => tacTotals[a] += bonus);
+    } else if (area === "torso") {
+      ["torso","leftarm","rightarm"].forEach(a => tacTotals[a] += bonus);
+    } else {
+      tacTotals[area] += bonus;
+    }
+    if (wtEl) {
+  const w = Number(item.weight);
+  wtEl.textContent = w > 0 ? `Wt. ${w}` : "";
+}
+
+    });
+
+  /* Apply cover + AC added */
+  const acAdded = Number(character?.armorACAdded) || 0;
+  const coverBonus =
+    document.getElementById("cover-full")?.checked ? 4 :
+    document.getElementById("cover-partial")?.checked ? 2 : 0;
+
+  Object.keys(tacTotals).forEach(k => {
+    tacTotals[k] += acAdded + coverBonus;
+    const el = document.getElementById(`armor-${k}-tac`);
+    if (el) el.innerHTML = `<strong>TAC ${tacTotals[k]}</strong>`;
+  });
+}
+
+function renderSpellcastingPanel() {
+  const el = document.getElementById("spellcastingContent");
+  if (!el) return;
+
+  if (!character || !Array.isArray(character.classes)) {
+    el.innerHTML = "<em>No spellcaster loaded.</em>";
+    return;
+  }
+
+  const casters = character.classes.filter(c => {
+    const id = (c.classId || c.id || "").toLowerCase();
+    return ["wizard","warlock","priest"].includes(id);
+  });
+
+  if (!casters.length) {
+    el.innerHTML = "<em>No spellcaster loaded.</em>";
+    return;
+  }
+
+  let html = "";
+
+  casters.forEach(c => {
+    const id = (c.classId || c.id || "").toLowerCase();
+    const lvl = Number(c.level) || 1;
+
+    const row = classAdv.find(r =>
+      r.classID.toLowerCase() === id &&
+      Number(r.level) === lvl
+    );
+
+    if (!row) return;
+
+const slots = [row.slot1,row.slot2,row.slot3,row.slot4,row.slot5]
+  .map(v => Number(v) || 0);
+
+const line = slots
+  .map((v,i) => v > 0 ? `Level ${i+1}: ${v}` : null)
+  .filter(Boolean)
+  .join(" | ");
+
+html += `<div><strong><em>${id.charAt(0).toUpperCase() + id.slice(1)} Level ${lvl}</em> Spells Per Day</strong> ${line}</div>`;
+  });
+
+el.innerHTML = html + `
+<div style="background:linear-gradient(to right, #48752c, #9dc384); color:#bdd6ac; font-weight:bold; font-style:italic; padding:6px 10px; margin-top:8px; border-radius:8px;">
+Spellbook
+</div>
+<table style="width:100%; border-collapse:collapse; font-size:0.8em;">
+<thead>
+<tr style="background:#9dc384; color:#48752c;">
+<th></th>
+<th style="text-align:left;">Name</th>
+<th>Type</th>
+<th>Level</th>
+<th>S/C</th>
+<th style="text-align:left;">Effect</th>
+<th>Range</th>
+<th>Save</th>
+<th>Damage</th>
+<th>Duration</th>
+<th>Components</th>
+</tr>
+</thead>
+<tbody id="spellbookBody" class="spellbookStriped">${
+  (character.personalSpells || []).map(id => {
+    const s = spellbook.find(x => (x.id || x.name) === id);
+    if (!s) return "";
+
+    const type = (s.class || "").toUpperCase();
+    const level = type === "CAN" ? 1 : (s.level || "");
+    const sc = (s.complexity || "").toUpperCase().startsWith("S") ? "S" :
+               (s.complexity || "").toUpperCase().startsWith("C") ? "C" : "";
+
+    return `<tr style="text-align:center;">
+<td><button style="font-size:0.45em; padding:1px 4px;" data-rmvspell="${id}">Rmv</button></td>
+<td style="text-align:left;">
+  <button
+    class="clickable"
+    data-spell="${s.id || s.name}"
+    style="
+      background:#634fa2;
+      color:#d8d2e7;
+      border:2px solid #8b7dbe;
+      border-radius:8px;
+      font-weight:bold;
+      padding:4px 10px;
+      cursor:pointer;
+    "
+  >${s.name || s.id || ""}</button>
+</td>
+<td>${type}</td>
+<td>${level}</td>
+<td>${sc}</td>
+<td style="text-align:left;">${s.effectText || "—"}</td>
+<td>${(() => { const totalLevel = Array.isArray(character.classes) ? character.classes.reduce((n,c)=>n+(Number(c.level)||0),0) : Number(character.level)||0; let r=s.rangeFormula||"—"; if(r==="self")return"Self"; if(r==="touch")return"Touch"; if(r!=="—"){ r=r.replace(/LVL/g,totalLevel).replace(/@/g," "); try{const m=r.match(/^([0-9+\-*/(). ]+)\s*(.*)$/); if(m){const n=eval(m[1]); r=n+(m[2]?" "+m[2]:"");}}catch{}} return r; })()}</td>
+<td>${(() => { if (!s.saveType) return "—"; const cls=(s.class||"").toLowerCase(); const want=(cls==="war"?"warlock":cls==="wiz"?"wizard":cls==="pri"?"priest":cls); const lvl=cls==="can"?(Array.isArray(character.classes)?character.classes.reduce((n,c)=>{const id=(c.classId||c.id||"").toLowerCase();return["warlock","wizard","priest"].includes(id)?n+(Number(c.level)||0):n;},0):Number(character.level)||0):(Array.isArray(character.classes)?(character.classes.find(c=>((c.classId||c.id||"").toLowerCase()===want))?.level||0):Number(character.level)||0); let f=s.saveFormula||"—"; if(f!=="—"){f=f.replace(/LVL/g,lvl); try{const m=f.match(/^DC([0-9+\-*/(). ]+)/i); if(m){f="DC"+eval(m[1]);}}catch{}} const t=s.saveType.charAt(0).toUpperCase()+s.saveType.slice(1); const o=(s.saveOutcome||"").toLowerCase()==="half"?"for half.":(s.saveOutcome||"").toLowerCase()==="negates"?"negates.":(s.saveOutcome||""); return `(${f}) ${t} Save ${o}`; })()}</td>
+<td>${(() => { if (!s.damageFormula) return "—"; const cls=(s.class||"").toLowerCase(); const want=(cls==="war"?"warlock":cls==="wiz"?"wizard":cls==="pri"?"priest":cls); const lvl=cls==="can"?(Array.isArray(character.classes)?character.classes.reduce((n,c)=>{const id=(c.classId||c.id||"").toLowerCase();return["warlock","wizard","priest"].includes(id)?n+(Number(c.level)||0):n;},0):Number(character.level)||0):(Array.isArray(character.classes)?(character.classes.find(c=>((c.classId||c.id||"").toLowerCase()===want))?.level||0):Number(character.level)||0); return s.damageFormula.replace(/LVL/g,lvl); })()}</td>
+<td>${(() => { let d=s.duration||"—"; if(d==="—") return d; const cls=(s.class||"").toLowerCase(); const want=(cls==="war"?"warlock":cls==="wiz"?"wizard":cls==="pri"?"priest":cls); const lvl=cls==="can"?(Array.isArray(character.classes)?character.classes.reduce((n,c)=>{const id=(c.classId||c.id||"").toLowerCase();return["warlock","wizard","priest"].includes(id)?n+(Number(c.level)||0):n;},0):Number(character.level)||0):(Array.isArray(character.classes)?(character.classes.find(c=>((c.classId||c.id||"").toLowerCase()===want))?.level||0):Number(character.level)||0); if(/[A-Za-z]/.test(d)&&!/LVL/.test(d)) return d.charAt(0).toUpperCase()+d.slice(1); d=d.replace(/LVL/g,lvl).replace(/@/g," "); try{const m=d.match(/^([0-9+\-*/(). ]+)\s*(.*)$/); if(m){const n=eval(m[1]); d=n+(m[2]?" "+m[2]:"");}}catch{} return d; })()}</td>
+<td>${s.components || "—"}</td>
+</tr>`;
+  }).join("")
+}</tbody>
+</table>
+`;
+
+const bookEl = document.getElementById("spellbookContent");
+
+if (bookEl && Array.isArray(spellbook)) {
+  const casterMap = {};
+
+casters.forEach(c => {
+  const raw = (c.classId || c.id || "").toLowerCase();
+  const lvl = Number(c.level) || 1;
+
+  const key =
+    raw === "warlock" ? "war" :
+    raw === "wizard" ? "wiz" :
+    raw === "priest" ? "pri" :
+    raw;
+
+  casterMap[key] = Math.max(casterMap[key] || 0, lvl);
+});
+
+const classMap = { warlock:"war", wizard:"wiz", priest:"pri" };
+
+const filtered = spellbook.filter(s => {
+  const raw = (s.class || "").toLowerCase();
+  const lvl = Number(s.level) || 0;
+
+  if (raw === "can") return true; // allow cantrips
+
+  const key = classMap[raw] || raw; // normalize to WAR/WIZ/PRI style
+  return casterMap[key] && lvl <= casterMap[key];
+});
+
+    bookEl.innerHTML = `
+<table style="width:100%; border-collapse:collapse; font-size:0.825em;">
+<thead>
+<tr style="background:#8b7dbe; color:#d8d2e7;">
+<th></th>
+<th style="text-align:left;">Name</th>
+<th>Type</th>
+<th>Level</th>
+<th>S/C</th>
+<th style="text-align:left;">Effect</th>
+<th>Range</th>
+<th>Save</th>
+<th>Damage</th>
+<th>Duration</th>
+<th>Components</th>
+</tr>
+</thead>
+<tbody>
+${
+  filtered.map(s => {
+    const type = (s.class || "").toUpperCase();
+    const level = type === "CAN" ? 1 : (s.level || "");
+    const sc = (s.complexity || "").toUpperCase().startsWith("S") ? "S" :
+               (s.complexity || "").toUpperCase().startsWith("C") ? "C" : "";
+
+return `<tr style="text-align:center;">
+<td><button style="font-size:0.5em; padding:2px 6px;" data-addspell="${s.id || s.name}">Add</button></td>
+<td style="text-align:left;"><strong>${s.name || s.id || ""}</strong></td>
+<td>${type}</td>
+<td>${level}</td>
+<td>${sc}</td>
+<td style="text-align:left;">${s.effectText || "—"}</td>
+<td>${(() => { const totalLevel = Array.isArray(character.classes) ? character.classes.reduce((n,c)=>n+(Number(c.level)||0),0) : Number(character.level)||0; let r=s.rangeFormula||"—"; if(r==="self")return"Self"; if(r==="touch")return"Touch"; if(r!=="—"){ r=r.replace(/LVL/g,totalLevel).replace(/@/g," "); try{const m=r.match(/^([0-9+\-*/(). ]+)\s*(.*)$/); if(m){const n=eval(m[1]); r=n+(m[2]?" "+m[2]:"");}}catch{}} return r; })()}</td>
+<td>${(() => { if (!s.saveType) return "—"; const cls=(s.class||"").toLowerCase(); const want=(cls==="war"?"warlock":cls==="wiz"?"wizard":cls==="pri"?"priest":cls); const lvl=cls==="can"?(Array.isArray(character.classes)?character.classes.reduce((n,c)=>{const id=(c.classId||c.id||"").toLowerCase();return["warlock","wizard","priest"].includes(id)?n+(Number(c.level)||0):n;},0):Number(character.level)||0):(Array.isArray(character.classes)?(character.classes.find(c=>((c.classId||c.id||"").toLowerCase()===want))?.level||0):Number(character.level)||0); let f=s.saveFormula||"—"; if(f!=="—"){f=f.replace(/LVL/g,lvl); try{const m=f.match(/^DC([0-9+\-*/(). ]+)/i); if(m){f="DC"+eval(m[1]);}}catch{}} const t=s.saveType.charAt(0).toUpperCase()+s.saveType.slice(1); const o=(s.saveOutcome||"").toLowerCase()==="half"?"for half.":(s.saveOutcome||"").toLowerCase()==="negates"?"negates.":(s.saveOutcome||""); return `(${f}) ${t} Save ${o}`; })()}</td>
+<td>${(() => { if (!s.damageFormula) return "—"; const cls=(s.class||"").toLowerCase(); const want=(cls==="war"?"warlock":cls==="wiz"?"wizard":cls==="pri"?"priest":cls); const lvl=cls==="can"?(Array.isArray(character.classes)?character.classes.reduce((n,c)=>{const id=(c.classId||c.id||"").toLowerCase();return["warlock","wizard","priest"].includes(id)?n+(Number(c.level)||0):n;},0):Number(character.level)||0):(Array.isArray(character.classes)?(character.classes.find(c=>((c.classId||c.id||"").toLowerCase()===want))?.level||0):Number(character.level)||0); return s.damageFormula.replace(/LVL/g,lvl); })()}</td>
+<td>${(() => { let d=s.duration||"—"; if(d==="—") return d; const cls=(s.class||"").toLowerCase(); const want=(cls==="war"?"warlock":cls==="wiz"?"wizard":cls==="pri"?"priest":cls); const lvl=cls==="can"?(Array.isArray(character.classes)?character.classes.reduce((n,c)=>{const id=(c.classId||c.id||"").toLowerCase();return["warlock","wizard","priest"].includes(id)?n+(Number(c.level)||0):n;},0):Number(character.level)||0):(Array.isArray(character.classes)?(character.classes.find(c=>((c.classId||c.id||"").toLowerCase()===want))?.level||0):Number(character.level)||0); if(/[A-Za-z]/.test(d)&&!/LVL/.test(d)) return d.charAt(0).toUpperCase()+d.slice(1); d=d.replace(/LVL/g,lvl).replace(/@/g," "); try{const m=d.match(/^([0-9+\-*/(). ]+)\s*(.*)$/); if(m){const n=eval(m[1]); d=n+(m[2]?" "+m[2]:"");}}catch{} return d; })()}</td>
+<td>${s.components || "—"}</td>
+</tr>`;
+  }).join("")
+}
+</tbody>
+</table>
+` || "<em>No spells available.</em>";
+}
+}
+
+function renderAlchemicalItems() {
+  const body = document.getElementById("alchemicalItemsBody");
+  if (!body || !Array.isArray(equipment)) return;
+
+  const items = equipment.filter(e => e.eqpType === "alch");
+
+body.innerHTML = items.map(e => `
+<tr data-type="${e.eqpType}">
+<td><button class="addEquipmentBtn" data-id="${e.id}" style="font-size:0.5em; padding:2px 6px;">Add</button></td>
+<td style="text-align:left;">${e.eqpName || ""}</td>
+<td style="text-align:center;">${e.DMGTypeMaterial || ""}</td>
+<td style="text-align:center;">${e.cost || ""}</td>
+<td style="text-align:left;">${e.eqpDesc || ""}</td>
+<td style="text-align:center;">${e.Save || ""}</td>
+<td style="text-align:center;">${e.capacityQuantity ?? ""}</td>
+<td style="text-align:center;">${e.slots ?? ""}</td>
+<td style="text-align:center;">${e.weight ?? ""}</td>
+</tr>
+`).join("");
+
+document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
+  btn.onclick = () => addEquipmentToSheet(btn.dataset.id);
+});
+}
+
+function renderEquipmentCategory(type, bodyId) {
+  const body = document.getElementById(bodyId);
+  if (!body || !Array.isArray(equipment)) return;
+
+  const items = equipment
+  .filter(e => e.eqpType === type)
+  .sort((a, b) =>
+    a.eqpType.localeCompare(b.eqpType) ||
+    a.eqpName.localeCompare(b.eqpName)
+  );
+
+  body.innerHTML = items.map(e => `
+<tr>
+  <td><button class="addEquipmentBtn" data-id="${e.id}" style="font-size:0.5em; padding:2px 6px;">Add</button></td>
+  <td style="text-align:left;">${e.eqpName || ""}</td>
+  <td style="text-align:left;">
+  ${
+    e.eqpDesc
+      ? e.eqpType === "ammo" && e.capacityQuantity != null
+        ? `${e.eqpDesc} — Quantity: ${e.capacityQuantity}`
+        : e.eqpDesc
+      : ""
+  }
+</td>
+  <td style="text-align:center;">${
+({
+  guns: "Firearms",
+  mele: "Melee",
+  ha2h: "Hand to Hand",
+  rngd: "Ranged",
+  thrw: "Thrown",
+
+  armr: "Armor",
+  arpk: "Armor Pack",
+
+  genr: "General Gear",
+  cont: "Containers",
+  kits: "Kits",
+  clth: "Clothing",
+
+  ammo: "Ammunition",
+  alch: "Alchemical Items",
+
+  potn: "Potions",
+  tome: "Tomes"
+})[e.eqpType] || ""
+}</td>
+      <td style="text-align:center;">${e.DMGorTAC || ""}</td>
+      <td style="text-align:center;">${e.DMGTypeMaterial || ""}</td>
+      <td style="text-align:center;">${e.cost || ""}</td>
+      <td style="text-align:center;">${e.slots ?? ""}</td>
+      <td style="text-align:center;">${e.weight ?? ""}</td>
+      <td></td>
+    </tr>
+  `).join("");
+
+  document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
+    btn.onclick = () => addEquipmentToSheet(btn.dataset.id);
+  });
+}
+
+function renderAmmunition() {
+  renderEquipmentCategory("ammo", "ammunitionBody");
+}
+
+function renderArmor() {
+  renderEquipmentCategory("armr", "armorBody");
+}
+
+function renderGeneralGear() {
+  renderEquipmentCategory("genr", "generalGearBody");
+}
+
+function renderMagicalItems() {
+  renderEquipmentCategory("potn", "magicalItemsBody");
+}
+
+function renderAlchemical() {
+  renderEquipmentCategory("alch", "alchemicalItemsBody");
+}
+
+function renderContainers() {
+  renderEquipmentCategory("cont", "generalGearBody");
+}
+
+function renderClothing() {
+  renderEquipmentCategory("clth", "generalGearBody");
+}
+
+function renderKits() {
+  renderEquipmentCategory("kits", "generalGearBody");
+}
+
+function renderArmorPacks() {
+  renderEquipmentCategory("arpk", "armorBody");
+}
+
+function renderTomes() {
+  renderEquipmentCategory("tome", "magicalItemsBody");
+}
+
+function renderWeapons() {
+  const body = document.getElementById("weaponsBody");
+  if (!body || !Array.isArray(equipment)) return;
+
+  const weaponTypes = ["guns", "mele", "ha2h", "rngd", "thrw"];
+
+  const items = equipment
+  .filter(e => weaponTypes.includes(e.eqpType))
+  .sort((a, b) =>
+    a.eqpType.localeCompare(b.eqpType) ||
+    a.eqpName.localeCompare(b.eqpName)
+  );
+
+  body.innerHTML = items.map(e => `
+    <tr data-type="${e.eqpType}">
+      <td><button class="addEquipmentBtn" data-id="${e.id}" style="font-size:0.5em; padding:2px 6px;">Add</button></td>
+      <td style="text-align:left;">${e.eqpName || ""}</td>
+      <td style="text-align:left;">${e.eqpDesc || ""}</td>
+      <td style="text-align:center;">${
+({
+  guns: "Firearms",
+  mele: "Melee",
+  ha2h: "Hand to Hand",
+  rngd: "Ranged",
+  thrw: "Thrown",
+
+  armr: "Armor",
+  arpk: "Armor Pack",
+
+  genr: "General Gear",
+  cont: "Containers",
+  kits: "Kits",
+  clth: "Clothing",
+
+  ammo: "Ammunition",
+  alch: "Alchemical",
+
+  potn: "Potions",
+  tome: "Tomes"
+})[e.eqpType] || ""
+      }</td>
+      <td style="text-align:center;">${e.DMGorTAC || ""}</td>
+      <td style="text-align:center;">${e.DMGTypeMaterial || ""}</td>
+      <td style="text-align:center;">${e.cost || ""}</td>
+      <td style="text-align:center;">${e.slots ?? ""}</td>
+      <td style="text-align:center;">${e.weight ?? ""}</td>
+      <td></td>
+    </tr>
+  `).join("");
+
+  document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
+    btn.onclick = () => addEquipmentToSheet(btn.dataset.id);
+  });
+}
+
+function addEquipmentToSheet(id) {
+  if (!character) return;
+
+  if (!Array.isArray(character.selectedEquipment))
+    character.selectedEquipment = [];
+
+  if (!character.selectedEquipment.includes(id))
+    character.selectedEquipment.push(id);
+
+  renderSelectedEquipment();
+}
+
+function removeEquipmentFromSheet(id) {
+  if (!character || !Array.isArray(character.selectedEquipment)) return;
+
+  character.selectedEquipment =
+    character.selectedEquipment.filter(x => x !== id);
+
+  renderSelectedEquipment();
+}
+
+/* ===== INVENTORY CONTAINER RENDER START ===== */
+function renderContainers() {
+  if (!character || !character.inventory) return;
+
+  const pack = Array.isArray(character.inventory.backpack)
+    ? character.inventory.backpack
+    : new Array(16).fill(null);
+
+  const clothing = Array.isArray(character.inventory.clothing)
+    ? character.inventory.clothing
+    : new Array(3).fill(null);
+
+  // ===== Backpack grid render =====
+  const grid = document.getElementById("backpackGrid");
+  if (grid) {
+    const cells = Array.from(grid.children);
+    for (let i = 0; i < Math.min(16, cells.length); i++) {
+      const cell = cells[i];
+      const slot = pack[i];
+
+      const selected =
+        character.inventorySelection &&
+        character.inventorySelection.container === "backpack" &&
+        character.inventorySelection.index === i;
+
+      const sel = character.inventorySelection;
+let isSelectedItem = false;
+
+if (sel && sel.container === "backpack") {
+  const selectedSlot = pack[sel.index];
+  if (selectedSlot && slot && slot.itemId === selectedSlot.itemId) {
+    isSelectedItem = true;
+  }
+}
+
+if (isSelectedItem) {
+  cell.style.background = "#8b7dbe";
+  cell.style.border = "2px solid #634fa2";
+  cell.style.color = "#d8d2e7";
+} else {
+  cell.style.background = "#9dc384";
+  cell.style.border = "2px solid #48752c";
+  cell.style.color = "#48752c";
+}
+
+      if (!slot) {
+        cell.textContent = String(i + 1);
+        cell.title = "";
+        continue;
+      }
+
+      const item =
+        (Array.isArray(equipment) && equipment.find(e => e.id === slot.itemId)) ||
+        null;
+
+      const name = item ? (item.eqpName || slot.itemId) : slot.itemId;
+      const sizeText = slot.size === 1 ? "1 Slot" : `${slot.size} Slots`;
+
+      cell.innerHTML = `${name}<br>${sizeText}`;
+      cell.title = `${name} — ${sizeText}`;
+    }
+  }
+
+// ===== Clothing slots render =====
+for (let i = 0; i < 3; i++) {
+  const cell = document.getElementById("clothingSlot" + i);
+  if (!cell) continue;
+
+  const slot = clothing[i];
+
+  const sel = character.inventorySelection;
+  let isSelectedItem = false;
+
+  if (sel && sel.container === "clothing") {
+    const selectedSlot = clothing[sel.index];
+    if (selectedSlot && slot && slot.itemId === selectedSlot.itemId) {
+      isSelectedItem = true;
+    }
+  }
+
+  if (isSelectedItem) {
+    cell.style.background = "#8b7dbe";
+    cell.style.border = "2px solid #634fa2";
+    cell.style.color = "#d8d2e7";
+  } else {
+    cell.style.background = "#9dc384";
+    cell.style.border = "2px solid #48752c";
+    cell.style.color = "#48752c";
+  }
+
+  if (!slot) {
+    cell.textContent = ["Right Pocket","Left Pocket","Torso Pocket"][i];
+    cell.title = "";
+    continue;
+  }
+
+  const item =
+    (Array.isArray(equipment) && equipment.find(e => e.id === slot.itemId)) ||
+    null;
+
+  cell.textContent = item ? (item.eqpName || slot.itemId) : slot.itemId;
+  cell.title = item ? (item.eqpName || slot.itemId) : slot.itemId;
+}
+  // ===== Item details list (anchor items only) =====
+  const list = document.getElementById("backpackItemsList");
+  if (list) {
+    const anchors = [];
+
+    for (let i = 0; i < 16; i++) {
+      const s = pack[i];
+      if (s && s.anchor) anchors.push({ container: "Backpack", index: i, itemId: s.itemId, size: s.size });
+    }
+
+    for (let i = 0; i < 3; i++) {
+      const s = clothing[i];
+      if (s && s.anchor) anchors.push({ container: "Clothing", index: i, itemId: s.itemId, size: s.size });
+    }
+
+    if (!anchors.length) {
+      list.innerHTML = "<em>No items.</em>";
+      return;
+    }
+
+    list.innerHTML = anchors.map(a => {
+      const item =
+        (Array.isArray(equipment) && equipment.find(e => e.id === a.itemId)) ||
+        null;
+
+      const name = item ? (item.eqpName || a.itemId) : a.itemId;
+      return `<div><strong>${name}</strong> <em>(${a.container} slot ${a.index + 1}, size ${a.size})</em></div>`;
+    }).join("");
+  }
+}
+/* ===== INVENTORY CONTAINER RENDER END ===== */
+
+/* ===== DROP SELECTED ITEM START ===== */
+function dropSelectedItem() {
+  if (!character || !character.inventorySelection) return;
+
+  const sel = character.inventorySelection;
+  if (sel.container == null) return;
+
+  const arr = character.inventory[sel.container];
+  if (!arr) return;
+
+  const slot = arr[sel.index];
+  if (!slot || !slot.anchor) return;
+
+  const item =
+    Array.isArray(equipment)
+      ? equipment.find(e => e.id === slot.itemId)
+      : null;
+
+  const itemName = item ? (item.eqpName || slot.itemId) : slot.itemId;
+
+  const confirmDrop = confirm(`Are you sure you want to drop ${itemName}?`);
+  if (!confirmDrop) return;
+
+  const size = slot.size;
+
+  for (let i = 0; i < size; i++) {
+    arr[sel.index + i] = null;
+  }
+
+  character.inventorySelection = { container: null, index: null };
+
+  update();
+}
+/* ===== DROP SELECTED ITEM END ===== */
+
+function renderSelectedEquipment() {
+  const el = document.getElementById("equipmentContent");
+  if (!el || !character) return;
+
+  const list = character.selectedEquipment || [];
+
+let html = `
+<div style="background:linear-gradient(to right, #48752c, #9dc384); color:#bdd6ac; font-weight:bold; font-style:italic; padding:6px 10px; border-radius:8px;">
+Equipment Selected
+</div>
+
+<table style="width:100%; border-collapse:collapse; font-size:1.04em; table-layout:fixed;">
+<colgroup>
+  <col style="width:6%;">
+  <col style="width:14%;">
+  <col style="width:28%;">
+  <col style="width:12%;">
+  <col style="width:12%;">
+  <col style="width:14%;">
+  <col style="width:7%;">
+  <col style="width:4%;">
+  <col style="width:3%;">
+  <col style="width:6%;">
+</colgroup>
+<!-- ===== EQUIPMENT SELECTED TABLE HEAD START ===== -->
+<thead>
+<tr style="background:#9dc384; color:#48752c; font-weight:bold;">
+<th></th>
+<th style="text-align:left;">Name</th>
+<th style="text-align:left;">Description</th>
+<th style="text-align:center;">Type</th>
+<th style="text-align:center;">Damage / TAC</th>
+<th style="text-align:center;">Damage Type / Material</th>
+<th style="text-align:center;">Cost</th>
+<th style="text-align:center;">Slots</th>
+<th style="text-align:center;">Weight</th>
+<th></th>
+</tr>
+</thead>
+<!-- ===== EQUIPMENT SELECTED TABLE HEAD END ===== -->
+
+<!-- ===== EQUIPMENT SELECTED TBODY START ===== -->
+<tbody class="spellbookStriped">
+<!-- ===== EQUIPMENT SELECTED TBODY END (DO NOT DELETE) ===== -->
+`;
+
+html += list.map(id => {
+  const e = equipment.find(x => x.id === id);
+  if (!e) return "";
+
+return "<tr>"
+  + "<td><button onclick=\"purchaseEquipment('" + id + "')\" style=\"font-size:0.75em; padding:3px 9px;\">Add</button></td>"
+  + "<td style=\"text-align:left;\">" + (e.eqpName || "") + "</td>"
+  + "<td style=\"text-align:left;\">" + (e.eqpDesc || "") + "</td>"
+  + "<td style=\"text-align:center;\">" + (e.eqpType || "") + "</td>"
+  + "<td style=\"text-align:center;\">" + (e.DMGorTAC || "") + "</td>"
+  + "<td style=\"text-align:center;\">" + (e.DMGTypeMaterial || "") + "</td>"
+  + "<td style=\"text-align:center;\">" + (e.cost || "") + "</td>"
+  + "<td style=\"text-align:center;\">" + (e.slots ?? "") + "</td>"
+  + "<td style=\"text-align:center;\">" + (e.weight ?? "") + "</td>"
+  + "<td><button onclick=\"removeEquipmentFromSheet('" + id + "')\" style=\"font-size:0.5em; padding:2px 6px; background:#48752c; color:#bdd6ac; border:2px solid #9dc384; border-radius:6px;\">Rmv</button></td>"
+  + "</tr>";
+}).join("");
+
+html += `
+</tbody>
+</table>
+`;
+/* ===== EQUIPMENT MAP RENDER END ===== */
+
+html += `
+</tbody>
+</table>
+`;
+
+  el.innerHTML = html;
+}
+
+/* ===== MASTER BOOK RENDER ===== */
+function renderEquipmentBook() {
+
+  if (!Array.isArray(equipment)) return;
+
+  renderWeapons();
+  renderArmor();
+  renderGeneralGear();
+  renderMagicalItems();
+  renderAmmunition();
+  renderAlchemical();
+  renderClothing();
+  renderKits();
+  renderContainers();
+  renderArmorPacks();
+  renderTomes();
+  renderPotions();
+
+  applyEquipmentFilters();
+}
+function renderFeatsPanel() {
+  const el = document.getElementById("featsContent");
+  if (!el) return;
+
+  if (!character) {
+    el.innerHTML = "<em>No character loaded.</em>";
+    return;
+  }
+
+  const race = races.find(r => r.id === character.raceId);
+  let html = "";
+
+  /* ===== Class + Racial Feats (Attack-style headers) ===== */
+
+  function featHeader(label) {
+    return `
+      <div style="
+        display:grid;
+        grid-template-columns:1fr;
+        margin-top:12px;
+        padding-bottom:3px;
+        border-bottom:4px solid #48752c;
+        font-style: italic;
+        font-weight: bold;
+        font-size: 100%;
+        color: #48752c;
+      ">
+        <div><em>${label}</em></div>
+      </div>
+    `;
+  }
+
+  if (Array.isArray(character.classes)) {
+    character.classes.forEach(cc => {
+      const clsId = cc?.id || cc?.classId || "";
+      const cls = classes.find(c =>
+        (clsId && c.id === clsId) ||
+        (cc?.name && c.name === cc.name)
+      );
+      if (!cls || !cls.startingFeatName) return;
+
+      html += featHeader("Class Feat");
+      html += `<div style="margin-top:4px;"><strong>${cls.startingFeatName}</strong></div>`;
+      if (cls.startingFeatDescription)
+        html += `<div style="font-style:italic;">${cls.startingFeatDescription}</div>`;
+    });
+  }
+
+  if (race && race.racialFeatName) {
+    html += featHeader("Racial Feat");
+    html += `<div style="margin-top:4px;"><strong>${race.racialFeatName}</strong></div>`;
+    if (race.racialFeatDescription)
+      html += `<div style="font-style:italic;">${race.racialFeatDescription}</div>`;
+  }
+
+  /* ===== Selected Feats (Attack-style header) ===== */
+  if (Array.isArray(character.feats) && character.feats.length) {
+    const label = character.feats.length > 1 ? "Feats" : "Selected Feat";
+
+    html += featHeader(label);
+
+    character.feats.forEach(fid => {
+      const f = feats.find(x => x.id === fid);
+      if (!f) return;
+
+      html += `<div style="margin-top:4px;"><strong>${f.name}</strong></div>`;
+      if (f.featDescription)
+        html += `<div style="font-style:italic;">${f.featDescription}</div>`;
+    });
+  }
+
+  el.innerHTML = html || "<em>No feats.</em>";
+}
+
+/* ===== MULTI-FILTER TOGGLE START ===== */
+function toggleEquipmentFilter(type, button) {
+  if (activeEquipmentFilters.has(type)) {
+    activeEquipmentFilters.delete(type);
+
+    button.style.background = "#634fa2";
+    button.style.color = "#d8d2e7";
+    button.style.border = "2px solid #8b7dbe";
+  } else {
+    activeEquipmentFilters.add(type);
+
+    button.style.background = "#d8d2e7";
+    button.style.color = "#634fa2";
+    button.style.border = "2px solid #8b7dbe";
+  }
+
+  applyEquipmentFilters();
+}
+/* ===== MULTI-FILTER TOGGLE END ===== */
+
+/* ===== COMPOSITE FILTER HELPER START ===== */
+function toggleCompositeFilter(types, button) {
+  const allActive = types.every(t => activeEquipmentFilters.has(t));
+
+  if (allActive) {
+    types.forEach(t => activeEquipmentFilters.delete(t));
+    button.style.background = "#634fa2";
+    button.style.color = "#d8d2e7";
+    button.style.border = "2px solid #8b7dbe";
+  } else {
+    types.forEach(t => activeEquipmentFilters.add(t));
+    button.style.background = "#d8d2e7";
+    button.style.color = "#634fa2";
+    button.style.border = "2px solid #8b7dbe";
+  }
+
+  applyEquipmentFilters();
+}
+
+/* ===== COMPOSITE FILTER HELPER END ===== */
+
+function applyEquipmentFilters() {
+
+  const rows = document.querySelectorAll("#equipmentBookContent tr[data-type]");
+
+  rows.forEach(row => {
+    const type = row.dataset.type;
+
+    if (activeEquipmentFilters.size === 0) {
+      row.style.display = "none";
+    } else {
+      row.style.display = activeEquipmentFilters.has(type) ? "" : "none";
+    }
+  });
+
+}
+
+function update() {
+
+
+/* ===== ENSURE INVENTORY START ===== */
+if (character && !character.inventory) {
+  character.inventory = {
+    backpack: new Array(16).fill(null),
+    clothing: new Array(3).fill(null)
+  };
+}
+/* ===== ENSURE INVENTORY END ===== */
+
+/* ===== ENSURE INVENTORY SELECTION START ===== */
+if (character && !character.inventorySelection) {
+  character.inventorySelection = {
+    container: null,
+    index: null
+  };
+}
+/* ===== ENSURE INVENTORY SELECTION END ===== */
+
+  renderTopBar();
+  renderConditionsPanel();
+  renderStatsPanel();
+  renderFeatsPanel();
+  renderArmorPanel();
+  renderAttacksPanel();
+  renderSpellcastingPanel();
+  renderSelectedEquipment();
+  renderContainers();
+
+  const dropBtn = document.getElementById("dropItemBtn");
+  if (dropBtn) dropBtn.onclick = dropSelectedItem;
+
+  renderEquipmentBook();
+
+  const spellPanel = document.getElementById("spellcastingPanel");
+  const isCaster =
+    Array.isArray(character.classes) &&
+    character.classes.some(c => {
+      const id = (c.classId || c.id || "").toLowerCase();
+      return ["wizard","warlock","priest"].includes(id);
+    });
+
+  if (spellPanel) spellPanel.style.display = isCaster ? "block" : "none";
+
+  const idxStr = localStorage.getItem("atfSelectedCharacter");
+  const idx = Number(idxStr);
+
+  if (Number.isFinite(idx)) {
+    const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+    if (saved[idx]) {
+      saved[idx] = {
+        ...JSON.parse(JSON.stringify(character)),
+        savedAt: saved[idx].savedAt || new Date().toLocaleString()
+      };
+      localStorage.setItem("atfCharacters", JSON.stringify(saved));
+    }
+  }
+
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === character.classId);
+  const deity = deities.find(d => d.id === character.deityId);
+  const show = step => currentStep >= step;
+
+  let html = "";
+
+   /* ================= DESCRIPTION ================= */
+  if (show(8)) {
+    html += `<div style="grid-column:1 / 3; margin:10px 0;">
+      <button id="editDescriptionBtn" class="editable-field">Description:</button>
+      <em>${character.appearance.description || ""}</em>
+    </div>`;
+  }
+
+  /* ================= CORE ================= */
+  html += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">`;
+  if (race) html += `<div><strong>Racial HP Per Level</strong> ${race.hpPerLevel}</div>`;
+  if (cls)  html += `<div><strong>1st Class HP</strong> ${cls.hpPerLevel}</div>`;
+  if (show(4)) html += `<div><strong>Level 1 HP</strong> ${character.baseHP}</div>`;
+  if (race) html += `<div><strong>Base AC</strong> ${race.baseAC}</div>`;
+  if (race) html += `<div><strong>Speed</strong> ${20 + Number(race.charDistance)}</div>`;
+  if (show(3)) html += `<div><strong>Base Carrying Weight</strong> ${character.abilities?.STR.value * 10}</div>`;
+  /* ===== LANGUAGES DISPLAY START ===== */
+if (show(4)) {
+  const totalSlots = Math.floor(character.abilities?.INT.value / 3);
+  const usedSlots = Object.values(character.languageCosts || {}).reduce((a,b) => a + Number(b || 0), 0);
+
+  let list = "—";
+  if (Array.isArray(character.languages) && character.languages.length) {
+    list = character.languages.map(langName => {
+      const cost = character.languageCosts?.[langName] || 1;
+      return `${langName}${cost>1 ? ` (${cost})` : ""}`;
+    }).join(", ");
+  }
+
+  html += `<div>
+    <strong>Languages</strong>: ${list} (${usedSlots} / ${totalSlots})
+  </div>`;
+}
+/* ===== LANGUAGES DISPLAY END ===== */
+  html += `</div>`;
+
+/* ================= FEATS ================= */
+if (race || cls || (show(6) && character.feats.length)) {
+  html += `<div style="margin-top:10px;">`;
+
+  if (race) {
+    html += `<div><strong>Racial Feat</strong> ${race.racialFeatName}</div>`;
+    if (race.racialFeatDescription)
+      html += `<div style="margin-left:12px; font-style:italic;">${race.racialFeatDescription}</div>`;
+  }
+
+  if (cls) {
+    html += `<div style="margin-top:6px;"><strong>Class Feat</strong> ${cls.startingFeatName}</div>`;
+    if (cls.startingFeatDescription)
+      html += `<div style="margin-left:12px; font-style:italic;">${cls.startingFeatDescription}</div>`;
+  }
+
+  if (show(6) && character.feats.length) {
+    const f = feats.find(f => f.id === character.feats[0]);
+    if (f) {
+      html += `<div style="margin-top:6px;"><strong>Selected Feat</strong> ${f.name}</div>`;
+      if (f.featDescription)
+        html += `<div style="margin-left:12px; font-style:italic;">${f.featDescription}</div>`;
+    }
+  }
+
+  html += `</div>`;
+}
+
+  /* ================= EQUIPMENT ================= */
+  if (show(7)) {
+    const e = character.equipment;
+    if (e.weapons || e.armor || e.gear) {
+      html += `<div style="margin-top:10px;">`;
+      if (e.weapons) html += `<div><strong>Starting Weapons</strong> ${Array.isArray(e.weapons) ? e.weapons.map(s => s.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())).join(" & ") : e.weapons}</div>`;
+if (e.armor)   html += `<div><strong>Starting Armor</strong> ${Array.isArray(e.armor) ? e.armor.map(s => s.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())).join(" & ") : e.armor}</div>`;
+if (e.gear)    html += `<div><strong>Starting Gear</strong> ${Array.isArray(e.gear) ? e.gear.map(s => s.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())).join(" & ") : e.gear}</div>`;
+      html += `</div>`;
+    }
+  }
+
+
+}
+
+    function populateCharacterSelect() {
+      const sel = document.getElementById("characterSelect");
+      const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+
+      // Remove any existing options except placeholder
+      while (sel.options.length > 1) sel.remove(1);
+
+      saved.forEach((c, idx) => {
+        const name = (c && c.appearance && c.appearance.name) ? c.appearance.name : "Unnamed Character";
+        const savedAt = c && c.savedAt ? c.savedAt : "";
+        const opt = document.createElement("option");
+        opt.value = String(idx);
+        opt.textContent = savedAt ? `${name} (saved ${savedAt})` : name;
+        sel.appendChild(opt);
+      });
+    }
+
+    function loadSelectedCharacter(indexStr) {
+      const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+      const idx = Number(indexStr);
+      if (!Number.isFinite(idx) || !saved[idx]) {
+        character = null;
+        document.getElementById("summaryContent").innerHTML = "<em>Select a saved character to view their sheet.</em>";
+        return;
+      }
+character = JSON.parse(JSON.stringify(saved[idx])); // deep copy
+if (!Array.isArray(character.personalSpells)) character.personalSpells = [];
+window.character = character;
+
+/* === Ensure top-bar defaults === */
+if (character.xp == null) character.xp = 0;
+if (character.luck == null) character.luck = 1;
+if (character.team == null) character.team = 0;
+
+if (!character.currency) character.currency = {};
+if (character.armorACAdded == null) character.armorACAdded = 0;
+
+if (character.currency.silver == null) {
+  const cls =
+    classes.find(c => c.id === character.classId) ||
+    classes.find(c => c.name === character.classes?.[0]?.name);
+
+  character.currency.silver = Number(cls?.startSilver) || 0;
+}
+
+if (character.currency.gold == null) character.currency.gold = 1;
+
+
+
+/* === One-time legacy level migration === */
+const hasLevels =
+  (Array.isArray(character.classes) && character.classes.some(c => Number.isFinite(Number(c.level)))) ||
+  Number.isFinite(Number(character.level));
+
+if (!hasLevels) {
+  character.classes = [{
+    classId: character.classId,
+    level: 1
+  }];
+
+  saved[idx] = {
+    ...character,
+    savedAt: new Date().toISOString()
+  };
+
+  localStorage.setItem("atfCharacters", JSON.stringify(saved));
+
+  alert("This character was missing level data and has been updated to Level 1.");
+}
+
+
+if (character.skills) {
+  const fixed = {};
+  Object.entries(character.skills).forEach(([k,v]) => {
+    fixed[k.toLowerCase().replace(/[^a-z]/g,"")] = v;
+  });
+  character.skills = fixed;
+}
+
+if (!Array.isArray(character.conditions)) character.conditions = [];
+
+window.character = character;
+update();
+    }
+
+    document.getElementById("characterSelect").addEventListener("change", (e) => {
+  const idx = e.target.value;
+  localStorage.setItem("atfSelectedCharacter", idx);
+  loadSelectedCharacter(idx);
+});
+
+populateCharacterSelect();    
+
+document.getElementById("saveCharBtn").addEventListener("click", () => {
+  const idxStr = document.getElementById("characterSelect").value;
+  const idx = Number(idxStr);
+
+  if (!Number.isFinite(idx) || !character) return;
+
+  if (!confirm("Are you sure you want to overwrite this character?")) return;
+
+  const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+
+  saved[idx] = {
+    ...JSON.parse(JSON.stringify(character)),
+    savedAt: new Date().toLocaleString()
+  };
+
+  localStorage.setItem("atfCharacters", JSON.stringify(saved));
+  alert("Character Saved");
+});
+
+document.getElementById("downloadCharacterBtn").addEventListener("click", () => {
+  const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+  const idxStr = document.getElementById("characterSelect").value;
+  const idx = Number(idxStr);
+
+  if (!Number.isFinite(idx) || !saved[idx]) return;
+
+  const data = JSON.stringify(saved[idx], null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `${saved[idx].name || "character"}.json`;
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+});
+
+Promise.all([
+  loadCSV(raceURL),
+  loadCSV(classURL),
+  loadCSV(featsURL),
+  loadCSV(deitiesURL),
+  loadCSV(equipmentURL),
+  loadCSV(classAdvURL),
+  loadCSV("advancement.csv"),
+  loadCSV(spellbookURL).catch(() => []),
+  loadCSV(conditionsURL).catch(() => [])
+])
+.then(([r, c, f, d, e, ca, adv, sb, cond]) => {
+    races = r;
+    classes = c;
+    feats = f;
+
+/* ===== BOOK OF FEATS: POPULATE TYPE DROPDOWN START ===== */
+
+setTimeout(() => {
+  const featsTypeSelect = document.getElementById("featsTypeFilter");
+  if (!featsTypeSelect || !Array.isArray(feats)) return;
+
+  const types = [...new Set(
+    feats
+      .map(x => (x.featType || "").trim())
+      .filter(Boolean)
+  )].sort();
+
+  featsTypeSelect.innerHTML =
+    `<option value="">All</option>` +
+    types.map(t => `<option value="${t}">${t}</option>`).join("");
+}, 0);
+
+/* ===== BOOK OF FEATS: POPULATE TYPE DROPDOWN END ===== */
+
+/* ===== BOOK OF FEATS: RENDER TABLE START ===== */
+setTimeout(() => {
+  const body = document.getElementById("featsTableBody");
+  if (!body || !Array.isArray(feats)) return;
+
+  body.innerHTML = feats.map((f, i) => `
+<tr style="
+  background:${i % 2 === 0
+    ? "linear-gradient(to right, #d8d2e7, #8b7dbe)"
+    : "linear-gradient(to right, #8b7dbe, #d8d2e7)"
+};">
+  <td></td>
+  <td><strong>${f.name || ""}</strong></td>
+  <td>${f.featType || ""}</td>
+  <td>${f.featPrereq || ""}</td>
+  <td>${f.featDescription || ""}</td>
+  <td></td>
+</tr>
+  `).join("");
+}, 0);
+/* ===== BOOK OF FEATS: RENDER TABLE END ===== */
+
+/* ===== COPY CURRENT ROLL BUTTON START ===== */
+document.addEventListener("click", e => {
+  if (e.target.id !== "copyCurrentRollBtn") return;
+
+  const body = document.getElementById("rollCol0Body");
+  if (!body) return;
+
+  const text = body.innerText.trim();
+  if (!text) return;
+
+  navigator.clipboard.writeText(text);
+});
+/* ===== COPY CURRENT ROLL BUTTON END ===== */
+
+/* ===== BOOK OF FEATS: YES BUTTON TOGGLE START ===== */
+document.addEventListener("click", e => {
+  if (e.target.id !== "featsEligibleBtn") return;
+
+  const btn = e.target;
+  const label = document.getElementById("featsEligibleLabel");
+  const isYes = btn.textContent === "YES";
+
+  if (isYes) {
+    btn.textContent = "Clear";
+    btn.style.background = "#d8d2e7";
+    btn.style.color = "#634fa2";
+    if (label) label.textContent = "Filtering by currently eligible feats.";
+  } else {
+    btn.textContent = "YES";
+    btn.style.background = "#634fa2";
+    btn.style.color = "#d8d2e7";
+    if (label) label.textContent = "Filter by feats I am currently eligible for?";
+  }
+});
+/* ===== BOOK OF FEATS: YES BUTTON TOGGLE END ===== */
+
+/* ===== BOOK OF FEATS: FILTER LOGIC START ===== */
+
+function renderFeatsTableFiltered() {
+  const body = document.getElementById("featsTableBody");
+  if (!body || !Array.isArray(feats)) return;
+
+  const typeSelect = document.getElementById("featsTypeFilter");
+  const btn = document.getElementById("featsEligibleBtn");
+
+  const type = typeSelect ? typeSelect.value : "";
+  const eligibleOnly = btn && btn.textContent === "Clear";
+
+  let list = feats.slice();
+
+  if (type) {
+    list = list.filter(f => (f.featType || "") === type);
+  }
+
+  if (eligibleOnly && character && Array.isArray(character.feats)) {
+    const owned = new Set(character.feats);
+    list = list.filter(f => !owned.has(f.id));
+  }
+
+  body.innerHTML = list.map((f, i) => `
+<tr style="
+background:${i % 2 === 0
+  ? 'linear-gradient(to right, #d8d2e7, #634fa2)'
+  : 'transparent'};
+">
+  <td></td>
+  <td><strong>${f.name || ""}</strong></td>
+  <td>${f.featType || ""}</td>
+  <td>${f.featPrereq || ""}</td>
+  <td>${f.featDescription || ""}</td>
+  <td></td>
+</tr>
+  `).join("");
+}
+
+document.addEventListener("change", e => {
+  if (e.target.id === "featsTypeFilter") {
+    renderFeatsTableFiltered();
+  }
+});
+
+document.addEventListener("click", e => {
+  if (e.target.id === "featsEligibleBtn") {
+    setTimeout(renderFeatsTableFiltered, 0);
+  }
+});
+
+setTimeout(renderFeatsTableFiltered, 0);
+
+/* ===== BOOK OF FEATS: FILTER LOGIC END ===== */
+
+/* ===== BOOK OF FEATS: HIDE TOGGLE START ===== */
+
+document.addEventListener("click", e => {
+  if (e.target.id !== "toggleFeatsPanelBtn") return;
+
+  const body = document.getElementById("bookOfFeatsContent");
+  const btn = e.target;
+
+  if (!body) return;
+
+  const hidden = body.style.display === "none";
+
+  body.style.display = hidden ? "" : "none";
+  btn.textContent = hidden ? "Hide" : "Show";
+});
+
+/* ===== BOOK OF FEATS: HIDE TOGGLE END ===== */
+
+    deities = d;
+    equipment = e;
+ const v = document.getElementById("equipmentCategorySelect")?.value;
+
+if (v === "Alchemical Items") renderAlchemicalItems();
+if (v === "Ammunition") renderAmmunition();
+if (v === "Clothing & Armor") renderArmor();
+if (v === "General Gear") renderGeneralGear();
+if (v === "Magical Items") renderMagicalItems();
+if (v === "Weapons") renderWeapons();
+
+    /* ===== LOADER TRACE START ===== */
+classAdv = ca;
+advancement = adv;
+spellbook = sb;
+conditionsData = cond;
+
+/* ===== CONDITIONS DATA OVERRIDES START ===== */
+if (Array.isArray(conditionsData)) {
+  const winded = conditionsData.find(c =>
+    (c.id || c.name || "").toLowerCase() === "winded"
+  );
+
+  if (winded) {
+    winded.description =
+      "Winded: You can only take <strong>ONE SMALL ACTION <em>per round</em></strong>, and <strong>NO LARGE ACTIONS</strong> until resolved.\n" +
+      "Res.: Successful skill check <em>(+1 DIF if on yourself)</em>, short or full rest, any magical healing.";
+  }
+}
+/* ===== CONDITIONS DATA OVERRIDES END ===== */
+
+console.log("TRACE: before populate");
+populateCharacterSelect();
+console.log("TRACE: after populate");
+/* ===== LOADER TRACE END ===== */
+
+    const last = localStorage.getItem("atfSelectedCharacter");
+    if (last !== null) {
+      document.getElementById("characterSelect").value = last;
+      loadSelectedCharacter(last);
+    }
+  })
+  .catch(() => {
+    populateCharacterSelect();
+  });
+
+document.addEventListener("click", e => {
+
+  /* ===== Armor AC Bonus free-text (non-persistent) ===== */
+  if (e.target.id === "armor-ac-notes") {
+    const span = e.target;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = span.textContent === "Notes" ? "" : span.textContent;
+    input.style.width = "100%";
+
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("keydown", ev => {
+      if (ev.key === "Enter") {
+        const newSpan = document.createElement("span");
+        newSpan.id = "armor-ac-notes";
+        newSpan.className = "editable-field";
+        newSpan.tabIndex = 0;
+        newSpan.textContent = input.value.trim() || "Notes";
+
+        input.replaceWith(newSpan);
+      }
+    });
+
+    return;
+  }
+
+/* ===== CLOTHING EDIT BUTTON START ===== */
+if (e.target.id === "armor-clothing-name") {
+  const span = e.target;
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = span.textContent === "None" ? "" : span.textContent;
+  input.style.width = "100%";
+
+  span.replaceWith(input);
+  input.focus();
+
+  input.addEventListener("keydown", ev => {
+    if (ev.key === "Enter") {
+      const name = input.value.trim() || "None";
+
+      const newSpan = document.createElement("span");
+      newSpan.id = "armor-clothing-name";
+      newSpan.className = "editable-field";
+      newSpan.tabIndex = 0;
+      newSpan.textContent = name;
+
+      input.replaceWith(newSpan);
+
+      const ac = document.getElementById("armor-clothing-ac");
+      if (ac) ac.textContent = name === "None" ? "" : "AC 0";
+    }
+  });
+
+  return;
+}
+/* ===== CLOTHING EDIT BUTTON END ===== */
+
+ if (e.target.id === "conditionsButton" && character) {
+  if (!Array.isArray(conditionsData) || !conditionsData.length) {
+    alert("No conditions loaded.");
+    return;
+  }
+
+  const names = conditionsData.map(c => c.name || c.id).join("\n");
+  const pick = prompt("Type a condition name to add.\nType '-' to resolve the last condition.\n\n" + names);
+
+  if (!pick) return;
+
+  if (!Array.isArray(character.conditions)) character.conditions = [];
+  if (pick === "-") {
+  character.conditions.pop();
+} else {
+  character.conditions.push(pick);
+}
+
+  update();
+  return;
+}
+
+if (e.target.dataset.removeCondition && character) {
+  const i = Number(e.target.dataset.removeCondition);
+  renderConditionsPanel();
+  return;
+}
+
+/* ===== CONDITION RESOLVE BUTTON HANDLER START ===== */
+if (e.target.classList && e.target.classList.contains("resolveBtn")) {
+  const base = e.target.dataset.base;
+  if (!base || !character) return;
+
+  if (!character.conditionStates) character.conditionStates = {};
+
+  const list = stages[base];
+  if (!list) return;
+
+  let idx = Number(character.conditionStates[base]);
+  if (!Number.isFinite(idx)) return;
+
+  if (idx <= 0) {
+    delete character.conditionStates[base];
+  } else {
+    character.conditionStates[base] = idx - 1;
+  }
+
+  renderConditionsPanel();
+  renderStatsPanel();
+
+  return;
+}
+/* ===== CONDITION RESOLVE BUTTON HANDLER END ===== */
+
+if (e.target.id === "addConditionBtn" && character) {
+  if (!Array.isArray(conditionsData) || !conditionsData.length) return;
+
+  const name = conditionsData[0].name || conditionsData[0].id;
+  if (!Array.isArray(character.conditions)) character.conditions = [];
+  character.conditions.push(name);
+
+  renderConditionsPanel();
+  return;
+}
+
+/* ===== ROUND ENGINE CLICK HANDLERS START ===== */
+
+if (e.target.id === "roundStartBtn") {
+
+  roundState.active = true;
+  roundState.round = 1;
+
+  roundState.encounterStart = Date.now();
+  roundState.roundStart = Date.now();
+
+  roundState.timerInterval = setInterval(() => {
+
+    const now = Date.now();
+
+    const roundElapsed = Math.floor((now - roundState.roundStart) / 1000);
+    const encounterElapsed = Math.floor((now - roundState.encounterStart) / 1000);
+
+    const format = s => {
+      const m = Math.floor(s / 60).toString().padStart(2,"0");
+      const sec = (s % 60).toString().padStart(2,"0");
+      return m + ":" + sec;
+    };
+
+    const rEl = document.getElementById("roundTimeDisplay");
+    const eEl = document.getElementById("encounterTimeDisplay");
+
+    if (rEl) rEl.textContent = format(roundElapsed);
+    if (eEl) eEl.textContent = format(encounterElapsed);
+
+  }, 1000);
+
+  renderConditionsPanel();
+  return;
+}
+
+if (e.target.id === "roundNextBtn") {
+
+  if (!roundState.active) return;
+
+  roundState.round += 1;
+  roundState.roundStart = Date.now();
+
+  renderConditionsPanel();
+  return;
+}
+
+if (e.target.id === "roundEndBtn") {
+
+  if (!roundState.active) return;
+
+  clearInterval(roundState.timerInterval);
+
+  const totalSeconds =
+    Math.floor((Date.now() - roundState.encounterStart) / 1000);
+
+  const m = Math.floor(totalSeconds / 60).toString().padStart(2,"0");
+  const s = (totalSeconds % 60).toString().padStart(2,"0");
+
+  roundState.lastEncounterTime = m + ":" + s;
+
+  roundState.active = false;
+  roundState.round = 0;
+
+  renderConditionsPanel();
+  return;
+}
+
+/* ===== ROUND ENGINE CLICK HANDLERS END ===== */
+
+if (e.target.classList && e.target.classList.contains("conditionBtn")) {
+  const btn = e.target;
+  const base = btn.dataset.cond;
+  const box = document.getElementById("conditionDescription");
+  if (!box || !Array.isArray(conditionsData)) return;
+
+  if (!character.conditionStates) character.conditionStates = {};
+
+  const stages = {
+    Bleeding: [
+      { name:"Bleeding", bg:"#d86991", fg:"#000000" },
+      { name:"Gushing",  bg:"#e7123d", fg:"#000000" }
+    ],
+    Fuzzy: [
+      { name:"Fuzzy",   bg:"#2e2e2e", fg:"#c3c3c3" },
+      { name:"Blinded", bg:"#000000", fg:"#4c4c4c" }
+    ],
+    Shaken: [
+      { name:"Shaken",    bg:"#d4ce00", fg:"#000000" },
+      { name:"Frightened",bg:"#e77000", fg:"#000000" },
+      { name:"Horrified", bg:"#000000", fg:"#d8d2e7" }
+    ],
+    Hidden:   [{ name:"Hidden",   bg:"#ffffff", fg:"#634fa2" }],
+    Poisoned: [{ name:"Poisoned", bg:"#9dc384", fg:"#48752c" }],
+    Prone:    [{ name:"Prone",    bg:"#008e77", fg:"#000000" }],
+    Winded:   [{ name:"Winded",   bg:"#7fafc2", fg:"#000000" }]
+  };
+
+  const list = stages[base];
+  if (!list) return;
+
+  let idx = Number(character.conditionStates[base]);
+if (!Number.isFinite(idx)) idx = -1;
+  idx = Math.max(0, Math.min(idx + 1, list.length - 1));
+character.conditionStates[base] = idx;
+
+renderStatsPanel();
+
+const stage = list[idx];
+
+btn.style.background = stage.bg;
+btn.style.color = stage.fg;
+btn.textContent = stage.name;
+
+const activeRow = document.getElementById("activeConditionsRow");
+if (activeRow && btn.parentElement !== activeRow) {
+  activeRow.appendChild(btn);
+}
+
+  /* Resolve button */
+  let resolve = btn.nextElementSibling;
+  if (!resolve || !resolve.classList.contains("resolveBtn")) {
+    resolve = document.createElement("button");
+    resolve.className = "resolveBtn";
+    resolve.dataset.base = base;
+    btn.after(resolve);
+  }
+
+  resolve.textContent = "Resolve";
+  resolve.style.background = stage.bg;
+  resolve.style.color = stage.fg;
+  resolve.style.fontWeight = "bold";
+
+  const active = Object.entries(character.conditionStates)
+    .map(([k,i]) => stages[k][i].name);
+
+  const rows = active.map(n =>
+    conditionsData.find(c => (c.name || c.id) === n)
+  ).filter(r => r && r.description);
+
+  box.innerHTML =
+    "<ul style='margin:0; padding-left:18px;'>" +
+    rows.map(r => `<li>${r.description}</li>`).join("") +
+    "</ul>";
+
+  return;
+}
+
+if (e.target.id === "toggleConditionsPanel") {
+  const content = document.getElementById("conditionsContent");
+  if (!content) return;
+
+  const isHidden = content.style.display === "none";
+  content.style.display = isHidden ? "block" : "none";
+  e.target.textContent = isHidden ? "Hide" : "Show";
+  return;
+}
+
+if (e.target.id === "toggleFeatsPanel") {
+  const content = document.getElementById("featsContent");
+  const book = document.getElementById("bookOfFeatsPanel");
+  if (!content) return;
+
+  const isHidden = content.style.display === "none";
+  content.style.display = isHidden ? "block" : "none";
+  if (book) book.style.display = isHidden ? "block" : "none";
+  e.target.textContent = isHidden ? "Hide" : "Show";
+}
+
+if (e.target.id === "toggleAttacksPanel") {
+  const content = document.getElementById("attacksContent");
+  if (!content) return;
+
+  const isHidden = content.style.display === "none";
+  content.style.display = isHidden ? "grid" : "none";
+  e.target.textContent = isHidden ? "Hide" : "Show";
+}
+
+if (e.target.id === "toggleBookOfFeatsPanel") {
+  const content = document.getElementById("bookOfFeatsContent");
+  if (!content) return;
+
+  const isHidden = content.style.display === "none";
+  content.style.display = isHidden ? "block" : "none";
+  e.target.textContent = isHidden ? "Hide" : "Show";
+}
+
+if (e.target.id === "toggleSpellbookPanel") {
+  const content = document.getElementById("spellbookContent");
+  if (!content) return;
+
+  const isHidden = content.style.display === "none" || content.style.display === "";
+  content.style.display = isHidden ? "block" : "none";
+  e.target.textContent = isHidden ? "Hide" : "Show";
+}
+
+if (e.target.id === "toggleSpellcastingPanel") {
+  const content = document.getElementById("spellcastingContent");
+  if (!content) return;
+
+  const isHidden = content.style.display === "none";
+  content.style.display = isHidden ? "grid" : "none";
+  e.target.textContent = isHidden ? "Hide" : "Show";
+}
+
+  /* ===== Save Rolls ===== */
+  if (e.target.id === "dodgeRollLabel") {
+    rollDodgeSave();
+    return;
+  }
+
+  if (e.target.id === "resistRollLabel") {
+    rollResistSave();
+    return;
+  }
+
+  if (e.target.id === "toughnessRollLabel") {
+    rollToughnessSave();
+    return;
+  }
+
+  /* ===== Weapon Rolls ===== */
+  if (e.target.id === "clearMisfireBtn" && character) {
+    const wid = e.target.dataset.weapon;
+    if (character.weaponMisfire) delete character.weaponMisfire[wid];
+    return;
+  }
+
+if (e.target.dataset.weapon) {
+  rollWeaponAttack(e.target.dataset.weapon, e.target.dataset.type);
+  return;
+}
+
+if (e.target.dataset.spell && character) {
+  const s = spellbook.find(x => (x.id || x.name) === e.target.dataset.spell);
+  if (!s) return;
+
+  const totalLevel =
+    Array.isArray(character.classes)
+      ? character.classes.reduce((n,c) => n + (Number(c.level) || 0), 0)
+      : Number(character.level) || 0;
+
+let range = s.rangeFormula || "—";
+
+if (range === "self") {
+  range = "Self";
+} else if (range === "touch") {
+  range = "Touch";
+} else if (range !== "—") {
+  range = range.replace(/LVL/g, totalLevel).replace(/@/g," ");
+  try {
+    const m = range.match(/^([0-9+\-*/(). ]+)\s*(.*)$/);
+    if (m) {
+      const n = eval(m[1]);
+      range = n + (m[2] ? " " + m[2] : "");
+    }
+  } catch {}
+}
+
+  const col0 = document.getElementById("spellCol0");
+  const col1 = document.getElementById("spellCol1");
+  const col2 = document.getElementById("spellCol2");
+
+  col2.innerHTML = col1.innerHTML;
+  col1.innerHTML = col0.innerHTML;
+
+  col0.innerHTML = `
+<div>
+  <div><strong><em>${s.name || s.id}</em></strong></div>
+  <div>Range: ${range}</div>
+  <div>Target: ${s.targetConstraints || "—"}</div>
+  <div>${s.alwaysHits ? "Always Hits" : (s.saveType || "—")}</div>
+  <div>Damage: ${s.damageFormula ? rollDamage(s.damageFormula) : "—"}</div>
+  <div>${s.effectText || "—"}</div>
+  <div>Duration: ${(() => { let d = s.duration || "—"; if (d !== "—") { d = d.replace(/LVL/g, totalLevel).replace(/@/g," "); try { const m = d.match(/^([0-9+\-*/(). ]+)\s*(.*)$/); if (m) { const n = eval(m[1]); d = n + (m[2] ? " " + m[2] : ""); } } catch {} } return d; })()}</div>
+  <div>Components: ${s.components || "—"}</div>
+</div>
+`;
+  return;
+}
+
+if (e.target.dataset.addspell && character) {
+  if (!character.personalSpells) character.personalSpells = [];
+  if (!character.personalSpells.includes(e.target.dataset.addspell)) {
+    character.personalSpells.push(e.target.dataset.addspell);
+  }
+
+  const idx = Number(document.getElementById("characterSelect").value);
+  if (Number.isFinite(idx)) {
+    const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+    saved[idx] = {
+      ...JSON.parse(JSON.stringify(character)),
+      savedAt: saved[idx]?.savedAt || new Date().toLocaleString()
+    };
+    localStorage.setItem("atfCharacters", JSON.stringify(saved));
+  }
+
+  renderSpellcastingPanel();
+  return;
+}
+
+if (e.target.dataset.rmvspell && character) {
+  const id = e.target.dataset.rmvspell;
+  const s = spellbook.find(x => (x.id || x.name) === id);
+  const name = s ? (s.name || s.id) : id;
+
+  if (!confirm(`Are you sure you want to remove ${name} from your spellbook?`)) return;
+
+  if (character.personalSpells) {
+    character.personalSpells = character.personalSpells.filter(x => x !== id);
+  }
+
+  renderSpellcastingPanel();
+  return;
+}
+
+});
+
+/* ===== Recalculate armor TAC on cover / AC added change ===== */
+["cover-partial","cover-full","armor-ac-added"].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("change", renderArmorPanel);
+});
+
+
+})();
+  </script>
+</body>
+</html>

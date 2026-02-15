@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Player Resources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+html, body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #bdd6ac 100%);
+  background-attachment: fixed;
+  color: #48752c;
+}
+    .top {
+      text-align: center;
+      padding: 40px 20px 20px 20px;
+    }
+
+    .logo {
+      max-width: 420px;
+    }
+
+.page-title {
+  margin-top: 20px;
+  font-size: 2.4em;
+  font-weight: 700;
+  color: #48752c;
+}
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .panel {
+      background: #bdd6ac;
+      border: 3px solid #9dc384;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background: linear-gradient(to right, #48752c, #bdd6ac);
+      color: #bdd6ac;
+      font-weight: 700;
+      padding: 14px 18px;
+      font-size: 1.3em;
+    }
+
+    .panel-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+/* CORE TOOLS BUTTONS */
+.core-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.05em;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 2px solid #48752c;      /* Dark Green outline */
+  background: #9dc384;            /* Medium Green background */
+  color: #48752c;                 /* Dark Green text */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.core-btn:hover {
+  background: #48752c;
+  color: #9dc384;
+  border-color: #9dc384;
+  transform: translateY(-3px);
+}
+
+/* LORE BUTTONS */
+.lore-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.05em;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 2px solid #bdd6ac;      /* Light Green outline */
+  background: #48752c;            /* Dark Green background */
+  color: #bdd6ac;                 /* Light Green text */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lore-btn:hover {
+  background: #bdd6ac;
+  color: #48752c;
+  border-color: #48752c;
+  transform: translateY(-3px);
+}
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="top">
+  <img src="Atf Text Logo with Purple Stripe.png" alt="After the Fall Logo" class="logo">
+  <h1 class="page-title">Player Resources</h1>
+</div>
+
+  <div class="container">
+    <div class="panel-grid">
+
+      <!-- LEFT PANEL -->
+      <div class="panel">
+        <div class="panel-header">
+          Core Tools
+        </div>
+        <div class="panel-body">
+<button class="core-btn" onclick="location.href='wizard.html'">
+  Character Creator Wizard
+</button>
+<button class="core-btn" onclick="location.href='character-sheet.html'">
+  Character Sheet
+</button>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="panel">
+        <div class="panel-header">
+          Lore & Reference
+        </div>
+        <div class="panel-body">
+<button class="lore-btn" onclick="window.open('AtFRules.html', '_blank')">
+  Rulebook
+</button>
+<button class="lore-btn" onclick="window.open('AtFChronicle.html', '_blank')">
+  The Chronicle of the Second Age
+</button>
+<button class="lore-btn" onclick="window.open('AtFPlayerReference.pdf', '_blank')">
+  Player Reference Sheet
+</button>
+<button class="lore-btn" onclick="window.open('equipment-reference.html', '_blank')">
+  Equipment Reference
+</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

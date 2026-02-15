@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Equipment Reference</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+  margin:0;
+  min-height:100vh;
+  font-family:'Roboto', sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #bdd6ac 100%);
+  background-attachment: fixed;
+  color:#48752c;
+}
+
+.container {
+  max-width:1440px;   /* 20% wider than 1200 */
+  margin:40px auto;
+  padding:0 20px;
+}
+
+.panel {
+  background:#bdd6ac;
+  border:4px solid #9dc384;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.panel-header {
+  background:linear-gradient(to right, #48752c, #9dc384);
+  color:#bdd6ac;
+  padding:14px 18px;
+  font-weight:bold;
+  font-style:italic;
+  font-size:1.3em;
+}
+
+.panel-body {
+  padding:16px;
+}
+
+/* FILTER BUTTONS */
+.filter-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.filter-grid button {
+  background:#48752c;
+  color:#bdd6ac;
+  border:2px solid #9dc384;
+  border-radius:8px;
+  font-weight:bold;
+  padding:8px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+}
+
+.filter-grid button.active,
+.filter-grid button:hover {
+  background:#bdd6ac;
+  color:#48752c;
+  border-color:#48752c;
+}
+
+/* TABLE */
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:1.1em;
+}
+
+thead tr {
+  background:#48752c;
+  color:#bdd6ac;
+}
+
+th, td {
+  padding:8px;
+  text-align:left;
+}
+
+tbody tr:nth-child(odd) {
+  background:#bdd6ac;
+}
+
+tbody tr:nth-child(even) {
+  background:linear-gradient(to right, #bdd6ac, #9dc384);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="panel">
+    <div class="panel-header">
+      Equipment Reference
+    </div>
+
+    <div class="panel-body">
+
+      <!-- FILTERS -->
+      <div class="filter-grid">
+  <button onclick="toggleCompositeFilter(['armr','clth','arpk'], this)">Armor</button>
+  <button onclick="toggleFilter('alch', this)">Alchemical</button>
+  <button onclick="toggleFilter('ammo', this)">Ammunition</button>
+  <button onclick="toggleFilter('cont', this)">Containers</button>
+  <button onclick="toggleFilter('genr', this)">General Gear</button>
+  <button onclick="toggleFilter('kits', this)">Kits</button>
+  <button onclick="toggleCompositeFilter(['tome','potn'], this)">Magic Items</button>
+  <button onclick="toggleCompositeFilter(['mele','ha2h','rngd','guns','thrw'], this)">Weapons</button>
+</div>
+
+      <!-- TABLE -->
+      <table>
+        <thead>
+  <tr>
+    <th style="width:19%;">Name</th>
+    <th style="width:36%;">Description</th>
+    <th style="width:10%;">Type</th>
+    <th style="width:10%;">DMG or TAC</th>
+    <th style="width:10%;">DMG Type or Material</th>
+    <th style="width:5%;">Cost</th>
+    <th style="width:5%;">Slots</th>
+    <th style="width:5%;">Weight</th>
+  </tr>
+</thead>
+        <tbody id="equipmentTableBody"></tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+let equipment = [];
+let activeFilters = new Set();
+
+/* CSV PARSER */
+function parseCSV(text) {
+  const rows = text.split('\n').map(r => r.split(','));
+  const headers = rows.shift();
+  return rows.map(r => {
+    const obj = {};
+    headers.forEach((h,i) => obj[h.trim()] = (r[i]||'').trim());
+    return obj;
+  });
+}
+
+/* LOAD CSV */
+async function loadEquipment() {
+  const res = await fetch("equipment.csv");
+  const text = await res.text();
+  equipment = parseCSV(text);
+  renderTable();
+}
+
+/* FILTER */
+function toggleFilter(type, btn) {
+  if (activeFilters.has(type)) {
+    activeFilters.delete(type);
+    btn.classList.remove("active");
+  } else {
+    activeFilters.add(type);
+    btn.classList.add("active");
+  }
+  renderTable();
+}
+
+function toggleCompositeFilter(types, btn) {
+  const allActive = types.every(t => activeFilters.has(t));
+
+  if (allActive) {
+    types.forEach(t => activeFilters.delete(t));
+    btn.classList.remove("active");
+  } else {
+    types.forEach(t => activeFilters.add(t));
+    btn.classList.add("active");
+  }
+
+  renderTable();
+}
+
+function formatType(type) {
+  const map = {
+    armr: "Armor",
+    clth: "Clothing",
+    arpk: "Armor Pack",
+    alch: "Alchemical",
+    ammo: "Ammunition",
+    cont: "Container",
+    genr: "General Gear",
+    kits: "Kit",
+    potn: "Potion",
+    tome: "Tome",
+    mele: "Melee Weapon",
+    ha2h: "Hand-to-Hand Weapon",
+    rngd: "Ranged Weapon",
+    guns: "Firearm",
+    thrw: "Thrown Weapon"
+  };
+
+  return map[type] || type || "";
+}
+
+function formatDescription(e) {
+
+  let desc = e.eqpDesc || "";
+
+  if (e.eqpType === "ammo" && e.capacityQuantity) {
+
+    if (desc && !desc.trim().endsWith(".")) {
+      desc = desc.trim() + ".";
+    }
+
+    return desc + " Quantity per pack: " + e.capacityQuantity + ".";
+  }
+
+  return desc;
+}
+
+/* RENDER */
+function renderTable() {
+  const body = document.getElementById("equipmentTableBody");
+  body.innerHTML = "";
+
+let filtered = equipment.filter(e => e.eqpType !== "ntrl");
+
+if (activeFilters.size > 0) {
+  filtered = filtered.filter(e => activeFilters.has(e.eqpType));
+}
+
+  filtered.forEach(e => {
+    const row = document.createElement("tr");
+row.innerHTML = `
+  <td><strong>${e.eqpName || ""}</strong></td>
+      <td>${formatDescription(e)}</td>
+      <td>${formatType(e.eqpType)}</td>
+      <td>${e.DMGorTAC || ""}</td>
+      <td>${e.DMGTypeMaterial || ""}</td>
+      <td>${e.cost || ""}</td>
+      <td>${e.slots || ""}</td>
+      <td>${e.weight || ""}</td>
+    `;
+    body.appendChild(row);
+  });
+}
+
+loadEquipment();
+
+</script>
+
+</body>
+</html>

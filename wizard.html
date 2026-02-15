@@ -1,0 +1,2913 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>After the Fall Character Creator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+/* ===== GLOBAL FONT SCALE START ===== */
+html {
+  font-size: 120%;
+}
+/* ===== GLOBAL FONT SCALE END ===== */
+
+    body {
+      font-family: Roboto, sans-serif;
+      margin: 20px;
+      background: #48752c;
+    }
+
+.panel-header,
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+/* === Sheet-only mode (sheet.html) === */
+.sheet-only #stepPanel,
+.sheet-only #contextPanel,
+.sheet-only #progressTrack,
+.sheet-only #step0Layout {
+  display: none;
+}
+
+.sheet-only {
+  grid-template-columns: 1fr;
+}
+
+.sheet-only #summaryPanel {
+  grid-column: 1 / -1;
+}
+
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    #step0Layout { display: none; }
+
+    .panel {
+      background: #bdd6ac;
+      border: 5px solid #9dc384;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    h1, h2 { margin-top: 0; }
+
+.step h2 {
+  background: #48752c;
+  color: #bdd6ac;
+  padding: 12px 16px 12px 16px;
+  margin: -20px -20px 12px -20px;   /* adds spacing below the header */
+  border-radius: 6px 6px 0 0;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+    select, input, textarea {
+      padding: 8px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+button {
+  padding: 8px 16px;
+  font-size: 16px;
+  background: #634fa2;
+  color: #d8d2e7;
+  border: 2px solid #8b7dbe;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Save Character should be light purple */
+#saveCharBtn {
+  background: #d8d2e7;
+  color: #634fa2;
+  border: 2px solid #8b7dbe;
+  font-weight: bold;
+}
+
+    button:hover { background: #8b7dbe; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .step { display: none; }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      margin: 6px 0 12px 0;
+    }
+
+/* ===============================
+   SUMMARY PANEL – PAPER SHEET
+   =============================== */
+
+#summaryContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* Section wrapper */
+.summary-sheet {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* ---------- 1) Identity Grid ---------- */
+.summary-identity {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+.summary-identity .full { grid-column: 1 / 3; }
+
+/* ---------- 3) Core Stats Grid ---------- */
+.summary-core {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 12px;
+}
+
+/* ---------- 4) Abilities ---------- */
+.summary-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+
+/* ---------- 5) Skills ---------- */
+.summary-skills {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+
+/* ---------- Common cell style ---------- */
+.sheet-cell {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #48752c;
+}
+
+.sheet-title {
+  background: #48752c;
+  color: #bdd6ac;
+  font-weight: normal;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.sheet-value {
+  background: #9dc384;
+  padding: 6px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Description block */
+.sheet-description {
+  background: #9dc384;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* Feats & Equipment */
+.sheet-lines div {
+  margin-bottom: 4px;
+}
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .help-text {
+      font-size: 0.9em;
+      opacity: 0.85;
+      margin: 6px 0 8px 0;
+    }
+
+    .error-text {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #b00020;
+      background: #ffe6ea;
+      border-radius: 8px;
+    }
+
+/* ===== Step 6 Feat Checkboxes ===== */
+#featsPanel label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+#featsPanel input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  accent-color: #d8d2e7; /* light purple when unchecked */
+}
+
+#featsPanel input[type="checkbox"]:checked {
+  accent-color: #634fa2; /* dark purple when checked */
+}
+
+/* ===== Step 7 Equipment Radios ===== */
+#weaponChoices label,
+#armorChoices label,
+#gearChoices label {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: start;
+  column-gap: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+#weaponChoices input[type="radio"],
+#armorChoices input[type="radio"],
+#gearChoices input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #d8d2e7; /* light purple */
+}
+
+#weaponChoices input[type="radio"]:checked,
+#armorChoices input[type="radio"]:checked,
+#gearChoices input[type="radio"]:checked {
+  accent-color: #634fa2; /* dark purple */
+}
+
+#contextPanel .panel-header,
+#summaryPanel .panel-header {
+  background: #48752c;              /* Dark Green */
+  color: #bdd6ac;                   /* Light Green */
+  padding: 12px 16px;
+  margin: -20px -20px 12px -20px;
+  border-radius: 6px 6px 0 0;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* === Lock all green headers to the same height === */
+.step h2,
+#contextPanel .panel-header,
+#summaryPanel .panel-header {
+  min-height: 48px;
+  line-height: 1;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* ===== Lock all 3 green headers to the same height ===== */
+.panel-header,
+.step h2 {
+  min-height: 52px;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* Keep header buttons from changing header height */
+.panel-header button,
+.step h2 button {
+  line-height: 1;
+  padding: 6px 12px !important;
+  font-size: 14px !important;
+}
+
+/* === Normalize inner layout so all three headers size the same === */
+/* ===== PANEL HEADER GRADIENT START ===== */
+.panel-header,
+#contextPanel .panel-header,
+#summaryPanel .panel-header,
+.step h2 {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to right, #48752c, #9dc384) !important;
+  color: #bdd6ac !important;
+}
+/* ===== PANEL HEADER GRADIENT END ===== */
+
+.panel-header > span,
+.step h2 > span {
+  line-height: 1;
+  padding-top: 2px;
+}
+
+/* Prevent nav and buttons from stretching header height */
+.step h2 .nav,
+.panel-header button {
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+/* ===== Step 8: Two-panel layout (Summary replaces Context) ===== */
+.container.step8 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.container.step8 #stepPanel {
+  grid-column: 1 / 2;
+}
+
+.container.step8 #summaryPanel {
+  grid-column: 2 / 3;
+  display: block;
+}
+
+.container.step8 #contextPanel {
+  display: none;
+}
+
+/* ===== WIZARD PROGRESS BAR STYLES START ===== */
+
+#progressTrack {
+  width: 100%;
+  max-width: 1200px;
+  margin: 12px auto 20px auto;
+}
+
+#progressSteps {
+  display: flex;
+  gap: 8px;
+}
+
+.progressStep {
+  flex: 1;
+  text-align: center;
+  padding: 10px 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  user-select: none;
+}
+
+/* Future */
+.progressStep.future {
+  background: #48752c;
+  color: #bdd6ac;
+}
+
+/* Current */
+.progressStep.current {
+  background: #bdd6ac;
+  color: #48752c;
+}
+
+/* Completed */
+.progressStep.completed {
+  background: #634fa2;
+  color: #d8d2e7;
+}
+
+/* ===== WIZARD PROGRESS BAR STYLES END ===== */
+
+  </style>
+</head>
+
+<body class="sheet-mode">
+  <div style="text-align:center;">
+    <img src="logo.png" style="height:200px;"><br>
+    <h1>After the Fall Character Creator</h1>
+  </div>
+
+<!-- ===== WIZARD PROGRESS BAR START ===== -->
+<div id="progressTrack">
+  <div id="progressSteps"></div>
+</div>
+<!-- ===== WIZARD PROGRESS BAR END ===== -->
+
+
+  <!-- STEP 0 FULL SCREEN -->
+  <div id="step0Layout">
+    <div class="panel">
+      <div class="step" id="step0">
+        <h2>Welcome to The Second Age</h2>
+        <div class="nav">
+          <button class="nextBtn">Next</button>
+        </div>
+        <p>This character creator will guide you through the steps of creating a character that can thrive in the Deadlands of <em>After the Fall</em>.</p>
+        <p>Each step builds on the last, but you can always go back and change your choices.</p>
+        <p><strong>Good luck surviving after the fall.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN WIZARD LAYOUT -->
+<!-- ===== MAIN CONTAINER: WIZARD MODE START ===== -->
+<div class="container">
+<!-- ===== MAIN CONTAINER: WIZARD MODE END ===== -->
+    <!-- LEFT: STEP CONTENT -->
+    <div class="panel" id="stepPanel">
+
+      <div class="step" id="step1">
+        <h2>Choose a Race</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+          <button class="nextBtn">Next</button>
+        </div>
+        <select id="raceSelect"></select>
+        <div id="mutationBlock" style="display:none;">
+          <label><strong>Choose Mutation</strong></label>
+          <select id="mutationSelect"></select>
+        </div>
+      </div>
+
+<div class="step" id="step2">
+  <h2>Choose a Class</h2>
+  <div class="nav">
+    <button class="backBtn">Back</button>
+    <button class="nextBtn">Next</button>
+  </div>
+
+  <select id="classSelect"></select>
+  <div id="classInlineDesc" style="margin-top:10px;"></div>
+
+  <!-- ===== STEP 2 PRIEST DEITY BLOCK START ===== -->
+  <div id="step2PriestDeityBlock" style="display:none; margin-top:12px;">
+    <label><strong>Deity</strong></label>
+    <select id="step2DeitySelect"></select>
+    <div id="step2DeityDesc" style="margin-top:8px;"></div>
+  </div>
+  <!-- ===== STEP 2 PRIEST DEITY BLOCK END ===== -->
+</div>
+
+      <div class="step" id="step3">
+        <h2>Assign Ability Scores</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+          <button class="nextBtn">Next</button>
+        </div>
+        <div id="abilityPanel"></div>
+        <div id="abilityLeftSummary" style="margin-top:12px;"></div>
+        <div><strong>Points Remaining:</strong> <span id="pointsRemaining">5</span></div>
+      
+</div>
+
+      <div class="step" id="step4">
+        <h2>Your Character's Stats</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+          <button class="nextBtn">Next</button>
+        </div>
+        <div id="baseStatsLeft"></div>
+      </div>
+
+      <div class="step" id="step5">
+        <h2>Select Skills</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+          <button class="nextBtn">Next</button>
+        </div>
+        <p>Points remaining: <span id="skillPointsRemaining">0</span></p>
+
+<div id="skillsPanel"></div>
+
+      </div>
+
+      <div class="step" id="step6">
+        <h2>Select Feat</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+          <button class="nextBtn">Next</button>
+        </div>
+        <p>Select <strong>1 feat</strong>.</p>
+        <div id="featsPanel"></div>
+        <div id="bonusChoiceBlock" style="display:none; margin-top:12px;">
+          <label><strong>Additional Choice</strong></label>
+          <div id="bonusChoicePanel"></div>
+        </div>
+      </div>
+
+      <div class="step" id="step7">
+        <h2>Starting Equipment</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+          <button class="nextBtn">Next</button>
+        </div>
+<div style="margin-bottom:20px;">
+  <strong>Weapons</strong>
+  <div id="weaponChoices"></div>
+</div>
+
+<div style="margin-bottom:20px;">
+  <strong>Armor</strong>
+  <div id="armorChoices"></div>
+</div>
+
+<div style="margin-bottom:20px;">
+  <strong>Gear</strong>
+  <div id="gearChoices"></div>
+</div>
+      </div>
+
+<!-- ===== STEP 7.5: STARTING SPELLBOOK START ===== -->
+<div class="step" id="step7.5">
+  <h2>Starting Spellbook</h2>
+  <div class="nav">
+    <button class="backBtn">Back</button>
+    <button class="nextBtn">Next</button>
+  </div>
+
+  <!-- ===== STEP 7.5: DEFINITION TEXT START ===== -->
+  <div id="wizardSpellbookDefinition" style="margin-top:10px;"></div>
+  <!-- ===== STEP 7.5: DEFINITION TEXT END ===== -->
+
+  <div style="margin-top:16px; border:4px solid #48752c; background:#bdd6ac; border-radius:10px; overflow:hidden;">
+    <div style="
+      background:linear-gradient(to right, #48752c, #9dc384);
+      color:#bdd6ac;
+      padding:12px 16px;
+      font-weight:bold;
+      font-style:italic;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    ">
+      <span>Spellbook</span>
+      <span id="wizardSpellbookCount" style="font-weight:bold; font-style:italic; color:#48752c;"></span>
+    </div>
+    <div id="wizardSpellbookContent" style="padding:0;"></div>
+  </div>
+
+  <div id="wizardBookWrap" style="margin-top:16px; border:4px solid #634fa2; background:#d8d2e7; border-radius:10px; overflow:hidden;">
+    <div style="
+      background:linear-gradient(to right, #634fa2, #8b7dbe);
+      color:#d8d2e7;
+      padding:12px 16px;
+      font-weight:bold;
+      font-style:italic;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    ">
+      <span>The Book of Magic</span>
+      <button id="toggleWizardBookBtn">Hide</button>
+    </div>
+    <div id="wizardBookOfMagicContent" style="padding:0;"></div>
+  </div>
+</div>
+<!-- ===== STEP 7.5: STARTING SPELLBOOK END ===== -->
+
+      <div class="step" id="step8">
+        <h2>Character Description</h2>
+        <div class="nav">
+          <button class="backBtn">Back</button>
+        </div>
+
+        <label><strong>Character Name:</strong></label>
+        <input type="text" id="charName">
+
+        <div class="grid-2" style="margin-top:10px;">
+          <div><strong>Race:</strong> <span id="charRaceDisplay"></span></div>
+          <div><label><strong>Age:</strong></label><input type="text" id="charAge"></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:10px;">
+          <div><label><strong>Height:</strong></label><input type="text" id="charHeight"></div>
+          <div><label><strong>Weight:</strong></label><input type="text" id="charWeight"></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:10px;">
+          <div><label><strong>Eyes:</strong></label><input type="text" id="charEyes"></div>
+          <div><label><strong>Hair:</strong></label><input type="text" id="charHair"></div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label><strong>Description:</strong></label>
+          <div id="descHelp" class="help-text"></div>
+          <textarea id="charDescription" rows="5"></textarea>
+        </div>
+
+        <hr style="margin:16px 0;">
+
+        <h2>Alignment</h2>
+        <div class="grid-2">
+          <div>
+            <label><strong>Order:</strong></label>
+            <select id="alignOrder">
+              <option value="">-- Select --</option>
+              <option value="Strict">Strict</option>
+              <option value="Neutral">Neutral</option>
+              <option value="Chaotic">Chaotic</option>
+            </select>
+            <div id="orderDef" class="help-text"></div>
+          </div>
+          <div>
+            <label><strong>Moral:</strong></label>
+            <select id="alignMoral">
+              <option value="">-- Select --</option>
+              <option value="Good">Good</option>
+              <option value="Indifferent">Indifferent</option>
+              <option value="Evil">Evil</option>
+            </select>
+            <div id="moralDef" class="help-text"></div>
+          </div>
+        </div>
+        <div id="priestAlignError" class="error-text" style="display:none;"></div>
+
+        <hr style="margin:16px 0;">
+
+        <h2>Deity</h2>
+        <div id="deitySelect" style="font-weight:bold; margin-bottom:8px;"></div>
+        <div id="deityInfo" class="summary-block" style="display:none;">
+          <div class="summary-title" id="deityName"></div>
+          <div><strong>Alignment(s):</strong> <span id="deityAlignments"></span></div>
+          <div><strong>Theme:</strong> <span id="deityTheme"></span></div>
+          <div style="margin-top:6px;" id="deityDescription"></div>
+          <div id="deityPrimordialWrap" style="margin-top:6px; display:none;">
+            <strong>Primordial:</strong> <span id="deityPrimordialNote"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MIDDLE: CONTEXT -->
+    <div class="panel" id="contextPanel">
+      <div class="panel-header" id="contextHeader">
+  <span>Context</span>
+</div>
+      <div id="contextContent"><em>Context will appear here.</em></div>
+    </div>
+
+<div class="panel" id="summaryPanel">
+ <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+  <span>Character Summary</span>
+
+  <div style="display:flex; gap:8px;">
+    <button id="clearDraftBtn" style="font-size:14px; padding:4px 10px;">
+      Start Over
+    </button>
+
+    <button id="saveCharBtn">
+      Save Character
+    </button>
+  </div>
+</div>
+
+      <div id="summaryContent"><em id="summaryPlaceholder">A summary of your choices will appear here.</em></div>
+    </div>
+  </div>
+
+  <script>
+/* ===== START OVER BUTTON: FULL RESET START ===== */
+document.getElementById("clearDraftBtn").onclick = () => {
+  if (!confirm("Clear current character and start over?")) return;
+
+  localStorage.removeItem("atfDraft");
+
+  location.reload();
+};
+/* ===== START OVER BUTTON: FULL RESET END ===== */
+
+document.getElementById("saveCharBtn").onclick = confirmCharacter;
+
+    const raceURL = "races.csv";
+const classURL = "classes.csv";
+const featsURL = "feats.csv";
+const deitiesURL = "deities.csv";
+const equipmentURL = "equipment.csv";
+/* ===== STEP 7.5: SPELLBOOK CSV START ===== */
+const spellbookURL = "spellbook.csv";
+/* ===== STEP 7.5: SPELLBOOK CSV END ===== */
+
+let equipment = [];
+    let classes = [];
+    let feats = [];
+    let deities = [];
+/* ===== STEP 7.5: SPELLBOOK DATA START ===== */
+let spellbook = [];
+/* ===== STEP 7.5: SPELLBOOK DATA END ===== */
+
+    let currentStep = 0;
+    const totalSteps = 9;
+
+    const character = {
+      raceId: null,
+      mutation: null,
+      classId: null,
+      abilities: null,
+      baseHP: null,
+      baseAC: null,
+      feats: [],
+      bonusChoice: null,
+      skills: null,
+      skillPoints: 0,
+      appearance: {
+        name: "",
+        age: "",
+        height: "",
+        weight: "",
+        eyes: "",
+        hair: "",
+        description: ""
+      },
+      alignment: { order: "", moral: "" },
+      deityId: null,
+      equipment: { weapons: null, armor: null, gear: null },
+      _startingEquipment: null
+    };
+
+    const raceSelect = document.getElementById("raceSelect");
+    const mutationSelect = document.getElementById("mutationSelect");
+    const mutationBlock = document.getElementById("mutationBlock");
+    const classSelect = document.getElementById("classSelect");
+    /* ===== PROGRESS BAR SAFE GUARD START ===== */
+const progressBar = document.getElementById("progressBar");
+/* ===== PROGRESS BAR SAFE GUARD END ===== */
+
+    const summaryContent = document.getElementById("summaryContent");
+
+    function parseDelimited(text) {
+      const rows = [];
+      let cur = "";
+      let row = [];
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        const n = text[i + 1];
+
+        if (c === '"' && inQuotes && n === '"') { cur += '"'; i++; continue; }
+        if (c === '"') { inQuotes = !inQuotes; continue; }
+
+        if (c === "," && !inQuotes) { row.push(cur); cur = ""; continue; }
+
+        if ((c === "\n" || c === "\r") && !inQuotes) {
+          if (cur.length || row.length) { row.push(cur); rows.push(row); }
+          row = []; cur = ""; continue;
+        }
+
+        cur += c;
+      }
+
+      if (cur.length || row.length) { row.push(cur); rows.push(row); }
+
+      const headers = rows.shift().map(h => h.trim());
+
+      return rows
+        .map(r => {
+          const o = {};
+          headers.forEach((h, i) => { o[h] = (r[i] || "").trim(); });
+          return o;
+        })
+        .filter(r => r.id);
+    }
+
+    async function loadCSV(url) {
+      const res = await fetch(url);
+      const text = await res.text();
+      return parseDelimited(text);
+    }
+
+function setContext(headerText, bodyHTML) {
+  const header = document.getElementById("contextHeader");
+  const content = document.getElementById("contextContent");
+  if (!header || !content) return;
+
+  // Always hard-reset first
+  header.textContent = "";
+  content.innerHTML = "";
+
+  // Then apply new content
+  header.textContent = headerText || "";
+  content.innerHTML = bodyHTML || "";
+}
+    function formatStartingOptions(raw) {
+      if (!raw) return "—";
+      return raw
+        .split("||")
+        .map(group =>
+          group
+            .split("|")
+            .map(s => s.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()))
+            .join(" & ")
+        )
+        .join(" OR ");
+    }
+
+    const ABILITIES = ["STR", "PER", "AGI", "END", "INT", "CHA"];
+
+    const SKILLS = [
+      "Acrobatics","Acquisition","Athletics","Bluff","Craft","Engineering","Explosives","Guns","Hand to Hand",
+      "Handle Animal","Linguistics","Local Knowledge","Pick Lock / Pocket","Melee","Ranged","Repair","Science",
+      "Sense Motive","Sneak","Survival / Medicine","Tolerance","Theology","Thrown","Use Device"
+    ];
+
+/* ===== WIZARD PROGRESS SYSTEM START ===== */
+
+function getProgressSteps() {
+  const base = [
+    "Race",
+    "Class",
+    "ABI Scores",
+    "Derived Stats",
+    "Skill Scores",
+    "Starting Feats",
+    "Starting Equipment"
+  ];
+
+  const cls = classes?.find(c => c.id === character?.classId);
+
+  if (cls && (cls.spellcasting || cls.hasSpells || cls.spells)) {
+    base.push("Spellbook");
+  }
+
+  base.push("Details & Deity");
+
+  return base;
+}
+
+function renderProgress(currentStep) {
+  const container = document.getElementById("progressSteps");
+  if (!container) return;
+
+  const steps = getProgressSteps();
+
+  container.innerHTML = steps.map((label, i) => {
+    let state = "future";
+    if (i + 1 < currentStep) state = "completed";
+    if (i + 1 === currentStep) state = "current";
+
+    const check = state === "completed" ? " ✓" : "";
+return `<div class="progressStep ${state}">${label}${check}</div>`;
+  }).join("");
+}
+
+/* ===== WIZARD PROGRESS SYSTEM END ===== */
+
+    function showStep(n) {
+      currentStep = n;
+
+  setContext("", "");
+
+const container = document.querySelector(".container");
+
+/* ===== STEP LAYOUT CONTROL START ===== */
+container.classList.toggle("step8", n === 8 || n === 7.5);
+/* ===== STEP LAYOUT CONTROL END ===== */
+
+      if (n === 0) {
+        document.getElementById("step0Layout").style.display = "block";
+        document.querySelector(".container").style.display = "none";
+      } else {
+        document.getElementById("step0Layout").style.display = "none";
+        document.querySelector(".container").style.display = "grid";
+      }
+
+      document.querySelectorAll(".step").forEach(s => (s.style.display = "none"));
+      document.getElementById("step" + n).style.display = "block";
+
+      /* ===== PROGRESS BAR UPDATE SAFE START ===== */
+if (progressBar) {
+  progressBar.style.width = (n / (totalSteps - 1)) * 100 + "%";
+}
+/* ===== PROGRESS BAR UPDATE SAFE END ===== */
+
+      if (n === 2 && classSelect.value) classSelect.onchange();
+
+if (n === 3) {
+  renderAbilityContext();
+
+  // Always rebuild if abilities are invalid or missing
+  if (
+    !character.abilities ||
+    Object.values(character.abilities).some(o => o.value == null)
+  ) {
+    buildBaseAbilities();
+  } else {
+    renderAbilities();
+  }
+
+  renderAbilityLeftRules();
+}
+
+      if (n === 4) {
+        calculateBaseStats();
+        renderBaseStatsContext();
+        renderBaseStatsLeft();
+      }
+
+/* ===== STEP 5 SKILL STATE GUARD START ===== */
+if (n === 5) {
+  renderSkillsContext();
+
+  // Only build skills if they do not already exist in draft
+  if (!character.skills || Object.keys(character.skills).length === 0) {
+    buildBaseSkills();
+  } else {
+    renderSkills();
+  }
+}
+/* ===== STEP 5 SKILL STATE GUARD END ===== */
+
+      if (n === 6) {
+        renderFeatsContext();
+        renderFeats();
+      }
+
+/* ===== STEP 7 EQUIPMENT STATE GUARD START ===== */
+if (n === 7) {
+  renderStartingEquipment(); // render only
+}
+/* ===== STEP 7 EQUIPMENT STATE GUARD END ===== */
+
+/* ===== STEP 7.5: RENDER STARTING SPELLBOOK START ===== */
+if (n === 7.5) {
+  renderStartingSpellbookStep();
+}
+/* ===== STEP 7.5: RENDER STARTING SPELLBOOK END ===== */
+
+if (n === 8) {
+  clearContextPanel("Character Summary");
+  renderAppearance();
+  renderDeityInfo();
+  renderAlignment();
+}
+
+      update();
+      renderProgress(n);
+    }
+
+/* ===== STEP 7.5: STARTING SPELLBOOK LOGIC START ===== */
+
+function isWizardWarlock() {
+  const cls = classes.find(c => c.id === character.classId);
+  const id = (cls?.id || "").toLowerCase();
+  return id === "wizard" || id === "warlock";
+}
+
+function isPriest() {
+  const cls = classes.find(c => c.id === character.classId);
+  const id = (cls?.id || "").toLowerCase();
+  return id === "priest";
+}
+
+function getWizardWarlockLimit() {
+  if (!character?.abilities) return 0;
+  const cls = classes.find(c => c.id === character.classId);
+  const id = (cls?.id || "").toLowerCase();
+  if (id === "wizard") return Number(character.abilities.INT?.value) || 0;
+  if (id === "warlock") return Number(character.abilities.CHA?.value) || 0;
+  return 0;
+}
+
+function uniq(arr) {
+  const out = [];
+  (arr || []).forEach(x => { if (x && !out.includes(x)) out.push(x); });
+  return out;
+}
+
+function parsePriestSpellNames(priestSpellsRaw) {
+  return (priestSpellsRaw || "")
+    .split("|")
+    .map(s => s.trim())
+    .filter(Boolean)
+    .map(token => token.includes(":") ? token.split(":").slice(1).join(":").trim() : token.trim())
+    .filter(Boolean);
+}
+
+function findSpellIdsByName(name) {
+  const raw = String(name || "").trim();
+  const n = raw.toLowerCase();
+
+  let matches = spellbook.filter(x =>
+    String(x.name || x.id || "").trim().toLowerCase() === n
+  );
+
+  if (!matches.length && raw.includes("(")) {
+    const base = raw.split("(")[0].trim().toLowerCase();
+    if (base) {
+      matches = spellbook.filter(x =>
+        String(x.name || x.id || "").trim().toLowerCase() === base
+      );
+    }
+  }
+
+  /* ===== VARIANT NAME MATCH (e.g. Sounds of Saturn → all versions) ===== */
+  if (!matches.length && raw) {
+    const base = raw.toLowerCase();
+    matches = spellbook.filter(x =>
+      String(x.name || x.id || "")
+        .trim()
+        .toLowerCase()
+        .startsWith(base)
+    );
+  }
+  /* ===== VARIANT NAME MATCH END ===== */
+
+  return matches.map(s => (s.id || s.name)).filter(Boolean);
+}
+
+function isCantripOrLevel1(s) {
+  const type = String(s.class || "").trim().toUpperCase();
+  const lvl = Number(s.level);
+  if (type === "CAN") return true;
+  return lvl === 1;
+}
+
+function isSpellAllowedForPriest(s) {
+  if (!isPriest()) return true;
+
+  const rules = String(s.specialRules || "");
+  const match = rules.match(/deity:([^|]+)/i);
+  if (!match) return true;
+
+  const raw = match[1].trim();
+  if (/^all$/i.test(raw)) return true;
+
+  const allowed = raw.split(";").map(x => x.trim().toLowerCase());
+  const deity = String(character.deityId || "").toLowerCase();
+
+  return allowed.includes(deity);
+}
+
+function renderSpellTableRows(spellIds) {
+  const ids = spellIds || [];
+  if (!ids.length) {
+    return `<tr><td colspan="11" style="padding:6px; font-style:italic;">No spells selected.</td></tr>`;
+  }
+
+  return ids.map(id => {
+    const s = spellbook.find(x => (x.id || x.name) === id);
+    if (!s) return "";
+
+    const type = (s.class || "").toUpperCase();
+    const level = type === "CAN" ? 1 : (s.level || "");
+    const sc = (s.complexity || "").toUpperCase().startsWith("S") ? "S" :
+               (s.complexity || "").toUpperCase().startsWith("C") ? "C" : "";
+
+    return `<tr>
+<td style="text-align:center;">
+<button data-rmvspell="${id}" style="font-size:0.6em; padding:4px 8px;">Rmv</button>
+</td>
+<td style="text-align:left;">
+  <button data-spell="${id}" style="background:none;border:none;color:#48752c;font-weight:bold;cursor:pointer;text-align:left;display:block;width:100%;">
+    ${s.name || s.id}
+  </button>
+</td>
+<td style="text-align:center;">${type || "—"}</td>
+<td style="text-align:center;">${level || "—"}</td>
+<td style="text-align:center;">${sc || "—"}</td>
+<td style="text-align:left;">${s.effectText || "—"}</td>
+<td style="text-align:center;">${s.range || "—"}</td>
+<td style="text-align:center;">${s.saveType || "—"}</td>
+<td style="text-align:center;">${s.damageFormula || "—"}</td>
+<td style="text-align:center;">${s.duration || "—"}</td>
+<td style="text-align:left;">${s.components || "—"}</td>
+</tr>`;
+  }).join("");
+}
+
+function renderSpellbookTable() {
+  const el = document.getElementById("wizardSpellbookContent");
+  if (!el) return;
+
+  const ids = Array.isArray(character.personalSpells) ? character.personalSpells : [];
+
+const sortedIds = ids
+  .map(id => spellbook.find(x => (x.id || x.name) === id))
+  .filter(Boolean)
+  .sort((a, b) => {
+    const t = (a.class || "").localeCompare(b.class || "");
+    if (t !== 0) return t;
+    return (a.name || a.id).localeCompare(b.name || b.id);
+  })
+  .map(s => (s.id || s.name));
+  el.innerHTML = `
+<table style="width:100%; border-collapse:collapse; font-size:0.8em; table-layout:fixed;">
+<colgroup>
+  <col style="width:6%">
+  <col style="width:24%">
+  <col style="width:8%">
+  <col style="width:6%">
+  <col style="width:6%">
+  <col style="width:20%">
+  <col style="width:8%">
+  <col style="width:8%">
+  <col style="width:8%">
+  <col style="width:6%">
+  <col style="width:20%">
+</colgroup>
+<thead>
+<tr style="background:#9dc384; color:#48752c; font-size:0.7em;">
+<th style="width:5%"></th>
+<th style="text-align:left; width:15%;">Name</th>
+<th style="text-align:center; width:5%;">Type</th>
+<th style="text-align:center; width:5%;">Lvl</th>
+<th style="text-align:center; width:5%;">S/C</th>
+<th style="text-align:left;" width:20%;">Effect</th>
+<th style="text-align:center; width:5%;">Range</th>
+<th style="text-align:center; width:10%;">Save</th>
+<th style="text-align:center; width:10%;">Damage</th>
+<th style="text-align:center; width:5%;">Duration</th>
+<th style="text-align:left; width:15%;">Components</th>
+</tr>
+</thead>
+<tbody id="wizardSpellbookBody" style="font-size:0.7em;">${
+  renderSpellTableRows(sortedIds)
+}</tbody>
+</table>`;
+}
+
+function renderBookOfMagicTable() {
+  const el = document.getElementById("wizardBookOfMagicContent");
+  if (!el) return;
+
+const list = (spellbook || [])
+  .filter(s => {
+    if (isPriest() && !isSpellAllowedForPriest(s)) return false;
+    if (!isWizardWarlock()) return true;
+    return isCantripOrLevel1(s);
+  })
+  
+.sort((a, b) => {
+    const t = (a.class || "").localeCompare(b.class || "");
+    if (t !== 0) return t;
+    return (a.name || a.id).localeCompare(b.name || b.id);
+  });
+
+  el.innerHTML = `
+<table style="width:100%; border-collapse:collapse; font-size:0.8em;">
+<thead>
+<tr style="background:#8b7dbe; color:#d8d2e7; font-size:0.7em;">
+<th style="width:5%"></th>
+<th style="text-align:left; width:15%;">Name</th>
+<th style="text-align:center; width:5%;">Type</th>
+<th style="text-align:center; width:5%;">Lvl</th>
+<th style="text-align:center; width:5%;">S/C</th>
+<th style="text-align:left;" width:20%;">Effect</th>
+<th style="text-align:center; width:5%;">Range</th>
+<th style="text-align:center; width:10%;">Save</th>
+<th style="text-align:center; width:10%;">Damage</th>
+<th style="text-align:center; width:5%;">Duration</th>
+<th style="text-align:left; width:15%;">Components</th>
+</tr>
+</thead>
+<tbody style="font-size:0.7em;">
+${
+  list.map(s => {
+    const id = (s.id || s.name);
+    const type = (s.class || "").toUpperCase();
+    const level = type === "CAN" ? 1 : (s.level || "");
+    const sc = (s.complexity || "").toUpperCase().startsWith("S") ? "S" :
+               (s.complexity || "").toUpperCase().startsWith("C") ? "C" : "";
+
+    return `<tr>
+<td style="text-align:center;">
+<button data-addspell="${id}" style="font-size:0.6em; padding:4px 8px;">Add</button>
+</td>
+<td style="text-align:left;">
+  <button data-spell="${id}" style="background:none;border:none;color:#634fa2;font-weight:bold;cursor:pointer;text-align:left;display:block;width:100%;">
+    ${s.name || s.id}
+  </button>
+</td>
+<td style="text-align:center;">${type || "—"}</td>
+<td style="text-align:center;">${level || "—"}</td>
+<td style="text-align:center;">${sc || "—"}</td>
+<td style="text-align:left;">${s.effectText || "—"}</td>
+<td style="text-align:center;">${s.range || "—"}</td>
+<td style="text-align:center;">${s.saveType || "—"}</td>
+<td style="text-align:center;">${s.damageFormula || "—"}</td>
+<td style="text-align:center;">${s.duration || "—"}</td>
+<td style="text-align:left;">${s.components || "—"}</td>
+</tr>`;
+  }).join("")
+}
+</tbody>
+</table>`;
+}
+
+function updateSpellbookHeaderText() {
+  const def = document.getElementById("wizardSpellbookDefinition");
+  const cnt = document.getElementById("wizardSpellbookCount");
+  const bookWrap = document.getElementById("wizardBookWrap");
+  if (!def || !cnt || !bookWrap) return;
+
+  const cls = classes.find(c => c.id === character.classId);
+  const id = (cls?.id || "").toLowerCase();
+
+  if (id === "priest") {
+    const deity = deities.find(d => d.id === character.deityId);
+    const names = parsePriestSpellNames(deity?.priestSpells || "");
+    def.innerHTML = `<p style="margin:0;"><strong>Priest:</strong> Here are the spells your deity provides:</p><p style="margin:6px 0 0 0;"><em>${names.join(", ") || "—"}</em></p>`;
+    cnt.textContent = "";
+    bookWrap.style.display = "none";
+    return;
+  }
+
+  bookWrap.style.display = "block";
+
+  if (id === "wizard") {
+    const lim = getWizardWarlockLimit();
+    const cur = Array.isArray(character.personalSpells) ? character.personalSpells.length : 0;
+    def.innerHTML = `<p style="margin:0;"><strong>Wizard:</strong> Your spellbook begins with <strong>${lim}</strong> spells, please select your starting spells.</p>`;
+    cnt.textContent = `Spells selected: ${cur} / ${lim}`;
+    return;
+  }
+
+  if (id === "warlock") {
+    const lim = getWizardWarlockLimit();
+    const cur = Array.isArray(character.personalSpells) ? character.personalSpells.length : 0;
+    def.innerHTML = `<p style="margin:0;"><strong>Warlock:</strong> Your spellbook begins with <strong>${lim}</strong> spells, please select your starting spells.</p>`;
+    cnt.textContent = `Spells selected: ${cur} / ${lim}`;
+    return;
+  }
+
+  def.innerHTML = `<p style="margin:0;"><em>No spellcaster loaded.</em></p>`;
+  cnt.textContent = "";
+  bookWrap.style.display = "none";
+}
+
+function ensurePriestAutoSpells() {
+  if (!isPriest()) return;
+
+  const deity = deities.find(d => d.id === character.deityId);
+  const names = parsePriestSpellNames(deity?.priestSpells || "");
+
+  const ids = uniq(names.flatMap(findSpellIdsByName).filter(Boolean));
+
+  character.personalSpells = ids;
+}
+
+function bindStep75ClicksOnce() {
+  const book = document.getElementById("wizardBookOfMagicContent");
+  const sb = document.getElementById("wizardSpellbookContent");
+  const toggleBtn = document.getElementById("toggleWizardBookBtn");
+  const wrap = document.getElementById("wizardBookWrap");
+  if (!book || !sb || !toggleBtn || !wrap) return;
+
+  if (book.dataset.bound === "1") return;
+  book.dataset.bound = "1";
+
+  toggleBtn.onclick = () => {
+    const body = document.getElementById("wizardBookOfMagicContent");
+    const showing = body.style.display !== "none";
+    body.style.display = showing ? "none" : "block";
+    toggleBtn.textContent = showing ? "Show" : "Hide";
+  };
+
+  function showSpellInContext(id) {
+    const s = spellbook.find(x => (x.id || x.name) === id);
+    if (!s) return;
+    setContext(
+      s.name || s.id,
+      `<div style="margin-bottom:8px;"><strong>Type:</strong> ${(s.class || "—").toUpperCase()} &nbsp;&nbsp; <strong>Level:</strong> ${((s.class || "").toUpperCase()==="CAN") ? 1 : (s.level || "—")}</div>
+       <div style="margin-bottom:8px;"><strong>Effect:</strong> ${s.effectText || "—"}</div>
+       <div style="margin-bottom:8px;"><strong>Range:</strong> ${s.range || "—"} &nbsp;&nbsp; <strong>Save:</strong> ${s.saveType || "—"}</div>
+       <div style="margin-bottom:8px;"><strong>Damage:</strong> ${s.damageFormula || "—"} &nbsp;&nbsp; <strong>Duration:</strong> ${s.duration || "—"}</div>
+       <div><strong>Components:</strong> ${s.components || "—"}</div>`
+    );
+  }
+
+  function handleClick(e) {
+    const add = e.target.closest("[data-addspell]");
+    const rmv = e.target.closest("[data-rmvspell]");
+    const view = e.target.closest("[data-spell]");
+
+    if (view) {
+      showSpellInContext(view.getAttribute("data-spell"));
+      return;
+    }
+
+    if (rmv) {
+      const id = rmv.getAttribute("data-rmvspell");
+      character.personalSpells = (Array.isArray(character.personalSpells) ? character.personalSpells : []).filter(x => x !== id);
+      renderStartingSpellbookStep();
+      update();
+      return;
+    }
+
+    if (add) {
+      const id = add.getAttribute("data-addspell");
+      if (!id) return;
+
+      character.personalSpells = Array.isArray(character.personalSpells) ? character.personalSpells : [];
+
+      if (character.personalSpells.includes(id)) return; /* no duplicates */
+
+      if (isWizardWarlock()) {
+        const lim = getWizardWarlockLimit();
+        if (character.personalSpells.length >= lim) return;
+      }
+
+      character.personalSpells.push(id);
+      character.personalSpells = uniq(character.personalSpells);
+
+      renderStartingSpellbookStep();
+      update();
+      return;
+    }
+  }
+
+  book.addEventListener("click", handleClick);
+  sb.addEventListener("click", handleClick);
+}
+
+function renderStartingSpellbookStep() {
+  if (!character) return;
+
+  if (!Array.isArray(character.personalSpells)) character.personalSpells = [];
+
+  if (isPriest()) {
+    ensurePriestAutoSpells();
+  } else {
+    character.personalSpells = uniq(character.personalSpells);
+  }
+
+  updateSpellbookHeaderText();
+  renderSpellbookTable();
+
+  if (!isPriest()) {
+    renderBookOfMagicTable();
+  }
+
+  bindStep75ClicksOnce();
+
+  if (isWizardWarlock()) {
+    const cnt = document.getElementById("wizardSpellbookCount");
+    const lim = getWizardWarlockLimit();
+    const cur = Array.isArray(character.personalSpells) ? character.personalSpells.length : 0;
+    if (cnt) cnt.textContent = `Spells selected: ${cur} / ${lim}`;
+  }
+}
+
+/* ===== STEP 7.5: STARTING SPELLBOOK LOGIC END ===== */
+
+    function bindNavButtons() {
+      document.querySelectorAll(".backBtn").forEach(btn => {
+  btn.onclick = () => {
+    if (currentStep > 0) {
+      const prev = currentStep === 7.5 ? 7 : currentStep - 1;
+      localStorage.setItem("atfDraft", JSON.stringify({ character, currentStep: prev }));
+      showStep(prev);
+    }
+  };
+});
+
+      document.querySelectorAll(".nextBtn").forEach(btn => {
+        btn.onclick = () => {
+          localStorage.setItem("atfDraft", JSON.stringify({ character, currentStep }));
+
+          if (currentStep === 0) { showStep(1); return; }
+
+          if (currentStep === 1 && !character.raceId) { alert("Choose a race."); return; }
+          if (currentStep === 2 && !character.classId) { alert("Choose a class."); return; }
+          if (currentStep === 3 && pointsRemaining() !== 0) { alert("You must spend all ability points."); return; }
+          if (currentStep === 5 && skillPointsRemaining() !== 0) { alert("You must spend all skill points."); return; }
+          if (currentStep === 6 && character.feats.length === 0) { alert("Select a feat."); return; }
+
+          if (currentStep === 7) {
+  const cls = classes.find(c => c.id === character.classId);
+
+  if (cls && (cls.id === "wizard" || cls.id === "warlock" || cls.id === "priest")) {
+    showStep(7.5);
+  } else {
+    showStep(8);
+  }
+  return;
+}
+
+          if (currentStep === 8) {
+            const deityId = character.deityId;
+            const moral = character.alignment?.moral;
+            const cls = classes.find(c => c.id === character.classId);
+            const errorEl = document.getElementById("priestAlignError");
+
+            if (deityId && moral) {
+              const d = deities.find(x => x.id === deityId);
+              if (d) {
+                const allowed = d.alignment.split(",").map(a => a.trim());
+                if (!allowed.includes("Any") && !allowed.includes(moral)) {
+                  errorEl.style.display = "block";
+                  errorEl.textContent =
+                    cls?.id === "priest"
+                      ? "As a priest devoted to a deity, your alignment must match the alignments they serve."
+                      : "That deity conflicts with your alignment.";
+                  return;
+                }
+              }
+            }
+            errorEl.style.display = "none";
+          }
+
+if (currentStep === 7.5) {
+  const cls = classes.find(c => c.id === character.classId);
+  const id = (cls?.id || "").toLowerCase();
+
+  if (id === "wizard" || id === "warlock") {
+    const lim = getWizardWarlockLimit();
+    const cur = Array.isArray(character.personalSpells) ? character.personalSpells.length : 0;
+    if (cur !== lim) { alert("Select all starting spells."); return; }
+  }
+
+  showStep(8);
+  return;
+}
+
+if (currentStep < totalSteps - 1) {
+  showStep(currentStep + 1);
+}
+        };
+      });
+    }
+
+    // ===== Step 3 Context =====
+    function renderAbilityContext() {
+      if (currentStep !== 3) return;
+      setContext(
+        "What Abilities Affect…",
+        `
+          <p><strong>When a skill check is required</strong>, resolve it using: <em>ABI + Skill + any bonuses + 1d10.</em></p>
+          <p>The player suggests what <em>ABI + Skill</em> they think applies, and if the GM agrees, they roll that <strong>skill check</strong> (<em>ABI + Skill + 1d10</em>). If the GM disagrees, they will instead tell the player what <em>ABI + Skill</em> should apply.</p>
+          <p>The GM sets the Difficulty <strong>(DIF)</strong>. If the total equals or exceeds the <strong>DIF</strong>, the action succeeds. Ties favor the acting character unless the situation is strictly opposed (<em>“roller wins”</em>).</p>
+          <p>If a skill check’s result is <em>+5 or more above the DIF</em>, the team gets a Team Point <strong>(TP)</strong>. If the skill check is a <em>Critical Success</em>, the team receives <strong>2 TP</strong> (<em>does not stack</em>).</p>
+          <hr>
+          <p><strong>Strength (STR)</strong><br>Physical power, lifting, melee force.</p>
+          <p><strong>Perception (PER)</strong><br>Awareness, intuition, perception.</p>
+          <p><strong>Agility (AGI)</strong><br>Agility, balance, reflexes, precision.</p>
+          <p><strong>Endurance (END)</strong><br>General health, resilience, resistance to harm.</p>
+          <p><strong>Intelligence (INT)</strong><br>Reasoning, memory, technical knowledge.</p>
+          <p><strong>Charisma (CHA)</strong><br>Presence, confidence, force of personality.</p>
+        `
+      );
+    }
+
+function renderAbilityLeftRules() {
+  const el = document.getElementById("abilityLeftSummary");
+  if (!el) return;
+
+  const cls = classes.find(c => c.id === character.classId);
+  const race = races.find(r => r.id === character.raceId);
+
+  let spellLine = "";
+
+  if (cls?.id === "priest") {
+    spellLine = `<p style="font-size:1.2em;"><em>A priest's spellbook <strong><em>begins with the spells their deity provides.</em></strong></em></p>`;
+  } else if (cls?.id === "wizard") {
+    spellLine = `<p style="font-size:1.2em;"><em>A wizard's spellbook <strong><em>begins with their INT score worth of spells in it.</em></strong></em></p>`;
+  } else if (cls?.id === "warlock") {
+    spellLine = `<p style="font-size:1.2em;"><em>A warlock's spellbook <strong><em>begins with their CHA score worth of spells in it.</em></strong></em></p>`;
+  }
+
+  const raw =
+    "All characters begin with 5 points in each ABI before any racial adjustments are applied (by the system). " +
+    "After racial adjustments, a player can choose to reduce any attribute by one to add that point elsewhere, on as many attributes as you want. " +
+    "In addition to any point gained by reducing a score, they start with 5 additional points to place where they want. " +
+    "No Attribute score may ever exceed 10 at any time in the game.";
+
+let racialParts = [];
+
+if (character.abilities) {
+  const a = character.abilities;
+
+  ["STR","PER","AGI","END","INT","CHA"].forEach(k => {
+    const base = Number(a[k]?.base ?? 5);
+    const delta = base - 5;
+
+    if (delta !== 0) {
+      racialParts.push(`${k} ${delta > 0 ? "+" : ""}${delta}`);
+    }
+  });
+}
+
+const racialText = racialParts.length ? racialParts.join(", ") : "None";
+
+  const remaining = pointsRemaining();
+
+  el.innerHTML =
+    spellLine +
+    `<p>${raw}</p>` +
+    `<p><strong>Racial Adjustments:</strong> ${racialText}</p>` +
+    `<p><strong>Points Remaining:</strong> ${remaining}</p>`;
+}
+
+/* ===== SELECT SKILLS CONTEXT BLOCK START ===== */
+function renderSkillsContext() {
+  setContext(
+    "Skills in After the Fall",
+    `
+      <p>Below are the <strong>24 skills</strong> used in <em>After the Fall</em>. A skill may be paired with different abilities depending on how it is being used and what the player is attempting.</p>
+      <p><em>These are just examples of what a skill may cover but is not all-inclusive,</em> and at the time of a skill check the player may suggest what skill they want to use in the situation (though the GM may suggest an alternate if they don’t agree).</p>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px;">
+
+        <div><strong>Acrobatics:</strong> Balance, tumbling, controlled falls, and moving through dangerous or confined spaces.</div>
+        <div><strong>Acquisition:</strong> Finding, bartering for, appraising, or securing goods, services, or information by any means.</div>
+
+        <div><strong>Athletics:</strong> Climbing, jumping, lifting, swimming, grappling, and raw physical exertion.</div>
+        <div><strong>Bluff:</strong> Lying, fast-talking, misdirection, and selling falsehoods under pressure.</div>
+
+        <div><strong>Craft:</strong> Creating, modifying, or repairing simple items, tools, and equipment by hand.</div>
+        <div><strong>Engineering:</strong> Designing, understanding, and modifying machines, structures, and complex systems.</div>
+
+        <div><strong>Explosives:</strong> Handling, creating, disarming, or identifying bombs, charges, and demolition devices.</div>
+        <div><strong>Guns:</strong> Aiming, firing, and safely operating firearms in combat or stressful situations.</div>
+
+        <div><strong>Hand 2 Hand:</strong> Unarmed and close-quarters combat using fists, feet, or simple body-based weapons.</div>
+        <div><strong>Handle Animal:</strong> Training, calming, riding, or directing animals and animal-like creatures.</div>
+
+        <div><strong>Linguistics:</strong> Reading, writing, translating, and understanding languages and coded text.</div>
+        <div><strong>Local Knowledge:</strong> Knowing the people, places, factions, and practical realities of a region.</div>
+
+        <div><strong>Melee:</strong> Fighting with handheld weapons in close-quarters combat.</div>
+        <div><strong>Pick Lock / Pocket:</strong> Lockpicking, bypassing security, and sleight-of-hand theft.</div>
+
+        <div><strong>Ranged:</strong> Using bows, crossbows, and similar ranged weapons accurately.</div>
+        <div><strong>Repair:</strong> Fixing, maintaining, and restoring damaged equipment and machinery.</div>
+
+        <div><strong>Science:</strong> Applying scientific knowledge, analysis, and experimentation to understand the world.</div>
+        <div><strong>Sense Motive:</strong> Reading intent, detecting lies, and judging a person’s true motives.</div>
+
+        <div><strong>Sneak:</strong> Moving silently, hiding, avoiding detection, and positioning for ambushes.</div>
+        <div><strong>Survival / Medicine:</strong> Wilderness survival, tracking, navigation, and emergency medical care.</div>
+
+        <div><strong>Theology:</strong> Understanding religions, rites, deities, and sacred traditions.</div>
+        <div><strong>Thrown:</strong> Accurately using weapons or objects thrown by hand.</div>
+
+        <div><strong>Tolerance:</strong> Resisting pain, toxins, intoxicant effects, fatigue, and extreme physical or environmental stress.</div>
+        <div><strong>Use Device:</strong> Operating unfamiliar, scavenged, magical, or pre-Fall technology.</div>
+
+      </div>
+    `
+  );
+}
+/* ===== SELECT SKILLS CONTEXT BLOCK END ===== */    function renderFeatsContext() {
+      const race = races.find(r => r.id === character.raceId);
+      const cls = classes.find(c => c.id === character.classId);
+      if (!race || !cls) return;
+
+      setContext(
+        "Your Feats",
+        `
+          <p><strong>Racial Feat:</strong><br>${race.racialFeatName}<br>${race.racialFeatDescription || ""}</p>
+          <p><strong>Class Feat:</strong><br>${cls.startingFeatName}<br>${cls.startingFeatDescription || ""}</p>
+        `
+      );
+    }
+
+    function renderBaseStatsContext() {
+      const race = races.find(r => r.id === character.raceId);
+      const cls = classes.find(c => c.id === character.classId);
+      if (!race || !cls || !character.abilities) return;
+
+      const a = character.abilities;
+      setContext(
+        "Derived Statistics",
+        `
+          <p>Your ${race.name} ${cls.name} has the following derived basics.</p>
+          <p><strong>Melee Attack</strong> <em>STR (${a.STR.value}) + (Melee OR Hand 2 Hand) + 1d10</em><br>
+          <strong>Ranged Attack</strong> <em>PER (${a.PER.value}) + Ranged + 1d10</em><br>
+          <strong>Firearm Attack</strong> <em>PER (${a.PER.value}) + Guns + 1d10</em><br>
+          <strong>Thrown Attack</strong> <em>STR (${a.STR.value}) + Thrown + 1d10</em></p>
+        `
+      );
+    }
+
+/* ===== BASE STATS LEFT PANEL START ===== */
+function renderBaseStatsLeft() {
+  const race = races.find(r => r.id === character.raceId);
+  const cls = classes.find(c => c.id === character.classId);
+  const a = character.abilities;
+
+  if (!race || !cls || !a) return;
+
+  const racialHP = Number(race.hpPerLevel || 0);
+  const classHP = Number(cls.hpPerLevel || 0);
+  const level1HP = 10 + racialHP + classHP;
+
+  const baseAC = Number(race.baseAC || 0);
+  const move = 20 + Number(race.charDistance || 0);
+  const baseWeight = a.STR.value * 10;
+
+  const startingSkills = a.INT.value + 5;
+
+  const defaultLangRaw = (race.defaultLanguages || race.defaultLanguage || "Common");
+  const defaultLangs = Array.isArray(defaultLangRaw)
+    ? defaultLangRaw
+    : String(defaultLangRaw).split(",").map(s => s.trim()).filter(Boolean);
+
+  const defaultLabel =
+    defaultLangs.length > 1 ? "Default Languages" : "Default Language";
+
+  const extraLang = Math.floor(a.INT.value / 3);
+
+  let spellLine = "";
+
+  if (cls.id === "wizard") {
+    spellLine = `<br><br><strong>Number of Spells in Spellbook:</strong> ${a.INT.value}`;
+  } else if (cls.id === "warlock") {
+    spellLine = `<br><br><strong>Number of Spells in Spellbook:</strong> ${a.CHA.value}`;
+  } else if (cls.id === "priest") {
+    const deity = deities.find(d => d.id === character.deityId);
+    const name = deity ? deity.name : "Deity";
+
+    const spells = parsePriestSpellNames(deity?.priestSpells || "");
+
+    const list = spells.length
+      ? `<ul style="margin:4px 0 0 20px;">${spells.map(s => `<li>${s}</li>`).join("")}</ul>`
+      : "";
+
+    spellLine =
+      `<br><br><strong>Spells in Spellbook Provided by ${name}</strong>` +
+      list;
+  }
+
+  const html = `
+<strong>Racial HP:</strong> ${racialHP}
+&nbsp;&nbsp;
+<strong>Class HP:</strong> ${classHP}
+&nbsp;&nbsp;
+<strong>Level 1 HP:</strong> ${level1HP}
+
+<br><br>
+
+<strong>Base AC:</strong> ${baseAC}
+&nbsp;&nbsp;
+<strong>Movement Speed:</strong> ${move}
+&nbsp;&nbsp;
+<strong>Base Weight:</strong> ${baseWeight}
+
+<br><br>
+
+<strong>${defaultLabel}:</strong> ${defaultLangs.join(", ")}
+&nbsp;&nbsp;
+<strong>Additional Languages Available:</strong> ${extraLang}
+&nbsp;&nbsp;
+<br><strong>Number of Starting Skills:</strong> ${startingSkills}
+
+
+
+${spellLine}
+`;
+
+  document.getElementById("baseStatsLeft").innerHTML = html;
+}
+/* ===== BASE STATS LEFT PANEL END ===== */
+
+    // ===== Abilities =====
+    function buildBaseAbilities() {
+      const race = races.find(r => r.id === character.raceId);
+      character.abilities = {};
+
+      ABILITIES.forEach(a => {
+        const mod = Number(race[a.toLowerCase() + "Mod"] || 0);
+        const base = 5 + mod;
+        character.abilities[a] = { base, value: base, lowered: false };
+      });
+
+      renderAbilities();
+    }
+
+    function pointsRemaining() {
+      let earned = 0;
+      let spent = 0;
+
+      ABILITIES.forEach(a => {
+        const o = character.abilities[a];
+        if (o.lowered) earned += 1;
+        const above = o.value - o.base;
+        if (above > 0) spent += above;
+      });
+
+      const race = races.find(r => r.id === character.raceId);
+      const bonus = race && race.racialFeatName === "Good Upbringing" ? 6 : 5;
+      return bonus + earned - spent;
+    }
+
+    function renderAbilities() {
+      const panel = document.getElementById("abilityPanel");
+
+      let html = `<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; text-align:center; margin-bottom:12px;">`;
+
+      ABILITIES.forEach(a => {
+        const o = character.abilities[a];
+        const min = o.base - 1;
+        const canDec = o.value > min && !o.lowered;
+        const canInc = o.value < 10 && pointsRemaining() > 0;
+
+        html += `
+          <div>
+            <div style="background:#48752c; color:#bdd6ac; font-weight:bold; padding:6px; border-radius:6px 6px 0 0;">${a}</div>
+            <div style="background:#9dc384; padding:8px; border-radius:0 0 6px 6px; display:flex; justify-content:center; align-items:center; gap:8px;">
+              <button onclick="decAbility('${a}')" ${canDec ? "" : "disabled"}>-</button>
+              <div style="min-width:24px; font-weight:bold;">${o.value}</div>
+              <button onclick="incAbility('${a}')" ${canInc ? "" : "disabled"}>+</button>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      panel.innerHTML = html;
+
+      /* ===== STEP 3: HUMAN BONUS DISPLAY START ===== */
+const race = races.find(r => r.id === character.raceId);
+const remaining = pointsRemaining();
+
+if (race && race.racialFeatName === "Good Upbringing") {
+  document.getElementById("pointsRemaining").innerHTML =
+    `Points Remaining: ${remaining - 1} ` +
+    `<strong>+1 for <em>Good Upbringing</em></strong>: ${remaining}`;
+} else {
+  document.getElementById("pointsRemaining").textContent =
+    `Points Remaining: ${remaining}`;
+}
+/* ===== STEP 3: HUMAN BONUS DISPLAY END ===== */
+      update();
+    }
+
+function incAbility(a) {
+  const o = character.abilities[a];
+  if (!o) return;
+
+  if (o.value >= 10) return;
+  if (pointsRemaining() <= 0) return;
+
+  o.value++;
+
+  if (o.value >= o.base) {
+    o.lowered = false;
+  }
+
+  renderAbilities();
+}
+
+function decAbility(a) {
+  const o = character.abilities[a];
+  if (!o) return;
+
+  const min = o.base - 1;
+  if (o.value <= min) return;
+
+  o.value--;
+
+  o.lowered = o.value < o.base;
+
+  renderAbilities();
+}
+
+    // ===== Base Stats =====
+    function calculateBaseStats() {
+      const race = races.find(r => r.id === character.raceId);
+      const cls = classes.find(c => c.id === character.classId);
+      if (!race || !cls) return;
+
+      const raceHP = Number(race.hpPerLevel);
+      const classHP = Number(cls.hpPerLevel);
+      const baseAC = Number(race.baseAC);
+
+      character.baseHP = 10 + raceHP + classHP;
+      character.baseAC = baseAC;
+    }
+
+    // ===== Skills =====
+    function buildBaseSkills() {
+      const race = races.find(r => r.id === character.raceId);
+      const cls = classes.find(c => c.id === character.classId);
+
+      const normalize = s => s.toLowerCase().replace(/\u00A0/g, " ").replace(/[^a-z]/g, "");
+
+      const parseSkills = str =>
+  (str || "")
+    .split(",")
+    .map(s => s.trim())
+    .map(s => SKILLS.find(k => normalize(k) === normalize(s)))
+    .filter(Boolean)
+    .map(k => normalize(k));
+
+const classSkills = parseSkills(cls.classSkills);
+const racialSkills = parseSkills(race.racialSkills);
+
+      const INT = character.abilities.INT.value;
+      character.skillPoints = INT + 5 + Number(cls.skillPoints || 0);
+
+      character.skills = {};
+      SKILLS.forEach(name => {
+        const key = normalize(name);
+        const isClass = classSkills.includes(key);
+        const isRace = racialSkills.includes(key);
+
+        let base = 0;
+        if (isClass && isRace) base = 3;
+        else if (isClass) base = 2;
+        else if (isRace) base = 1;
+
+        let max = 1;
+        if (isClass && isRace) max = 4;
+        else if (isClass) max = 3;
+        else if (isRace) max = 2;
+
+        character.skills[name] = { value: base, base, max, isClass, isRace };
+      });
+
+      renderSkills();
+    }
+
+    function skillPointsRemaining() {
+      let spent = 0;
+      SKILLS.forEach(name => {
+        const s = character.skills[name];
+        spent += s.value - s.base;
+      });
+      return character.skillPoints - spent;
+    }
+
+/* ===== SKILLS RENDER BLOCK START ===== */
+function renderSkills() {
+  const panel = document.getElementById("skillsPanel");
+  let spent = 0;
+
+  let hasClass = false;
+  let hasRace = false;
+  let hasBoth = false;
+
+  let html = `<div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; text-align:center;">`;
+
+  SKILLS.forEach(name => {
+    const s = character.skills[name];
+    spent += s.value - s.base;
+
+    if (s.isClass) hasClass = true;
+    if (s.isRace) hasRace = true;
+    if (s.isClass && s.isRace) hasBoth = true;
+
+    let label = name;
+    if (s.isClass && s.isRace) label = `<strong><em>${name}</em></strong>`;
+    else if (s.isClass) label = `<strong>${name}</strong>`;
+    else if (s.isRace) label = `<em>${name}</em>`;
+
+    const canDec = s.value > s.base;
+    const canInc = s.value < s.max && skillPointsRemaining() > 0;
+
+    html += `
+      <div style="background:#9dc384; padding:8px; border-radius:8px;">
+        <div style="margin-bottom:6px;">${label}</div>
+        <div style="display:flex; justify-content:center; gap:6px; align-items:center;">
+          <button onclick="decSkill('${name}')" ${canDec ? "" : "disabled"}>-</button>
+          <span>${s.value}</span>
+          <button onclick="incSkill('${name}')" ${canInc ? "" : "disabled"}>+</button>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+
+  let legend = "";
+
+  if (hasClass) {
+    legend += `<div style="margin-top:12px;"><strong>Class Skills</strong> are marked by <strong>bold text</strong>.</div>`;
+  }
+
+  if (hasRace) {
+    legend += `<div><strong>Racial Skills</strong> are marked by <em>italic text</em>.</div>`;
+  }
+
+  if (hasBoth) {
+    legend += `<div><strong>Skills</strong> modified by both <strong>Class</strong> and <em>Race</em> are marked by <strong><em>bold + italic text</em></strong>.</div>`;
+  }
+
+  panel.innerHTML = html + legend;
+
+  document.getElementById("skillPointsRemaining").textContent = skillPointsRemaining();
+  update();
+}
+/* ===== SKILLS RENDER BLOCK END ===== */
+
+    function incSkill(name) {
+      if (skillPointsRemaining() <= 0) return;
+      const s = character.skills[name];
+      if (s.value >= s.max) return;
+      s.value++;
+      renderSkills();
+    }
+
+    function decSkill(name) {
+      const s = character.skills[name];
+      if (s.value <= s.base) return;
+      s.value--;
+      renderSkills();
+    }
+
+    // ===== Feats =====
+    function featIsEligible(f) {
+      if (f.reqLevel) {
+        const lvl = Number(f.reqLevel);
+        if (!isNaN(lvl) && lvl > 1) return false;
+      }
+
+      if (f.reqAbilities) {
+        const parts = f.reqAbilities.split("|");
+        for (const p of parts) {
+          const [abi, val] = p.split(":");
+          if (!character.abilities || character.abilities[abi].value < Number(val)) return false;
+        }
+      }
+
+      if (f.reqClass) {
+        const allowed = f.reqClass.split("|");
+        if (!allowed.includes(character.classId)) return false;
+      }
+
+      if (f.reqRaces) {
+        const allowed = f.reqRaces.split("|");
+        if (!allowed.includes(character.raceId)) return false;
+      }
+
+      if (f.reqFeats) {
+        const required = f.reqFeats.split("|");
+        for (const rf of required) {
+          if (!character.feats.includes(rf)) return false;
+        }
+      }
+
+      return true;
+    }
+
+    function renderFeats() {
+      const panel = document.getElementById("featsPanel");
+      let html = "";
+
+      feats.filter(featIsEligible).forEach(f => {
+        const checked = character.feats.includes(f.id);
+        const disabled = !checked && character.feats.length >= 1;
+
+        html += `
+          <div style="margin-bottom:12px;">
+            <label class="feat-row">
+              <input type="checkbox" ${checked ? "checked" : ""} ${disabled ? "disabled" : ""} onchange="toggleFeat('${f.id}')">
+              <strong>${f.name}</strong>
+            </label>
+            <div style="margin-left:20px;">${f.featDescription}</div>
+          </div>
+        `;
+      });
+
+      panel.innerHTML = html;
+    }
+
+    function toggleFeat(id) {
+      if (character.feats.includes(id)) {
+        character.feats = [];
+        character.bonusChoice = null;
+      } else {
+        character.feats = [id];
+        character.bonusChoice = null;
+      }
+      renderFeats();
+      update();
+    }
+
+function renderChoiceGroup(raw, elId, onSelect, selected) {
+  const el = document.getElementById(elId);
+  if (!raw) { el.innerHTML = "<em>None</em>"; return; }
+
+  const groups = raw.split("||").map(g => g.trim());
+  el.innerHTML = "";
+
+  const wrapper = document.createElement("div");
+  wrapper.style.display = "flex";
+  wrapper.style.flexDirection = "column";
+  wrapper.style.gap = "6px";
+
+  groups.forEach((g, i) => {
+const items = g.split("|").map(x => x.trim());
+    const labelText = g
+      .split("|")
+      .map(x => x.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()))
+      .join(" & ");
+
+const row = document.createElement("label");
+row.style.display = "flex";
+row.style.alignItems = "flex-start";
+row.style.gap = "8px";
+row.style.cursor = "pointer";
+row.style.margin = "0";
+row.style.padding = "0";
+
+const input = document.createElement("input");
+input.type = "radio";
+input.name = elId;
+input.checked = selected && selected.join("|") === items.join("|");
+input.style.margin = "0";
+input.style.marginTop = "3px";   // aligns radio with first text line
+input.style.flex = "0 0 auto";
+
+const text = document.createElement("span");
+text.textContent = labelText;
+text.style.margin = "0";
+text.style.padding = "0";
+text.style.lineHeight = "1.3";
+text.style.display = "block";
+text.style.flex = "1";
+text.style.whiteSpace = "normal";
+input.addEventListener("change", () => { onSelect(items); update(); });
+
+row.appendChild(input);
+row.appendChild(text);
+    wrapper.appendChild(row);
+
+  });
+
+  el.appendChild(wrapper);
+}
+
+
+/* ===== STEP 7 EQUIPMENT STATE GUARD START ===== */
+function renderStartingEquipment() {
+  // Rebuild starting equipment once if missing (refresh / back)
+  if (!character._startingEquipment) {
+    buildStartingEquipment();
+  }
+
+  const data = character._startingEquipment;
+  if (!data) return;
+
+  renderChoiceGroup(
+    data.weapons,
+    "weaponChoices",
+    v => { character.equipment.weapons = v; updateEquipmentContext(); },
+    character.equipment.weapons
+  );
+
+  renderChoiceGroup(
+    data.armor,
+    "armorChoices",
+    v => { character.equipment.armor = v; updateEquipmentContext(); },
+    character.equipment.armor
+  );
+
+  renderChoiceGroup(
+    data.gear,
+    "gearChoices",
+    v => { character.equipment.gear = v; updateEquipmentContext(); },
+    character.equipment.gear
+  );
+
+  updateEquipmentContext();
+}
+/* ===== STEP 7 EQUIPMENT STATE GUARD END ===== */
+
+function titleCase(t){
+  return { melee:"Melee", firearm:"Firearm", ranged:"Ranged", thrown:"Thrown" }[t] || t;
+}
+function line(label,val){
+  if(!val) return "";
+  return "<strong>"+label+"</strong> "+val;
+}
+function pair(a,b){ return [a,b].filter(Boolean).join("  "); }
+
+function prettyType(t){
+  return {
+    guns: "Firearm",
+    mele: "Melee",
+    rngd: "Ranged",
+    ha2h: "Hand to Hand",
+    thwn: "Thrown"
+  }[t] || t;
+}
+
+function renderWeapon(w){
+  return `
+<strong>${w.eqpName}</strong>, <em>${prettyType(w.eqpType)}</em><br>
+${w.eqpDesc || ""}<br>
+${pair(line("DMG",w.DMGorTAC),line("DMG Type",w.DMGTypeMaterial))}<br>
+${pair(line("Misfire",w.Misfire),pair(line("Weight",w.weight),line("Hands",w.hands)))}<br>
+${line("Value",w.cost)}
+`;
+}
+
+function renderArmor(a){
+  return `
+${a.eqpName}, <em>Armor for ${a.Area}</em><br>
+${a.eqpDesc || ""}<br>
+${pair(line("AC",a.DMGorTAC),line("Material",a.DMGTypeMaterial))}<br>
+${pair(line("Weight",a.weight),line("Slots",a.slots))}<br>
+${line("Value",a.cost)}
+`;
+}
+
+function renderKit(k){
+  return `
+${k.eqpName}<br>
+${k.eqpDesc || ""}<br>
+${pair(line("Weight",k.weight),line("Slots",k.slots))}<br>
+${line("Value",k.cost)}
+`;
+}
+
+function updateEquipmentContext(){
+  const normalize = s =>
+  s.toLowerCase()
+   .replace(/\s+/g,"_")
+   .replace(/[^a-z0-9_]/g,"");
+
+  document.getElementById("contextHeader").textContent = "Starting Equipment Descriptions";
+
+  const picks = []
+    .concat(character.equipment.weapons || [])
+    .concat(character.equipment.armor || [])
+    .concat(character.equipment.gear || [])
+    .map(normalize);
+
+  const chosen = equipment.filter(e =>
+    picks.includes(normalize(e.eqpName))
+  );
+
+const weapons = chosen.filter(e =>
+  ["guns","mele","rngd","ha2h"].includes(e.eqpType)
+);
+
+const armor = chosen.filter(e =>
+  ["armr","clth","arpk"].includes(e.eqpType)
+);
+
+const kits = chosen.filter(e =>
+  e.eqpType === "kits"
+);
+
+  let html = "";
+
+  if (weapons.length) {
+    html += "<strong><em>Weapons</em></strong><br>";
+    weapons.forEach(w => html += renderWeapon(w) + "<br><br>");
+  }
+
+  if (armor.length) {
+    html += "<em><strong>Armor</strong></em><br>";
+    armor.forEach(a => html += renderArmor(a) + "<br><br>");
+  }
+
+  if (kits.length) {
+    html += "<strong><em>Kits</em></strong><br>";
+    kits.forEach(k => html += renderKit(k) + "<br><br>");
+  }
+
+  document.getElementById("contextContent").innerHTML =
+    html || "<em>Select starting equipment.</em>";
+}
+
+    // ===== Step 8: Alignment and Deity =====
+    const ORDER_DEFS = {
+      Strict: "Strict characters believe order, structure, and rules are necessary for survival.",
+      Neutral: "Neutral characters balance order and chaos, adapting as needed.",
+      Chaotic: "Chaotic characters value freedom, impulse, and personal choice over imposed order."
+    };
+
+    const MORAL_DEFS = {
+      Good: "Good characters act to protect, uplift, or preserve others.",
+      Indifferent: "Indifferent characters prioritize survival, pragmatism, or personal goals.",
+      Evil: "Evil characters willingly exploit, harm, or dominate others for gain or belief."
+    };
+
+    const deitySelect = document.getElementById("deitySelect");
+    const deityInfo = document.getElementById("deityInfo");
+    const deityName = document.getElementById("deityName");
+    const deityAlignments = document.getElementById("deityAlignments");
+    const deityTheme = document.getElementById("deityTheme");
+    const deityDescription = document.getElementById("deityDescription");
+    const deityPrimordialWrap = document.getElementById("deityPrimordialWrap");
+    const deityPrimordialNote = document.getElementById("deityPrimordialNote");
+
+/* ===== PRIEST ALIGNMENT FILTER START ===== */
+function filterPriestAlignment() {
+  const cls = classes.find(c => c.id === character.classId);
+  const moralSel = document.getElementById("alignMoral");
+
+  if (!moralSel) return;
+
+  const deityId = character.deityId;
+  const d = deities.find(x => x.id === deityId);
+
+  Array.from(moralSel.options).forEach(opt => {
+    opt.hidden = false;
+    opt.disabled = false;
+  });
+
+  if (!cls || cls.id !== "priest" || !d || !d.alignment) return;
+
+  const allowed = d.alignment.split(",").map(a => a.trim());
+
+  if (allowed.includes("Any")) return;
+
+  Array.from(moralSel.options).forEach(opt => {
+    if (!allowed.includes(opt.value)) {
+      opt.hidden = true;
+      opt.disabled = true;
+    }
+  });
+
+  if (!allowed.includes(character.alignment?.moral)) {
+    character.alignment.moral = allowed[0] || null;
+    moralSel.value = character.alignment.moral;
+  }
+}
+/* ===== PRIEST ALIGNMENT FILTER END ===== */
+
+function renderDeityInfo() {
+  const id = character.deityId;
+
+  if (!id) {
+    deityInfo.style.display = "none";
+    return;
+  }
+
+  deitySelect.textContent =
+    (deities.find(d => d.id === id)?.name) || id;
+
+      const d = deities.find(x => x.id === id);
+      if (!d) return;
+
+      character.deityId = id;
+      deityInfo.style.display = "block";
+filterPriestAlignment();
+
+      deityName.textContent = d.name;
+      deityAlignments.textContent = d.alignment;
+      deityTheme.textContent = d.theme;
+      deityDescription.textContent = d.description || "";
+
+      if (String(d.primordial).toLowerCase() === "true") {
+        deityPrimordialWrap.style.display = "block";
+        deityPrimordialNote.textContent = d.primordialNote || "";
+      } else {
+        deityPrimordialWrap.style.display = "none";
+      }
+    }
+
+    function renderAlignment() {
+      const order = document.getElementById("alignOrder").value;
+      const moral = document.getElementById("alignMoral").value;
+
+      character.alignment = { order, moral };
+
+      document.getElementById("orderDef").textContent = ORDER_DEFS[order] || "";
+      document.getElementById("moralDef").textContent = MORAL_DEFS[moral] || "";
+    }
+
+  function renderAppearance() {
+  const a = character.appearance;
+
+  const eyesEl = document.getElementById("charEyes");
+  const hairEl = document.getElementById("charHair");
+
+  document.getElementById("charName").value = a.name;
+  document.getElementById("charAge").value = a.age;
+  document.getElementById("charHeight").value = a.height;
+  document.getElementById("charWeight").value = a.weight;
+  document.getElementById("charDescription").value = a.description;
+
+  const race = races.find(r => r.id === character.raceId);
+  document.getElementById("charRaceDisplay").textContent = race ? race.name : "";
+
+  // ===== Race appearance rules =====
+  if (race?.id === "grey") {
+    a.eyes = "Black";
+    a.hair = "None";
+
+    eyesEl.value = "Black";
+    hairEl.value = "None";
+
+    eyesEl.disabled = true;
+    hairEl.disabled = true;
+
+  } else if (race?.id === "outlander") {
+    a.hair = "None";
+
+    eyesEl.disabled = false;
+
+    hairEl.value = "None";
+    hairEl.disabled = true;
+
+  } else {
+    eyesEl.disabled = false;
+    hairEl.disabled = false;
+
+    eyesEl.value = a.eyes;
+    hairEl.value = a.hair;
+  }
+}
+
+    [
+      ["charName", "name"],
+      ["charAge", "age"],
+      ["charHeight", "height"],
+      ["charWeight", "weight"],
+      ["charEyes", "eyes"],
+      ["charHair", "hair"],
+      ["charDescription", "description"]
+    ].forEach(([id, key]) => {
+      const el = document.getElementById(id);
+      el.addEventListener("input", e => { character.appearance[key] = e.target.value; update(); });
+    });
+
+    deitySelect.onchange = () => { renderDeityInfo(); update(); };
+    document.getElementById("alignOrder").onchange = () => { renderAlignment(); update(); };
+    document.getElementById("alignMoral").onchange = () => { renderAlignment(); update(); };
+
+    // ===== Final Review =====
+    function renderFinalReview() {
+      const el = document.getElementById("finalReview");
+      let html = "";
+
+      const race = races.find(r => r.id === character.raceId);
+      const cls = classes.find(c => c.id === character.classId);
+
+      html += `
+        <div class="summary-block">
+          <div class="summary-title">Identity</div>
+          <strong>${character.appearance.name || "Unnamed Character"}</strong><br>
+          ${race?.name || ""} ${cls?.name || ""}
+        </div>
+      `;
+
+      html += `
+        <div class="summary-block">
+          <div class="summary-title">Appearance</div>
+          Age: ${character.appearance.age || "—"}<br>
+          Height: ${character.appearance.height || "—"}<br>
+          Weight: ${character.appearance.weight || "—"}<br>
+          Eyes: ${character.appearance.eyes || "—"}<br>
+          Hair: ${character.appearance.hair || "—"}<br>
+          <div style="margin-top:6px;">${character.appearance.description || ""}</div>
+        </div>
+      `;
+
+      html += `<div class="summary-block"><div class="summary-title">Abilities</div>`;
+      ABILITIES.forEach(a => { html += `${a}: ${character.abilities[a].value}<br>`; });
+      html += `</div>`;
+
+      html += `
+        <div class="summary-block">
+          <div class="summary-title">Base Stats</div>
+          HP: ${character.baseHP}<br>
+          AC: ${character.baseAC}
+        </div>
+      `;
+
+      html += `<div class="summary-block"><div class="summary-title">Skills</div>`;
+      SKILLS.forEach(s => {
+        const v = character.skills[s].value;
+        if (v > 0) html += `${s}: ${v}<br>`;
+      });
+      html += `</div>`;
+
+      if (character.feats.length) {
+        const feat = feats.find(f => f.id === character.feats[0]);
+        if (feat) {
+          html += `
+            <div class="summary-block">
+              <div class="summary-title">Feat</div>
+              <strong>${feat.name}</strong><br>
+              ${feat.featDescription}
+            </div>
+          `;
+        }
+      }
+
+      html += `
+        <div class="summary-block">
+          <div class="summary-title">Starting Equipment</div>
+          Weapons: ${(character.equipment.weapons || []).join(" & ")}<br>
+Armor: ${(character.equipment.armor || []).join(" & ")}<br>
+Gear: ${(character.equipment.gear || []).join(" & ")}
+        </div>
+      `;
+
+      const moral = character.alignment?.moral || "—";
+      const order = character.alignment?.order || "—";
+      html += `
+        <div class="summary-block">
+          <div class="summary-title">Alignment</div>
+          ${order} ${moral}
+        </div>
+      `;
+
+      const deity = deities.find(d => d.id === character.deityId);
+      html += `
+        <div class="summary-block">
+          <div class="summary-title">Deity</div>
+          ${deity ? deity.name : "None"}
+        </div>
+      `;
+
+      el.innerHTML = html;
+    }
+
+// ===== Save Character =====
+function confirmCharacter() {
+  if (!character.appearance.name) { alert("Character must have a name."); return; }
+
+  const existing = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+  const savedCharacter = structuredClone(character);
+
+  savedCharacter.classes = [{
+    classId: character.classId,
+    level: 1
+  }];
+
+  savedCharacter.savedAt = new Date().toISOString();
+
+  existing.push(savedCharacter);
+  localStorage.setItem("atfCharacters", JSON.stringify(existing));
+
+  localStorage.removeItem("atfDraft");
+
+  alert("Character saved successfully.");
+
+  Object.keys(character).forEach(k => delete character[k]);
+  currentStep = 0;
+  showStep(0);
+}
+
+/* ===== CHARACTER PICKER: SAFE GUARD START ===== */
+const picker = document.getElementById("characterPicker");
+
+if (picker) {
+
+function loadSavedCharacters() {
+  const list = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+
+  picker.innerHTML = "";
+
+  if (!list.length) {
+    picker.innerHTML = `<option value="">No saved characters</option>`;
+    return;
+  }
+
+  list.forEach((c, i) => {
+    const name = c.appearance?.name || "Unnamed";
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = name;
+    picker.appendChild(opt);
+  });
+
+  picker.value = 0;
+  loadCharacterFromList(0);
+}
+
+function loadCharacterFromList(index) {
+  const list = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+  if (!list[index]) return;
+
+  Object.keys(character).forEach(k => delete character[k]);
+  Object.assign(character, JSON.parse(JSON.stringify(list[index])));
+
+  update();
+}
+
+picker.onchange = () => loadCharacterFromList(picker.value);
+
+}
+
+/* ===== CHARACTER PICKER: SAFE GUARD END ===== */
+
+function update() {
+if (currentStep < 1 && !document.body.classList.contains("sheet-mode")) {
+  summaryContent.innerHTML = `<em>A summary of your choices will appear here.</em>`;
+  return;
+}
+
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === character.classId);
+  const deity = deities.find(d => d.id === character.deityId);
+  const show = step => currentStep >= step;
+
+  let html = "";
+
+html += renderIdentityBlock(show);
+
+html += renderCoreBlock(show);
+
+html += renderFeatsBlock(show);
+
+html += renderEquipmentBlock(show);
+
+function renderAbilitiesBlock(show) {
+  if (!show(3) || !character.abilities) return "";
+
+  let html = `<div class="summary-abilities" style="margin-top:12px;">`;
+  ABILITIES.forEach(a => html += `<div class="sheet-title">${a}</div>`);
+  ABILITIES.forEach(a => html += `<div class="sheet-value">${character.abilities[a].value}</div>`);
+  html += `</div>`;
+
+  return html;
+}
+
+function renderSkillsBlock(show) {
+  if (!show(5) || !character.skills) return "";
+
+  let html = `<div class="summary-skills" style="margin-top:12px;">`;
+
+  for (let i = 0; i < SKILLS.length; i += 6) {
+    const chunk = SKILLS.slice(i, i + 6);
+
+    chunk.forEach(s => {
+      html += `<div class="sheet-title">${s}</div>`;
+    });
+
+    chunk.forEach(s => {
+      html += `<div class="sheet-value">${character.skills[s].value}</div>`;
+    });
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function renderIdentityBlock(show) {
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === character.classId);
+  const deity = deities.find(d => d.id === character.deityId);
+
+  let html = `<div>`;
+
+  if (show(8) && character.appearance.name)
+    html += `<strong>Name</strong> ${character.appearance.name}<br>`;
+
+  if (race) html += `<strong>Race</strong> ${race.name} &nbsp;&nbsp; `;
+  if (cls)  html += `<strong>Class</strong> ${cls.name} Level 1<br>`;
+
+  if (show(8)) {
+    if (character.alignment.order && character.alignment.moral)
+      html += `<strong>Alignment</strong> ${character.alignment.order} ${character.alignment.moral} &nbsp;&nbsp; `;
+    html += `<strong>Deity</strong> ${deity ? deity.name : "None"}<br>`;
+
+    if (character.appearance.age) html += `<strong>Age</strong> ${character.appearance.age} &nbsp;&nbsp; `;
+    if (character.appearance.height) html += `<strong>Height</strong> ${character.appearance.height} &nbsp;&nbsp; `;
+    if (character.appearance.weight) html += `<strong>Weight</strong> ${character.appearance.weight}<br>`;
+
+    if (character.appearance.eyes) html += `<strong>Eyes</strong> ${character.appearance.eyes} &nbsp;&nbsp; `;
+    if (character.appearance.hair) html += `<strong>Hair</strong> ${character.appearance.hair}<br>`;
+  }
+
+  html += `</div>`;
+
+  if (show(8) && character.appearance.description) {
+    html += `<div style="margin:10px 0;"><em>${character.appearance.description}</em></div>`;
+  }
+
+  return html;
+}
+
+function renderCoreBlock(show) {
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === character.classId);
+
+  if (!race && !cls) return "";
+
+  let html = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">`;
+
+  if (race) html += `<div><strong>Racial HP Per Level</strong> ${race.hpPerLevel}</div>`;
+  if (cls)  html += `<div><strong>1st Class HP</strong> ${cls.hpPerLevel}</div>`;
+  if (show(4)) html += `<div><strong>Level 1 HP</strong> ${character.baseHP}</div>`;
+  if (race) html += `<div><strong>Base AC</strong> ${race.baseAC}</div>`;
+  if (race) html += `<div><strong>Speed</strong> ${20 + Number(race.charDistance)}</div>`;
+  if (show(3)) html += `<div><strong>Base Carrying Weight</strong> ${character.abilities?.STR.value * 10}</div>`;
+  if (show(4)) html += `<div><strong>Starting Skills</strong> ${character.abilities?.INT.value + 5}</div>`;
+  if (show(4)) html += `<div><strong>Languages Known</strong> ${Math.floor(character.abilities?.INT.value / 3)}</div>`;
+
+  html += `</div>`;
+  return html;
+}
+
+function renderFeatsBlock(show) {
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === character.classId);
+
+  if (!race && !cls && !(show(6) && character.feats.length)) return "";
+
+  let html = `<div style="margin-top:10px;">`;
+
+  if (race) {
+    html += `<div><strong>Racial Feat</strong> ${race.racialFeatName}</div>`;
+    if (race.racialFeatDescription)
+      html += `<div style="margin-left:12px; font-style:italic;">${race.racialFeatDescription}</div>`;
+  }
+
+  if (cls) {
+    html += `<div style="margin-top:6px;"><strong>Class Feat</strong> ${cls.startingFeatName}</div>`;
+    if (cls.startingFeatDescription)
+      html += `<div style="margin-left:12px; font-style:italic;">${cls.startingFeatDescription}</div>`;
+  }
+
+  if (show(6) && character.feats.length) {
+    const f = feats.find(f => f.id === character.feats[0]);
+    if (f) {
+      html += `<div style="margin-top:6px;"><strong>Selected Feat</strong> ${f.name}</div>`;
+      if (f.featDescription)
+        html += `<div style="margin-left:12px; font-style:italic;">${f.featDescription}</div>`;
+    }
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function renderEquipmentBlock(show) {
+  if (!show(7)) return "";
+
+  const e = character.equipment;
+  if (!e.weapons && !e.armor && !e.gear) return "";
+
+  const format = arr =>
+    (arr || [])
+      .map(s => s.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()))
+      .join(" & ");
+
+  let html = `<div style="margin-top:10px;">`;
+
+  if (e.weapons) html += `<div><strong>Starting Weapons</strong> ${format(e.weapons)}</div>`;
+  if (e.armor)   html += `<div><strong>Starting Armor</strong> ${format(e.armor)}</div>`;
+  if (e.gear)    html += `<div><strong>Starting Gear</strong> ${format(e.gear)}</div>`;
+
+  html += `</div>`;
+  return html;
+}
+
+html += renderAbilitiesBlock(show);
+
+html += renderSkillsBlock(show);
+
+
+
+  summaryContent.innerHTML = html;
+}
+    // ===== Step 1: Race =====
+    raceSelect.onchange = () => {
+      character.raceId = raceSelect.value;
+      character.mutation = null;
+
+      const race = races.find(r => r.id === character.raceId);
+
+      if (race) {
+        setContext(
+          race.name,
+          `
+            <div class="summary-block">
+              <div style="margin-bottom:8px;">${race.racialDesc || ""}</div>
+              <div style="margin-bottom:12px;">
+                An average ${race.name} is between ${race.racialHeight}, and generally weighs ${race.racialWeight}.
+                ${race.name}s can live to about ${race.racialLifeSpan}.
+                Their normal movement speed is ${20 + Number(race.charDistance)} when not encumbered.
+              </div>
+              <table style="width:100%; margin-bottom:12px; text-align:center;">
+                <tr><th>STR</th><th>PER</th><th>AGI</th><th>END</th><th>INT</th><th>CHA</th></tr>
+                <tr>
+                  <td>${race.strMod}</td><td>${race.perMod}</td><td>${race.agiMod}</td>
+                  <td>${race.endMod}</td><td>${race.intMod}</td><td>${race.chaMod}</td>
+                </tr>
+              </table>
+              <div style="margin-bottom:8px;">
+                <strong>Racial HP per Level:</strong> ${race.hpPerLevel}<br>
+                <strong>Base AC:</strong> ${race.baseAC}
+              </div>
+              <div>
+                <strong>Racial Feat:</strong><br>
+                <strong>${race.racialFeatName}</strong><br>
+                ${race.racialFeatDescription || ""}
+              </div>
+            </div>
+          `
+        );
+      }
+
+      if (race && race.id === "mutant" && race.mutationChoices && race.mutationChoices.trim().length > 0) {
+        const options = race.mutationChoices.split("|").map(x => x.trim()).filter(Boolean);
+        mutationSelect.innerHTML = `<option value="">-- Choose Mutation --</option>` + options.map(o => `<option value="${o}">${o}</option>`).join("");
+        mutationBlock.style.display = "block";
+      } else {
+        mutationBlock.style.display = "none";
+      }
+
+      update();
+    };
+
+    mutationSelect.onchange = () => { character.mutation = mutationSelect.value; update(); };
+
+    // ===== Step 2: Class =====
+    classSelect.onchange = () => {
+      character.classId = classSelect.value;
+      const cls = classes.find(c => c.id === character.classId);
+
+      const desc = document.getElementById("classInlineDesc");
+      desc.innerHTML = cls?.description ? `<strong><em>${cls.description}</em></strong>` : "";
+
+      if (cls) {
+        setContext(
+          cls.name,
+          `
+            <div class="summary-block">
+              <div style="margin-bottom:10px;">${cls.classDesc || ""}</div>
+              <div style="margin-bottom:10px;">
+                <strong>Class HP per Level:</strong> ${cls.hpPerLevel}<br>
+                <strong>Class Skills:</strong> ${(cls.classSkills || "").replace(/,/g, ", ")}
+              </div>
+              <div style="margin-bottom:10px;">
+                <strong>Starting Feat:</strong><br>
+                <strong>${cls.startingFeatName}</strong><br>
+                ${cls.startingFeatDescription || ""}
+              </div>
+              <div style="margin-bottom:10px;">
+                <strong>Starting Weapon Choices:</strong><br>
+                ${formatStartingOptions(cls.startingWeapons)}
+              </div>
+              <div style="margin-bottom:10px;">
+                <strong>Starting Armor Choices:</strong><br>
+                ${formatStartingOptions(cls.startingArmor)}
+              </div>
+              <div>
+                <strong>Starting Gear Choices:</strong><br>
+                ${formatStartingOptions(cls.startingGear)}
+              </div>
+            </div>
+          `
+        );
+      }
+
+      character.equipment.weapons = null;
+      character.equipment.armor = null;
+      character.equipment.gear = null;
+
+      character._startingEquipment = {
+        weapons: cls?.startingWeapons || "",
+        armor: cls?.startingArmor || "",
+        gear: cls?.startingGear || ""
+      };
+
+      update();
+    };
+
+/* ===== STEP 2 PRIEST DEITY LOGIC START ===== */
+const step2ClassSel = document.getElementById("classSelect");
+const step2Block = document.getElementById("step2PriestDeityBlock");
+const step2DeitySel = document.getElementById("step2DeitySelect");
+const step2DeityDesc = document.getElementById("step2DeityDesc");
+
+function renderStep2DeityDesc(id) {
+  const d = deities.find(x => x.id === id);
+  if (!d) {
+    step2DeityDesc.innerHTML = "";
+    return;
+  }
+
+  step2DeityDesc.innerHTML = `
+    <div><strong>${d.name || d.id}</strong></div>
+    <div><strong>Alignment(s):</strong> ${d.alignment || "—"}</div>
+    ${d.theme ? `<div><strong>Theme:</strong> ${d.theme}</div>` : ""}
+    ${d.description ? `<div style="margin-top:4px;">${d.description}</div>` : ""}
+  `;
+}
+
+function populateStep2Deities() {
+  step2DeitySel.innerHTML = `<option value="">Choose a deity…</option>`;
+  deities
+    .slice()
+    .sort((a,b) => (a.name||a.id).localeCompare(b.name||b.id))
+    .forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.id;
+      opt.textContent = d.name || d.id;
+      step2DeitySel.appendChild(opt);
+    });
+
+  if (character.deityId) {
+    step2DeitySel.value = character.deityId;
+    renderStep2DeityDesc(character.deityId);
+  }
+}
+
+step2ClassSel.addEventListener("change", () => {
+  const cls = classes.find(c => c.id === step2ClassSel.value);
+
+  if (cls && cls.id === "priest") {
+    step2Block.style.display = "block";
+    populateStep2Deities();
+  } else {
+    step2Block.style.display = "none";
+    step2DeityDesc.innerHTML = "";
+  }
+});
+
+step2DeitySel.addEventListener("change", () => {
+  const id = step2DeitySel.value || null;
+  character.deityId = id;
+  renderStep2DeityDesc(id);
+});
+/* ===== STEP 2 PRIEST DEITY LOGIC END ===== */
+
+// ===== Move Back / Next into green step headers =====
+window.addEventListener("load", () => {
+  document.querySelectorAll("#stepPanel .step").forEach(step => {
+    const header = step.querySelector("h2");
+    const nav = step.querySelector(".nav");
+    if (!header || !nav) return;
+
+    header.style.display = "flex";
+    header.style.justifyContent = "space-between";
+    header.style.alignItems = "center";
+
+    const title = document.createElement("span");
+    title.textContent = header.textContent;
+
+    header.textContent = "";
+    header.appendChild(title);
+    header.appendChild(nav);
+
+    nav.style.margin = "0";
+  });
+});    
+
+// ===== BOOT: DATA LOAD START =====
+Promise.all([
+  loadCSV(raceURL),
+  loadCSV(classURL),
+  loadCSV(featsURL),
+  loadCSV(deitiesURL),
+  loadCSV(equipmentURL),
+  /* ===== STEP 7.5: LOAD SPELLBOOK CSV START ===== */
+  loadCSV(spellbookURL)
+  /* ===== STEP 7.5: LOAD SPELLBOOK CSV END ===== */
+])
+
+// ===== BOOT: DATA LOAD THEN START =====
+.then(([r, c, f, d, e, sb]) => {
+
+  races = r;
+  classes = c;
+  feats = f;
+  deities = d;
+  equipment = e;
+  /* ===== STEP 7.5: STORE SPELLBOOK DATA START ===== */
+  spellbook = sb;
+  /* ===== STEP 7.5: STORE SPELLBOOK DATA END ===== */
+
+  raceSelect.innerHTML =
+    `<option value="">-- Choose Race --</option>` +
+    races.map(r => `<option value="${r.id}">${r.name}</option>`).join("");
+
+  classSelect.innerHTML =
+    `<option value="">-- Choose Class --</option>` +
+    classes.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+
+  deitySelect.innerHTML =
+    `<option value="">None</option>` +
+    deities.map(x => `<option value="${x.id}">${x.name}</option>`).join("");
+
+/* ===== BOOT: START STATE LOGIC START ===== */
+const draft = JSON.parse(localStorage.getItem("atfDraft") || "null");
+const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+
+if (draft && draft.character != null && Number.isFinite(draft.currentStep)) {
+  Object.assign(character, draft.character);
+  showStep(draft.currentStep);
+} else {
+  showStep(0);
+}
+/* ===== BOOT: START STATE LOGIC END ===== */
+
+  bindNavButtons();
+})
+
+// ===== BOOT: ERROR FALLBACK START =====
+.catch(() => {
+  showStep(0);
+  bindNavButtons();
+});
+// ===== BOOT: ERROR FALLBACK END =====
+// ===== BOOT: DATA LOAD END =====
+function clearContextPanel(title){
+  document.getElementById("contextHeader").textContent = title || "";
+  document.getElementById("contextContent").innerHTML = "";
+}
+
+</script>
+</body>
+</html>

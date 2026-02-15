@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>After the Fall — GM Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #d8d2e7);
+    color: #634fa2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .logo {
+    max-width: 500px;
+    margin-bottom: 30px;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 40px;
+    font-size: 2.2em;
+    font-weight: 700;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 260px;
+    margin: auto;
+  }
+
+  .gm-link {
+    padding: 14px 30px;
+    font-size: 1.1em;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #634fa2;
+    color: #d8d2e7;
+    border: 2px solid #d8d2e7;
+    transition: all 0.2s ease;
+  }
+
+  .gm-link:hover {
+    background: #d8d2e7;
+    color: #634fa2;
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="container">
+    <img src="logo.png" alt="After the Fall Logo" class="logo">
+
+    <h1>Game Master Resources</h1>
+
+<div class="button-group">
+
+  <button class="gm-link" onclick="window.open('AtfRules.html', '_blank')">
+    Main Rulebook
+  </button>
+
+  <button class="gm-link" onclick="window.open('AtFChronicle.html', '_blank')">
+    The Chronicle of the Second Age
+  </button>
+
+  <button class="gm-link" onclick="window.open('encounters.html', '_blank')">
+    Encounter Dashboard
+  </button>
+
+  <button class="gm-link" onclick="window.open('equipment-gm.html', '_blank')">
+    Equipment Reference
+  </button>
+
+</div>
+</div>
+
+</body>
+</html>

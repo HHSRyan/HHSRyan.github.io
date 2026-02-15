@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>After the Fall Encounter App</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+
+/* ===== TOP BAR THEME START ===== */
+
+/* ===== BASE LAYOUT START ===== */
+body {
+  font-family: Roboto, sans-serif;
+  margin: 20px;
+  min-height: 100vh;
+  background: linear-gradient(#634fa2, #48752c);
+  background-attachment: fixed;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 8px;
+}
+/* ===== BASE LAYOUT END ===== */
+
+
+/* ===== TILE STRUCTURE START ===== */
+.topbar-panel {
+  border: 4px solid #8b7dbe;
+  border-radius: 10px;
+  background: #d8d2e7;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* CRITICAL: prevents stretch */
+}
+
+.topbar-panel-header {
+  background: linear-gradient(to right, #634fa2, #8b7dbe);
+  color: #d8d2e7;
+  font-weight: bold;
+  font-style: italic;
+  padding: 12px 16px;
+  flex: 0 0 auto;
+}
+/* ===== TILE STRUCTURE END ===== */
+
+
+/* ===== TILE CONTENT FLOW START ===== */
+.topbar-panel-content {
+  padding: 16px;
+  flex: 1;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0; /* CRITICAL: forces wrapping */
+}
+/* ===== TILE CONTENT FLOW END ===== */
+
+
+/* ===== ROLL TILE OVERRIDES START ===== */
+.topbar-panel.roll-tile .topbar-panel-content {
+  padding: 0;
+  display: flex;
+}
+/* ===== ROLL TILE OVERRIDES END ===== */
+
+
+/* ===== DASHBOARD GRID START ===== */
+.topbar-container {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.topbar-container > .topbar-panel {
+  flex: 1 1 0;
+  min-width: 0; /* prevents content stretch */
+}
+/* ===== DASHBOARD GRID END ===== */
+
+
+.encounter-tr {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* ===== TOP BAR THEME END ===== */
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== TOP BAR ROOT START ===== -->
+<div class="topbar-panel">
+  <div class="topbar-panel-header">Encounter Dashboard</div>
+  <div class="topbar-panel-content">
+    <div id="topBar" class="topbar-container"></div>
+  </div>
+</div>
+<!-- ===== TOP BAR ROOT END ===== -->
+
+<!-- ===== THREAT DETAILS ROOT START ===== -->
+<div class="topbar-panel" style="margin-top:20px;">
+  <div class="topbar-panel-header">Threat Details</div>
+  <div class="topbar-panel-content">
+    <div id="threatDetailsContent">
+      <em>No threats selected.</em>
+    </div>
+  </div>
+</div>
+<!-- ===== THREAT DETAILS ROOT END ===== -->
+
+<!-- ===== THREATS PANEL ROOT START ===== -->
+<div class="topbar-panel" style="margin-top:20px;">
+  <div class="topbar-panel-header">
+    Select Threats from the Book of Beasts
+  </div>
+
+  <div class="topbar-panel-content">
+
+    <div style="
+      background:#634fa2;
+      color:#d8d2e7;
+      padding:10px 14px;
+      font-weight:bold;
+      font-style:italic;
+      border-radius:6px;
+      margin-bottom:12px;
+    ">
+      Current Threats
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-size:1.2em; margin-bottom:8px;">
+      <colgroup>
+        <col style="width:35px;">
+        <col style="width:15%;">
+        <col style="width:46%;">
+        <col style="width:10%;">
+        <col style="width:5%;">
+        <col style="width:4%;">
+        <col style="width:4%;">
+        <col style="width:3%;">
+        <col style="width:35px;">
+      </colgroup>
+      <thead>
+        <tr style="background:#8b7dbe; color:#d8d2e7;">
+          <th></th>
+          <th style="text-align:left;">Name</th>
+          <th style="text-align:left;">Description</th>
+          <th style="text-align:center;">Size & Type</th>
+          <th style="text-align:center;">Space / Reach</th>
+          <th style="text-align:center;">HP</th>
+          <th style="text-align:center;">Base AC</th>
+          <th style="text-align:center;">TR</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+
+    <div id="threatsContent" style="font-size:1.25em; display:grid; gap:12px;">
+      <em>No threats added.</em>
+    </div>
+
+    <!-- ===== PURPLE BOOK OF BEASTS PANEL START ===== -->
+    <div id="beastsPanel" style="margin-top:20px; border:4px solid #8b7dbe; background:#8b7dbe; border-radius:10px; overflow:hidden;">
+      <div class="topbar-panel-header" style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to right, #634fa2, #d8d2e7);">
+        <span>The Book of Beasts</span>
+        <button
+          id="toggleBeastsBtn"
+          style="
+            background:#634fa2;
+            color:#d8d2e7;
+            border:2px solid #8b7dbe;
+            font-weight:bold;
+            padding:4px 10px;
+          "
+        >Hide Book of Beasts</button>
+      </div>
+      <div id="beastsContent" style="padding:12px;">
+        <em>No beasts loaded.</em>
+      </div>
+    </div>
+    <!-- ===== PURPLE BOOK OF BEASTS PANEL END ===== -->
+
+  </div>
+</div>
+<!-- ===== THREATS PANEL ROOT END ===== -->
+
+<!-- ===== DEBUG PANEL ROOT START ===== -->
+<div class="topbar-panel" style="margin-top:20px;">
+  <div class="topbar-panel-header">Debug State</div>
+  <div class="topbar-panel-content">
+    <pre id="debugState" style="font-size:0.8em;"></pre>
+  </div>
+</div>
+<!-- ===== DEBUG PANEL ROOT END ===== -->
+
+
+  <script>
+
+/* ===== BEASTS CSV LOADER START ===== */
+
+let beastsData = [];
+let equipmentData = [];
+
+/* ===== CSV NORMALIZATION HELPERS START ===== */
+
+function normalizeCell(v) {
+  if (v == null) return "";
+  return String(v)
+    .replace(/\u00A0/g, " ")   // convert NBSP to normal space
+    .replace(/\r/g, "")
+    .trim();
+}
+
+function normalizeTable(table) {
+  return table.map(row => row.map(normalizeCell));
+}
+
+/* ===== CSV NORMALIZATION HELPERS END ===== */
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+
+    if (c === '"') {
+      if (inQuotes && text[i + 1] === '"') {
+        cell += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (c === "," && !inQuotes) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if (c === "\n" && !inQuotes) {
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+      continue;
+    }
+
+    if (c !== "\r") {
+      cell += c;
+    }
+  }
+
+  if (cell || row.length) {
+    row.push(cell);
+    rows.push(row);
+  }
+
+  return normalizeTable(rows);
+}
+
+function tableToObjects(table) {
+  if (!table.length) return [];
+
+  const headers = table[0];
+
+  return table.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = normalizeCell(row[i]);
+    });
+    return obj;
+  });
+}
+
+async function loadBeastsCSV() {
+  try {
+    const response = await fetch("beasts.csv");
+    const text = await response.text();
+    const table = parseCSV(text).filter(r => r.length);
+
+    beastsData = tableToObjects(table);
+    renderBeastsPanel();
+    refreshEncounter();
+  } catch {
+    beastsData = [];
+  }
+}
+
+async function loadEquipmentCSV() {
+  try {
+    const response = await fetch("equipment.csv");
+    const text = await response.text();
+    const table = parseCSV(text).filter(r => r.length);
+
+    equipmentData = tableToObjects(table);
+
+    /* ===== CSV POST-LOAD RERENDER START ===== */
+    renderThreatDetailsPanel();
+    /* ===== CSV POST-LOAD RERENDER END ===== */
+
+  } catch {
+    equipmentData = [];
+  }
+}
+
+async function loadAllCSV() {
+  await Promise.all([
+    loadBeastsCSV(),
+    loadEquipmentCSV()
+  ]);
+}
+
+/* ===== BEASTS CSV LOADER END ===== */
+
+/* ===== BEASTS PANEL RENDER START ===== */
+
+function renderBeastsPanel() {
+
+/* ===== BEAST FILTER STATE START ===== */
+  window.beastFilters = window.beastFilters || {
+    trText: "",
+    types: []
+  };
+/* ===== BEAST FILTER STATE END ===== */
+
+/* ===== BEASTS ROOT LOOKUP START ===== */
+  const root = document.getElementById("beastsContent");
+  if (!root) return;
+
+  if (!beastsData.length) {
+    root.innerHTML = "<em>No beasts loaded.</em>";
+    return;
+  }
+/* ===== BEASTS ROOT LOOKUP END ===== */
+
+/* ===== FILTER UI BUILD START ===== */
+  const allTypes = [...new Set(
+    beastsData.map(b => (b.type || "").trim()).filter(Boolean)
+  )].sort((a,b)=>a.localeCompare(b));
+
+  const typeOptions = allTypes
+    .map(t => `<option value="${t}">${t}</option>`)
+    .join("");
+
+  const activeTypes = window.beastFilters.types
+    .map(t => `<span style="margin-right:8px;font-weight:bold;">${t}</span>`)
+    .join("");
+
+  const filterFont = "font-size:1.2em;";
+
+  const filterStyles = `
+    ${filterFont}
+    background:#634fa2;
+    color:#d8d2e7;
+    border:2px solid #8b7dbe;
+    font-weight:bold;
+  `;
+/* ===== FILTER UI BUILD END ===== */
+
+/* ===== FILTER LOGIC START ===== */
+  function trMatch(trValue) {
+    const txt = window.beastFilters.trText.trim();
+    if (!txt) return true;
+
+    const tr = Number(trValue);
+    if (!Number.isFinite(tr)) return false;
+
+    const parts = txt.split(",");
+    return parts.some(p => {
+      const s = p.trim();
+      if (!s) return false;
+
+      if (s.includes("-")) {
+        const [a, b] = s.split("-").map(Number);
+        if (!Number.isFinite(a) || !Number.isFinite(b)) return false;
+        return tr >= a && tr <= b;
+      }
+
+      const n = Number(s);
+      return Number.isFinite(n) && tr === n;
+    });
+  }
+
+  function typeMatch(type) {
+    if (!window.beastFilters.types.length) return true;
+    return window.beastFilters.types.includes((type || "").trim());
+  }
+
+  const filtered = beastsData.filter(b =>
+    trMatch(b.TR) && typeMatch(b.type)
+  );
+/* ===== FILTER LOGIC END ===== */
+
+/* ===== BEAST SORT START ===== */
+  const sorted = [...filtered]
+    .map((b, i) => ({ b, i: beastsData.indexOf(b) }))
+    .filter(x => String(x.b.name || "").trim() !== "")
+    .sort((a, b) =>
+      (a.b.name || "").localeCompare(b.b.name || "")
+    );
+/* ===== BEAST SORT END ===== */
+
+/* ===== BEAST ROW BUILD START ===== */
+  const rows = sorted.map(({ b, i }, rowIndex) => {
+
+    const sizeType = [b.size, b.type]
+      .filter(Boolean)
+      .join(" ");
+
+    const spaceReach = [b.space, b.reach]
+      .filter(Boolean)
+      .join(" / ");
+
+    const stripe =
+      rowIndex % 2 === 0
+        ? "linear-gradient(to right, #d8d2e7, #8b7dbe)"
+        : "#8b7dbe";
+
+    return `
+      <tr style="background:${stripe};">
+        <td style="padding:6px 20px 6px 0; text-align:center; vertical-align:middle;">
+          <button
+            class="addBeastBtn"
+            data-index="${i}"
+            style="
+              background:#634fa2;
+              color:#d8d2e7;
+              border:2px solid #8b7dbe;
+              font-weight:bold;
+              padding:4px 8px;
+            "
+          >Add</button>
+        </td>
+        <td style="font-weight:bold; text-align:left; padding:6px 0;">${b.name || ""}</td>
+        <td style="text-align:left; padding:6px 0;">${b.description || ""}</td>
+        <td style="text-align:center; padding:6px 0;">${sizeType}</td>
+        <td style="text-align:center; padding:6px 0;">${spaceReach}</td>
+        <td style="text-align:center; padding:6px 0;">${b.hp || ""}</td>
+        <td style="text-align:center; padding:6px 0;">${b.baseAC || ""}</td>
+        <td style="text-align:center; padding:6px 0;">${b.TR || ""}</td>
+        <td style="padding:6px 0;"></td>
+      </tr>
+    `;
+  }).join("");
+/* ===== BEAST ROW BUILD END ===== */
+
+/* ===== BEAST TABLE RENDER START ===== */
+  const selectedTypesLine = window.beastFilters.types.length
+    ? window.beastFilters.types.join(", ")
+    : "None";
+
+  root.innerHTML = `
+    <div style="margin-bottom:12px; font-size:1.2em;">
+      <label style="font-weight:bold;">TR Filter:</label>
+      <input id="trFilterInput"
+        value="${window.beastFilters.trText}"
+        style="${filterStyles} margin-right:12px;width:100px;"
+      >
+
+      <label style="font-weight:bold; margin-left:8px;">Type:</label>
+      <select id="typeFilterSelect"
+        style="${filterStyles} margin-right:4px;"
+      >
+        ${typeOptions}
+      </select>
+
+      <button id="addTypeFilterBtn"
+        style="${filterStyles} margin-right:8px;"
+      >Add</button>
+
+      <button id="clearBeastFiltersBtn"
+        style="${filterStyles} margin-right:12px;"
+      >Clear</button>
+
+      <span style="font-weight:bold;">Currently Selected:</span>
+      <span>${selectedTypesLine}</span>
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-size:1.2em;">
+      <colgroup>
+        <col style="width:35px;">
+        <col style="width:15%;">
+        <col style="width:46%;">
+        <col style="width:10%;">
+        <col style="width:5%;">
+        <col style="width:4%;">
+        <col style="width:4%;">
+        <col style="width:3%;">
+        <col style="width:35px;">
+      </colgroup>
+      <thead>
+        <tr style="background:#634fa2; color:#d8d2e7;">
+          <th></th>
+          <th style="text-align:left;">Name</th>
+          <th style="text-align:left;">Description</th>
+          <th style="text-align:center;">Size & Type</th>
+          <th style="text-align:center;">Space / Reach</th>
+          <th style="text-align:center;">HP</th>
+          <th style="text-align:center;">Base AC</th>
+          <th style="text-align:center;">TR</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+/* ===== BEAST TABLE RENDER END ===== */
+
+/* ===== FILTER WIRING START ===== */
+  const trInput = root.querySelector("#trFilterInput");
+
+  trInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      window.beastFilters.trText = e.target.value;
+      renderBeastsPanel();
+    }
+  });
+
+  root.querySelector("#addTypeFilterBtn").addEventListener("click", () => {
+    const val = root.querySelector("#typeFilterSelect").value.trim();
+    if (val && !window.beastFilters.types.includes(val)) {
+      window.beastFilters.types.push(val);
+      renderBeastsPanel();
+    }
+  });
+
+  root.querySelector("#clearBeastFiltersBtn").addEventListener("click", () => {
+    window.beastFilters = { trText: "", types: [] };
+    renderBeastsPanel();
+  });
+/* ===== FILTER WIRING END ===== */
+
+/* ===== BEAST BUTTON WIRING START ===== */
+  root.querySelectorAll(".addBeastBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.index);
+      addEnemy(i);
+    });
+  });
+/* ===== BEAST BUTTON WIRING END ===== */
+
+}
+
+/* ===== BEASTS PANEL RENDER END ===== */
+
+/* ===== ENCOUNTER MATH ENGINE START ===== */
+
+  /*
+    Computes encounter math from enemy TR list and party size.
+
+    Input:
+      trList = array of numbers (one TR per enemy instance)
+      partySize = integer >= 1 or null
+
+    Output:
+      {
+        primaryTR,
+        secondaryTR,
+        encounterTR,
+        totalXP,
+        xpPerPlayer
+      }
+  */
+
+  function computeEncounterMath(trList, partySize) {
+
+    if (!Array.isArray(trList) || trList.length === 0) {
+      throw new Error("Encounter must contain at least one enemy.");
+    }
+
+    // Sort descending so highest TR is first
+    const sorted = [...trList].sort((a, b) => b - a);
+
+    const primaryTR = sorted[0];
+
+    const secondaryTR = sorted
+      .slice(1)
+      .reduce((sum, tr) => sum + tr, 0);
+
+    const encounterTR =
+      primaryTR +
+      Math.ceil(secondaryTR / (primaryTR + 1));
+
+    const totalXP = encounterTR * 500;
+
+    let xpPerPlayer = null;
+
+    if (Number.isInteger(partySize) && partySize >= 1) {
+      xpPerPlayer = Math.ceil(totalXP / partySize);
+    }
+
+    return {
+      primaryTR,
+      secondaryTR,
+      encounterTR,
+      totalXP,
+      xpPerPlayer
+    };
+  }
+
+  /* ===== ENCOUNTER MATH ENGINE END ===== */
+
+/* ===== ENCOUNTER SESSION STATE START ===== */
+
+/*
+Global encounter session state.
+
+This is the single source of truth for:
+
+* party size
+* round counter
+* timer
+* enemies (empty for now)
+  */
+
+const ENCOUNTER_SCHEMA_VERSION = 1;
+
+const encounterState = {
+version: ENCOUNTER_SCHEMA_VERSION,
+partySize: null,
+round: 1,
+timerSeconds: 0,
+timerRunning: false,
+enemies: []
+};
+
+
+let timerInterval = null;
+
+/* ----- Party Size ----- */
+
+function setPartySize(value) {
+const n = Number(value);
+
+if (Number.isInteger(n) && n >= 1) {
+encounterState.partySize = n;
+} else {
+encounterState.partySize = null;
+}
+}
+
+/* ----- Round Counter ----- */
+
+function incrementRound() {
+encounterState.round += 1;
+}
+
+function resetRound() {
+encounterState.round = 1;
+}
+
+/* ----- Timer ----- */
+
+function startTimer() {
+if (encounterState.timerRunning) return;
+
+encounterState.timerRunning = true;
+
+timerInterval = setInterval(() => {
+encounterState.timerSeconds += 1;
+}, 1000);
+}
+
+function pauseTimer() {
+encounterState.timerRunning = false;
+
+if (timerInterval) {
+clearInterval(timerInterval);
+timerInterval = null;
+}
+}
+
+function resetTimer() {
+pauseTimer();
+encounterState.timerSeconds = 0;
+}
+
+/* ===== ENCOUNTER SESSION STATE END ===== */
+
+/* ===== PARTY SIZE EDITOR START ===== */
+
+function startPartyEdit() {
+  const display = document.getElementById("partySizeDisplay");
+  if (!display) return;
+
+  const current = encounterState.partySize ?? "";
+
+  display.innerHTML =
+    '<input id="partySizeInput" type="number" min="1" style="width:80px;">';
+
+  const input = document.getElementById("partySizeInput");
+  input.value = current;
+  input.focus();
+  input.select();
+
+  function commit() {
+    setPartySize(input.value);
+    renderPartyDisplay();
+    updateTopBarDisplay();
+  }
+
+  input.addEventListener("blur", commit);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") commit();
+  });
+}
+
+function renderPartyDisplay() {
+  const display = document.getElementById("partySizeDisplay");
+  if (!display) return;
+
+  const value =
+    encounterState.partySize === null
+      ? "—"
+      : encounterState.partySize;
+
+  display.innerHTML = `
+    <button id="partySizeButton"
+      style="
+        background:#634fa2;
+        color:#d8d2e7;
+        border:2px solid #8b7dbe;
+        font-weight:bold;
+        padding:6px 12px;
+        cursor:pointer;
+        width:100%;
+      ">
+      Party Size: ${value}
+    </button>
+  `;
+
+  document
+    .getElementById("partySizeButton")
+    ?.addEventListener("click", startPartyEdit);
+}
+
+/* ===== PARTY SIZE EDITOR END ===== */
+
+/* ===== TOP BAR UI RENDER START ===== */
+
+/* ===== TILE FACTORY START ===== */
+function createTile(title, contentHTML, extraClass = "", headerRightHTML = "") {
+  const panel = document.createElement("div");
+  panel.className = "topbar-panel" + (extraClass ? " " + extraClass : "");
+
+  const header = document.createElement("div");
+  header.className = "topbar-panel-header";
+  header.style.display = "flex";
+  header.style.justifyContent = "space-between";
+  header.style.alignItems = "center";
+
+  const titleSpan = document.createElement("span");
+  titleSpan.textContent = title;
+  header.appendChild(titleSpan);
+
+  if (headerRightHTML) {
+    const right = document.createElement("div");
+    right.innerHTML = headerRightHTML;
+    header.appendChild(right);
+  }
+
+  const content = document.createElement("div");
+  content.className = "topbar-panel-content";
+  content.style.fontSize = "22px";
+  content.innerHTML = contentHTML;
+
+  panel.appendChild(header);
+  panel.appendChild(content);
+
+  return panel;
+}
+/* ===== TILE FACTORY END ===== */
+
+function renderTopBar() {
+  const root = document.getElementById("topBar");
+  root.innerHTML = "";
+
+  /* ===== PARTY TILE START ===== */
+  const partyTile = createTile(
+    "Party Size",
+    `<div id="partySizeDisplay"></div>`
+  );
+  /* ===== PARTY TILE END ===== */
+
+  /* ===== ENCOUNTER MATH TILE START ===== */
+  const mathTile = createTile("Encounter Math", `
+    <div id="mathEncounterBar"
+      style="background:linear-gradient(to right,#8b7dbe,#d8d2e7);color:#634fa2;font-weight:bold;padding:6px 10px;border-radius:6px;margin-bottom:8px;">
+      Encounter TR: —
+    </div>
+    <div id="mathPrimary">Primary TR: —</div>
+    <div id="mathSecondary">Secondary TR: —</div>
+  `);
+  /* ===== ENCOUNTER MATH TILE END ===== */
+
+  /* ===== XP TILE START ===== */
+  const xpTile = createTile("XP Results", `
+    <div id="xpBar"
+      style="background:linear-gradient(to right,#8b7dbe,#d8d2e7);color:#634fa2;font-weight:bold;padding:6px 10px;border-radius:6px;margin-bottom:8px;">
+      XP per Player: —
+    </div>
+    <div id="xpEncounter">Encounter XP: —</div>
+    <div id="xpExplain1" style="font-size:14px;font-style:italic;margin-top:6px;"></div>
+    <div id="xpExplain2" style="font-size:14px;font-style:italic;"></div>
+  `);
+  /* ===== XP TILE END ===== */
+
+/* ===== ROUND TILE START ===== */
+
+const roundTile = createTile("Round + Timer", `
+  <div>Round ${encounterState.round}</div>
+
+  <div style="display:flex; gap:10px; margin:8px 0;">
+    <button id="roundAdvanceBtn"
+      style="
+        font-size:56px;
+        padding:24px 44px;
+        background:#4b2a8f;
+        color:#d8d2e7;
+        border:2px solid #8b7dbe;
+        font-weight:bold;
+        border-radius:8px;
+      ">+</button>
+
+    <button id="roundResetBtn"
+      style="
+        font-size:56px;
+        padding:24px 44px;
+        background:#4b2a8f;
+        color:#d8d2e7;
+        border:2px solid #8b7dbe;
+        font-weight:bold;
+        border-radius:8px;
+      ">Reset</button>
+  </div>
+
+  <hr>
+
+  <div id="timerDisplay">${formatTime(encounterState.timerSeconds)}</div>
+
+  <div style="display:flex; gap:10px; margin-top:8px;">
+    <button id="timerStartBtn"
+      style="
+        font-size:56px;
+        padding:24px 44px;
+        background:#4b2a8f;
+        color:#d8d2e7;
+        border:2px solid #8b7dbe;
+        font-weight:bold;
+        border-radius:8px;
+      ">Start</button>
+
+    <button id="timerResetBtn"
+      style="
+        font-size:56px;
+        padding:24px 44px;
+        background:#4b2a8f;
+        color:#d8d2e7;
+        border:2px solid #8b7dbe;
+        font-weight:bold;
+        border-radius:8px;
+      ">Reset</button>
+  </div>
+`);
+
+/* ===== ROUND TILE END ===== */
+
+  /* ===== ROLL TILE 0 START ===== */
+  const rollTile0 = createTile(
+    "Current Roll",
+    `<div id="rollCol0" style="flex:1;font-size:22px;line-height:1.4;background:#634fa2;color:#d8d2e7;overflow:auto;padding:8px;"></div>`,
+    "roll-tile",
+    `<button id="copyRollBtn"
+      style="background:#634fa2;color:#d8d2e7;border:2px solid #8b7dbe;font-weight:bold;padding:4px 8px;border-radius:6px;">Copy</button>`
+  );
+  /* ===== ROLL TILE 0 END ===== */
+
+  /* ===== ROLL TILE 1 START ===== */
+  const rollTile1 = createTile(
+    "Roll",
+    `<div id="rollCol1" style="flex:1;font-size:22px;line-height:1.4;background:#8b7dbe;color:#d8d2e7;overflow:auto;padding:8px;"></div>`,
+    "roll-tile"
+  );
+  /* ===== ROLL TILE 1 END ===== */
+
+  /* ===== ROLL TILE 2 START ===== */
+  const rollTile2 = createTile(
+    "Roll",
+    `<div id="rollCol2" style="flex:1;font-size:22px;line-height:1.4;background:#d8d2e7;color:#634fa2;overflow:auto;padding:8px;"></div>`,
+    "roll-tile"
+  );
+  /* ===== ROLL TILE 2 END ===== */
+
+  root.appendChild(partyTile);
+  root.appendChild(mathTile);
+  root.appendChild(xpTile);
+  root.appendChild(roundTile);
+  root.appendChild(rollTile0);
+  root.appendChild(rollTile1);
+  root.appendChild(rollTile2);
+
+  renderPartyDisplay();
+  renderRoundDisplay();
+  wireControls();
+
+  document.getElementById("copyRollBtn")?.addEventListener("click", () => {
+    const el = document.getElementById("rollCol0");
+    if (!el) return;
+    navigator.clipboard.writeText(el.innerText || "");
+  });
+}
+
+/* ===== TOP BAR UI RENDER END ===== */
+
+/* ===== THREAT DETAILS PANEL START ===== */
+
+/* ===== THREAT DETAILS: NUMERIC HELPERS ===== */
+
+function beastNum(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/* ===== THREAT DETAILS: SAVE ROLL ENGINE ===== */
+
+function rollBeastSave(b, type) {
+  let ability = "";
+  let abilityVal = 0;
+  let save = 0;
+  let label = "";
+
+  if (type === "dodge") {
+    ability = "AGI";
+    abilityVal = beastNum(b.agi);
+    save = beastNum(b.saveDodge);
+    label = "Dodge Save";
+  }
+
+  if (type === "resist") {
+    ability = "END";
+    abilityVal = beastNum(b.end);
+    save = beastNum(b.saveResist);
+    label = "Resist Save";
+  }
+
+  if (type === "tough") {
+    ability = "STR";
+    abilityVal = beastNum(b.str);
+    save = beastNum(b.saveTough);
+    label = "Toughness Save";
+  }
+
+  const d10 = rollD10();
+  const base = abilityVal + save;
+  const total = base + d10;
+
+  let state = "normal";
+  let critHeader = "";
+
+  if (d10 === 10) {
+    state = "crit-success";
+    critHeader = `<div style="color:#00aa44;font-weight:bold;">Critical Success!</div>`;
+  }
+
+  if (d10 === 1) {
+    state = "crit-failure";
+    critHeader = `<div style="color:#cc0000;font-weight:bold;">Critical Failure!</div>`;
+  }
+
+  const html = `
+<div>
+  ${critHeader}
+  <div><strong><em>${label}</em></strong></div>
+  <div>(${ability} + Save) = (${abilityVal} + ${save}) = ${base}</div>
+  <div>1d10 Roll = ${d10}</div>
+  <div>Total = ${total}</div>
+</div>
+`;
+
+  pushRollResult(html, state);
+}
+
+/* ===== THREAT DETAILS: ATTACK STAT MAPPING ===== */
+
+function skillForAttack(type) {
+  if (type === "Melee") return "skillMel";
+  if (type === "Melee (H2H)") return "skillHtH";
+  if (type === "Ranged") return "skillRan";
+  if (type === "Firearms") return "skillGun";
+  if (type === "Thrown") return "skillThr";
+  return null;
+}
+
+function skillLabelForKey(key) {
+  if (key === "skillMel") return "Melee";
+  if (key === "skillHtH") return "Hand 2 Hand";
+  if (key === "skillRan") return "Ranged";
+  if (key === "skillGun") return "Guns";
+  if (key === "skillThr") return "Thrown";
+  return key || "—";
+}
+
+function abilityForAttack(type) {
+  if (type === "Melee" || type === "Melee (H2H)") return "STR";
+  return "PER";
+}
+
+/* ===== THREAT DETAILS: ATTACK STAT MAPPING END ===== */
+
+/* ===== THREAT DETAILS: EQUIPMENT LOOKUP ===== */
+
+function getEquipmentByName(name) {
+  if (!name) return null;
+  const n = String(name).trim().toLowerCase();
+  return equipmentData.find(e =>
+    String(e.eqpName || "").trim().toLowerCase() === n
+  ) || null;
+}
+
+function armorValue(eq) {
+  if (!eq) return 0;
+  const v = Number(eq.DMGorTAC);
+  return Number.isFinite(v) ? v : 0;
+}
+
+/* ===== THREAT DETAILS: ARMOR TABLE START ===== */
+
+function computeArmorTable(b) {
+  const base = Number(b.baseAC) || 0;
+
+  const clothing = getEquipmentByName(b.armClo);
+  const head = getEquipmentByName(b.armHead);
+  const torso = getEquipmentByName(b.armTorso);
+  const lfA = getEquipmentByName(b.armLfArm);
+  const rgA = getEquipmentByName(b.armRgArm);
+  const lfL = getEquipmentByName(b.armLfLeg);
+  const rgL = getEquipmentByName(b.armRgLeg);
+
+  const cloV = armorValue(clothing);
+  const headV = armorValue(head);
+  const torsoV = armorValue(torso);
+  const lfAV = armorValue(lfA);
+  const rgAV = armorValue(rgA);
+  const lfLV = armorValue(lfL);
+  const rgLV = armorValue(rgL);
+
+  return [
+    { part: "Clothing", eq: clothing, ac: cloV, tac: null },
+    { part: "Head", eq: head, ac: headV, tac: base + headV },
+    { part: "Torso", eq: torso, ac: torsoV, tac: base + cloV + torsoV },
+    { part: "Left Arm", eq: lfA, ac: lfAV, tac: base + cloV + torsoV + lfAV },
+    { part: "Right Arm", eq: rgA, ac: rgAV, tac: base + cloV + torsoV + rgAV },
+    { part: "Left Leg", eq: lfL, ac: lfLV, tac: base + cloV + lfLV },
+    { part: "Right Leg", eq: rgL, ac: rgLV, tac: base + cloV + rgLV }
+  ];
+}
+
+function renderArmorTable(b) {
+  const rows = computeArmorTable(b).map((r, i) => {
+    const eq = r.eq;
+    const name = eq?.eqpName || "—";
+    const mat = eq?.DMGTypeMaterial || "—";
+
+    const stripe =
+      i % 2 === 0
+        ? "linear-gradient(to right,#8b7dbe,#d8d2e7)"
+        : "#8b7dbe";
+
+    return `
+      <tr style="background:${stripe};">
+        <td style="text-align:left;"><strong>${r.part}</strong></td>
+        <td style="text-align:left;"><em>${name}</em></td>
+        <td style="text-align:left;">${mat}</td>
+        <td style="text-align:left;">${r.ac || ""}</td>
+        <td style="text-align:left;">${r.tac ?? ""}</td>
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <table style="width:100%; border-collapse:collapse; margin-top:6px;">
+      <thead>
+        <tr style="background:#634fa2; color:#d8d2e7;">
+          <th style="text-align:left;">Location</th>
+          <th style="text-align:left;">Armor</th>
+          <th style="text-align:left;">Material</th>
+          <th style="text-align:left;">AC</th>
+          <th style="text-align:left;">TAC</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+/* ===== THREAT DETAILS: ARMOR TABLE END ===== */
+
+//* ===== THREAT DETAILS: ATTACK TABLE START ===== */
+
+function mapAttackType(t) {
+  const k = String(t || "").toLowerCase();
+  if (k === "mele" || k === "ha2h" || k === "ntrl") return "Melee";
+  if (k === "rngd") return "Ranged";
+  if (k === "guns") return "Firearms";
+  if (k === "thrw") return "Thrown";
+  return t || "—";
+}
+
+function computeAttackRows(b) {
+  const ordered = [
+    ["mele","meleeOne"],["mele","meleeTwo"],
+    ["ha2h","meleeOne"],["ha2h","meleeTwo"],
+    ["rngd","rangedOne"],["rngd","rangedTwo"],
+    ["guns","firearmsOne"],["guns","firearmsTwo"],
+    ["thrw","thrownOne"],["thrw","thrownTwo"]
+  ];
+
+  return ordered
+    .map(([type, field]) => {
+      const eq = getEquipmentByName(b[field]);
+      if (!eq) return null;
+
+      const eqType = String(eq.eqpType || "").toLowerCase();
+
+      // allow natural attacks to render as melee
+      if (eqType !== type && !(eqType === "ntrl" && (type === "mele" || type === "ha2h"))) {
+        return null;
+      }
+
+      const atkType = mapAttackType(eqType === "ntrl" ? "mele" : type);
+
+      return {
+        type: atkType,
+        name: eq.eqpName || "—",
+        dmgType: eq.DMGTypeMaterial || "—",
+        dmg: eq.DMGorTAC || "—",
+        weight: eq.weight || "—",
+        abilityKey: abilityForAttack(type === "ha2h" ? "Melee (H2H)" : "Melee"),
+        skillKey: skillForAttack(type === "ha2h" ? "Melee (H2H)" : "Melee")
+      };
+    })
+    .filter(Boolean);
+}
+
+function renderAttacksTable(b, idx) {
+  const rows = computeAttackRows(b)
+    .map((r, i) => {
+      const stripe =
+        i % 2 === 0
+          ? "linear-gradient(to right,#8b7dbe,#d8d2e7)"
+          : "#8b7dbe";
+
+      return `
+      <tr style="background:${stripe};">
+        <td style="text-align:left;">${r.type}</td>
+        <td style="text-align:left;">
+          <button
+            class="beastAttackBtn"
+            data-enemy="${idx}"
+            data-ability="${r.abilityKey}"
+            data-skill="${r.skillKey}"
+            data-name="${r.name}"
+            data-type="${r.type}"
+            data-damage="${r.dmg}"
+            style="background:#634fa2;color:#d8d2e7;border:2px solid #634fa2;border-radius:6px;padding:2px 6px;font-weight:bold;"
+          >${r.name}</button>
+        </td>
+        <td style="text-align:left;">${r.dmgType}</td>
+        <td style="text-align:left;">${r.dmg}</td>
+        <td style="text-align:left;">${r.weight}</td>
+      </tr>
+    `;
+    })
+    .join("");
+
+  return `
+    <table style="width:100%; border-collapse:collapse; margin-top:6px;">
+      <thead>
+        <tr style="background:#634fa2;color:#d8d2e7;">
+          <th style="text-align:left;">Type</th>
+          <th style="text-align:left;">Attack</th>
+          <th style="text-align:left;">DMG Type</th>
+          <th style="text-align:left;">DMG</th>
+          <th style="text-align:left;">Wt</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+/* ===== THREAT DETAILS: ATTACK TABLE END ===== */
+
+/* ===== THREAT DETAILS: MAIN PANEL RENDER START ===== */
+
+function renderThreatDetailsPanel() {
+  const root = document.getElementById("threatDetailsContent");
+  if (!root) return;
+
+  const enemies = encounterState.enemies
+    .map(e => beastsData[e.beastIndex])
+    .filter(Boolean);
+
+  if (!enemies.length) {
+    root.innerHTML = "<em>No threats selected.</em>";
+    return;
+  }
+
+  const headerStyle = `
+    background:linear-gradient(to right,#634fa2,#d8d2e7);
+    color:#d8d2e7;
+    font-weight:bold;
+    padding:4px 8px;
+    border-radius:6px;
+  `;
+
+  const sections = enemies.map((b, i) => {
+    const maxHP = Number(b.hp) || 0;
+
+    if (encounterState.enemies[i].currentHP == null) {
+      encounterState.enemies[i].currentHP = maxHP;
+    }
+
+    const currentHP = encounterState.enemies[i].currentHP;
+
+    /* ===== HP STATE COMPUTE START ===== */
+
+    const str = beastNum(b.str);
+    const end = beastNum(b.end);
+    const deathHP = (str + end) * -1;
+
+    let titleText = b.name || "Unknown Threat";
+    let titleGradient = "linear-gradient(to right,#634fa2,#8b7dbe)";
+    let titleColor = "#d8d2e7";
+
+    if (currentHP <= deathHP) {
+      titleText = `${b.name} is Dead!`;
+      titleGradient = "linear-gradient(to right,#8b0000,#ff4d4d)";
+      titleColor = "#000000";
+    } else if (currentHP <= 0) {
+      titleText = `${b.name} - Unconscious! Loses 1 HP per round until death at ${deathHP}`;
+      titleGradient = "linear-gradient(to right,#ff8c00,#ffd580)";
+      titleColor = "#000000";
+    }
+
+    /* ===== HP STATE COMPUTE END ===== */
+
+    const specialLines = [
+      b.specialOne,
+      b.specialTwo,
+      b.feats,
+      b.smallAction
+    ].filter(x => x && String(x).trim() !== "");
+
+    const specialHTML = specialLines.length
+      ? specialLines.map(s => `<div>${s}</div>`).join("")
+      : "—";
+
+    return `
+      <div style="
+        border:3px solid #634fa2;
+        background:#8b7dbe;
+        border-radius:12px;
+        overflow:hidden;
+      ">
+        <div style="
+          background:${titleGradient};
+          color:${titleColor};
+          font-weight:bold;
+          padding:8px 10px;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+        ">
+          <span>${titleText}</span>
+          <span>
+            Hit Points
+            <button
+              contenteditable="true"
+              onblur="commitHP(${i}, this)"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}"
+              style="
+                margin:0 4px;
+                background:#634fa2;
+                color:#d8d2e7;
+                border:2px solid #634fa2;
+                border-radius:6px;
+                padding:2px 6px;
+                font-weight:bold;
+              "
+            >${currentHP}</button>
+            of ${maxHP}
+          </span>
+        </div>
+
+        <div style="padding:10px;">
+
+          <div style="font-style:italic; margin-bottom:6px;">
+            ${b.description || ""}
+          </div>
+
+          <div style="margin-bottom:6px;">
+            <strong>${b.size || ""} ${b.type || ""}</strong>
+            &nbsp; Base AC ${b.baseAC || ""}
+            &nbsp; Space ${b.space || ""}
+            &nbsp; Reach ${b.reach || ""}
+          </div>
+
+          <div style="display:flex; gap:8px; margin-bottom:6px;">
+            <button onclick="rollBeastSave(beastsData[encounterState.enemies[${i}].beastIndex],'dodge')" style="background:#634fa2;color:#d8d2e7;border:2px solid #634fa2;border-radius:6px;padding:4px 8px;font-weight:bold;">Dodge</button>
+            <button onclick="rollBeastSave(beastsData[encounterState.enemies[${i}].beastIndex],'resist')" style="background:#634fa2;color:#d8d2e7;border:2px solid #634fa2;border-radius:6px;padding:4px 8px;font-weight:bold;">Resist</button>
+            <button onclick="rollBeastSave(beastsData[encounterState.enemies[${i}].beastIndex],'tough')" style="background:#634fa2;color:#d8d2e7;border:2px solid #634fa2;border-radius:6px;padding:4px 8px;font-weight:bold;">Toughness</button>
+          </div>
+
+          <div style="margin-top:6px;">
+            <div style="${headerStyle}">Armor</div>
+            ${renderArmorTable(b)}
+          </div>
+
+          <div style="margin-top:6px;">
+            <div style="${headerStyle}">Attacks</div>
+            ${renderAttacksTable(b, i)}
+          </div>
+
+          <div style="margin-top:6px;">
+            <div style="${headerStyle}">Special Attacks / Feats</div>
+            <div>${specialHTML}</div>
+          </div>
+
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  root.innerHTML = `
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      ${sections}
+    </div>
+  `;
+}
+
+/* ===== THREAT DETAILS: MAIN PANEL RENDER END ===== */
+
+/* ===== THREAT DETAILS: BUTTON WIRING ===== */
+
+document.addEventListener("click", e => {
+  if (!e.target.classList.contains("beastAttackBtn")) return;
+
+  const enemy = Number(e.target.dataset.enemy);
+  const ability = e.target.dataset.ability;
+  const skill = e.target.dataset.skill;
+
+  const beast = beastsData[encounterState.enemies[enemy].beastIndex];
+  if (!beast) return;
+
+  rollAttack({
+    name: e.target.dataset.name,
+    type: e.target.dataset.type,
+    ability,
+    skill,
+    abilityVal: beastNum(beast[ability.toLowerCase()]),
+    skillVal: beastNum(beast[skill]),
+    damage: e.target.dataset.damage
+  });
+});
+
+/* ===== THREAT DETAILS: BUTTON WIRING END ===== */
+
+/* ===== ENEMY ROSTER RENDER START ===== */
+
+function renderEnemyRoster() {
+  const root = document.getElementById("threatsContent");
+  if (!root) return;
+
+  const enemies = encounterState.enemies;
+
+  const threats = enemies
+    .map((e, idx) => ({ e, idx }))
+    .filter(x => Number.isInteger(x.e.beastIndex) && beastsData[x.e.beastIndex]);
+
+  if (!threats.length) {
+    root.innerHTML = "<em>No threats added.</em>";
+    return;
+  }
+
+  const rows = threats.map(({ e, idx }) => {
+    const b = beastsData[e.beastIndex] || {};
+
+    const sizeType = [b.size, b.type].filter(Boolean).join(" ");
+    const spaceReach = [b.space, b.reach].filter(Boolean).join(" / ");
+
+    return `
+      <tr>
+        <td style="padding:6px 20px 6px 0; text-align:center; vertical-align:middle;">
+          <button
+            class="removeThreatBtn"
+            data-index="${idx}"
+            style="
+              background:#634fa2;
+              color:#d8d2e7;
+              border:2px solid #8b7dbe;
+              font-weight:bold;
+              padding:4px 8px;
+              cursor:pointer;
+            "
+          >Rmv</button>
+        </td>
+        <td style="font-weight:bold; text-align:left; padding:6px 0;">${b.name || ""}</td>
+        <td style="text-align:left; padding:6px 0;">${b.description || ""}</td>
+        <td style="text-align:center; padding:6px 0;">${sizeType}</td>
+        <td style="text-align:center; padding:6px 0;">${spaceReach}</td>
+        <td style="text-align:center; padding:6px 0;">${b.hp || ""}</td>
+        <td style="text-align:center; padding:6px 0;">${b.baseAC || ""}</td>
+        <td style="text-align:center; padding:6px 0;">${b.TR || ""}</td>
+        <td style="padding:6px 0;"></td>
+      </tr>
+      <tr>
+        <td colspan="9" style="height:6px;"></td>
+      </tr>
+    `;
+  }).join("");
+
+  root.innerHTML = `
+    <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-size:1.2em;">
+      <colgroup>
+        <col style="width:35px;">
+        <col style="width:15%;">
+        <col style="width:46%;">
+        <col style="width:10%;">
+        <col style="width:5%;">
+        <col style="width:4%;">
+        <col style="width:4%;">
+        <col style="width:3%;">
+        <col style="width:35px;">
+      </colgroup>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  root.querySelectorAll(".removeThreatBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.index);
+      snapshotEncounter();
+      encounterState.enemies.splice(i, 1);
+      refreshEncounter();
+    });
+  });
+}
+
+/* ===== ENEMY ROSTER RENDER END ===== */
+
+/* ===== ENEMY CONTROLLER START ===== */
+
+function addEnemy(beastIndex) {
+  if (!Number.isInteger(beastIndex)) return;
+
+  snapshotEncounter();
+  encounterState.enemies.push({ beastIndex });
+  refreshEncounter();
+}
+
+/* ===== ENEMY CONTROLLER END ===== */
+
+/* ===== ENEMY REMOVAL CONTROLLER START ===== */
+
+function removeEnemy(index) {
+  if (!Number.isInteger(index)) return;
+
+  snapshotEncounter();
+  encounterState.enemies.splice(index, 1);
+  refreshEncounter();
+}
+
+/* ===== ENEMY REMOVAL CONTROLLER END ===== */
+
+/* ===== ENEMY TR EDIT CONTROLLER START ===== */
+
+/* ===== ENEMY TR EDIT CONTROLLER END ===== */
+
+/* ===== ENCOUNTER SNAPSHOT SYSTEM START ===== */
+
+let previousEncounterSnapshot = null;
+
+function snapshotEncounter() {
+  previousEncounterSnapshot = JSON.parse(
+    JSON.stringify(encounterState)
+  );
+  updateUndoButtonState();
+}
+
+function restoreSnapshot() {
+  if (!previousEncounterSnapshot) return;
+
+  Object.assign(
+    encounterState,
+    JSON.parse(JSON.stringify(previousEncounterSnapshot))
+  );
+
+  refreshEncounter();
+  updateUndoButtonState();
+}
+
+/* ===== ENCOUNTER SNAPSHOT SYSTEM END ===== */
+
+/* ===== ENCOUNTER REFRESH ORCHESTRATOR START ===== */
+
+function refreshEncounter() {
+  renderThreatDetailsPanel();
+  renderEnemyRoster();
+  updateTopBarDisplay();
+  autosaveEncounter();
+}
+
+/* ===== ENCOUNTER REFRESH ORCHESTRATOR END ===== */
+
+/* ===== HP COMMIT HELPER START ===== */
+
+function commitHP(index, el) {
+  const v = Number(el.innerText) || 0;
+  encounterState.enemies[index].currentHP = v;
+  refreshEncounter();
+}
+
+/* ===== HP COMMIT HELPER END ===== */
+
+/* ===== ROLL PANEL ENGINE START ===== */
+
+function focusDashboardHeader() {
+  const top = document.querySelector(".topbar-panel");
+  if (top) {
+    top.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function pushRollResult(html, state = "normal") {
+  const col0 = document.getElementById("rollCol0");
+  const col1 = document.getElementById("rollCol1");
+  const col2 = document.getElementById("rollCol2");
+  if (!col0 || !col1 || !col2) return;
+
+  col2.innerHTML = col1.innerHTML;
+  col1.innerHTML = col0.innerHTML;
+
+  col0.innerHTML = html;
+
+  col0.style.boxShadow = "";
+  if (state === "crit-success") {
+    col0.style.boxShadow = "0 0 18px #0a5c2a inset";
+  }
+  if (state === "crit-failure") {
+    col0.style.boxShadow = "0 0 18px #8b0000 inset";
+  }
+
+  focusDashboardHeader();
+}
+
+function rollD10() {
+  return Math.floor(Math.random() * 10) + 1;
+}
+
+function rollDice(expr) {
+  const m = expr.match(/(\d+)d(\d+)/i);
+  if (!m) return 0;
+  const count = Number(m[1]);
+  const sides = Number(m[2]);
+  let total = 0;
+  for (let i = 0; i < count; i++) {
+    total += Math.floor(Math.random() * sides) + 1;
+  }
+  return total;
+}
+
+function mapBodyPart() {
+  const r = rollD10();
+  if (r <= 5) return "Torso";
+  if (r === 6) return "Left Leg";
+  if (r === 7) return "Right Leg";
+  if (r === 8) return "Left Arm";
+  if (r === 9) return "Right Arm";
+  return "Head";
+}
+
+function parseDamage(str) {
+  if (!str) return null;
+
+  const elementMap = {
+    F: "Fire",
+    A: "Acid",
+    I: "Ice",
+    E: "Electricity",
+    P: "Poison"
+  };
+
+  const parts = str.trim().split(/\s+/);
+  const formula = parts[0];
+  const element = elementMap[parts[1]] || null;
+
+  const dice = formula.match(/\d+d\d+/i)?.[0] || null;
+  const mods = formula
+    .replace(dice || "", "")
+    .split("+")
+    .filter(Boolean)
+    .map(n => Number(n));
+
+  const diceRoll = dice ? rollDice(dice) : 0;
+  const modTotal = mods.reduce((a, b) => a + b, 0);
+  const total = diceRoll + modTotal;
+
+  return {
+    formula,
+    total,
+    element
+  };
+}
+
+function formatDamage(dmg, crit) {
+  if (!dmg) return "";
+
+  const base = crit ? dmg.total * 2 : dmg.total;
+
+  let line = `Damage (${dmg.formula}): ${base}`;
+  if (dmg.element) {
+    line += ` ${dmg.element}`;
+  }
+
+  return `
+<div>Range: —</div>
+<div>${line}</div>
+`;
+}
+
+function rollAttack({
+  name,
+  type,
+  ability,
+  skill,
+  abilityVal,
+  skillVal,
+  damage
+}) {
+  const d10 = rollD10();
+  const base = abilityVal + skillVal;
+  const total = base + d10;
+
+  const body = mapBodyPart();
+  const dmg = d10 === 1 ? null : parseDamage(damage);
+
+  let state = "normal";
+  let critHeader = "";
+
+  if (d10 === 10) {
+    state = "crit-success";
+    critHeader = `<div style="color:#00aa44;font-weight:bold;">Critical Success!</div>`;
+  }
+
+  if (d10 === 1) {
+    state = "crit-failure";
+    critHeader = `<div style="color:#cc0000;font-weight:bold;">Critical Failure! Attack Misses and Causes Complication</div>`;
+  }
+
+  const html = `
+<div>
+  ${critHeader}
+  <div><strong><em>${name} Attack, ${type}</em></strong></div>
+  <div>(${ability} + ${skill}) = (${abilityVal} + ${skillVal}) = ${base}</div>
+  <div>1d10 Roll = ${d10}</div>
+  <div>Attack Roll = ${total}</div>
+  <div>Body Part Hit: ${body}</div>
+  ${d10 === 1 ? "" : formatDamage(dmg, d10 === 10)}
+</div>
+`;
+
+  pushRollResult(html, state);
+}
+
+/* ===== ROLL PANEL ENGINE END ===== */
+
+/* ===== ENCOUNTER STORAGE ADAPTER START ===== */
+
+const ENCOUNTER_STORAGE_KEY = "atfEncounter";
+
+function serializeEncounter() {
+  return JSON.stringify(encounterState);
+}
+
+function loadEncounter(json) {
+  if (!json) return;
+
+  try {
+    const data = JSON.parse(json);
+    Object.assign(encounterState, data);
+    validateEncounterState();
+    refreshEncounter();
+  } catch {
+    /* ignore bad data */
+  }
+}
+
+function saveEncounter() {
+  localStorage.setItem(
+    ENCOUNTER_STORAGE_KEY,
+    serializeEncounter()
+  );
+}
+
+function loadEncounterFromStorage() {
+  const json = localStorage.getItem(ENCOUNTER_STORAGE_KEY);
+  if (!json) return;
+
+  loadEncounter(json);
+}
+
+/* ===== ENCOUNTER STORAGE ADAPTER END ===== */
+
+/* ===== ENCOUNTER AUTOSAVE START ===== */
+
+function autosaveEncounter() {
+  saveEncounter();
+}
+
+/* ===== ENCOUNTER AUTOSAVE END ===== */
+
+/* ===== DEBUG STATE RENDER START ===== */
+
+/* ===== DEBUG STATE RENDER END ===== */
+
+/* ===== ENCOUNTER RESET CONTROLLER START ===== */
+
+function resetEncounterSession() {
+  encounterState.partySize = null;
+  encounterState.round = 1;
+  encounterState.timerSeconds = 0;
+  encounterState.timerRunning = false;
+  encounterState.enemies = [];
+
+  pauseTimer();
+  refreshEncounter();
+  renderThreatDetailsPanel();
+  renderPartyDisplay();
+}
+
+/* ===== ENCOUNTER RESET CONTROLLER END ===== */
+
+/* ===== ENCOUNTER VALIDATION START ===== */
+
+function validateEncounterState() {
+
+  if (!Array.isArray(encounterState.enemies)) {
+    encounterState.enemies = [];
+  }
+
+  encounterState.enemies = encounterState.enemies
+    .map(e => ({
+      beastIndex: Number.isInteger(e.beastIndex) ? e.beastIndex : -1
+    }))
+    .filter(e =>
+      e.beastIndex >= 0 &&
+      beastsData[e.beastIndex]
+    );
+
+  if (!Number.isInteger(encounterState.round) || encounterState.round < 1) {
+    encounterState.round = 1;
+  }
+
+  if (!Number.isInteger(encounterState.timerSeconds) || encounterState.timerSeconds < 0) {
+    encounterState.timerSeconds = 0;
+  }
+
+  renderThreatDetailsPanel();
+}
+
+/* ===== ENCOUNTER VALIDATION END ===== */
+
+/* ===== ROUND CONTROLLER START ===== */
+
+function advanceRound() {
+  incrementRound();
+  renderRoundDisplay();
+}
+
+function resetRoundUI() {
+  resetRound();
+  renderRoundDisplay();
+}
+
+/* ===== ROUND CONTROLLER END ===== */
+
+/* ===== ROUND DISPLAY RENDER START ===== */
+
+function renderRoundDisplay() {
+  const tiles = document
+    .getElementById("topBar")
+    .querySelectorAll(".topbar-panel");
+
+  const roundTile = tiles[3];
+  if (!roundTile) return;
+
+  const content = roundTile.querySelector(".topbar-panel-content");
+
+  const btnStyle = `
+    background:#634fa2;
+    color:#d8d2e7;
+    border:2px solid #8b7dbe;
+    font-weight:bold;
+    padding:10px 18px;
+    border-radius:6px;
+    font-size:22px;
+  `;
+
+  content.innerHTML = `
+    <div>Round ${encounterState.round}</div>
+
+    <div style="display:flex; gap:10px; margin:8px 0;">
+      <button id="roundAdvanceBtn" style="${btnStyle}">+</button>
+      <button id="roundResetBtn" style="${btnStyle}">Reset</button>
+    </div>
+
+    <hr>
+
+    <div id="timerDisplay">${formatTime(encounterState.timerSeconds)}</div>
+
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button id="timerStartBtn" style="${btnStyle}">
+        ${encounterState.timerRunning ? "Pause" : "Start"}
+      </button>
+      <button id="timerResetBtn" style="${btnStyle}">Reset</button>
+    </div>
+  `;
+
+  document
+    .getElementById("roundAdvanceBtn")
+    ?.addEventListener("click", advanceRound);
+
+  document
+    .getElementById("roundResetBtn")
+    ?.addEventListener("click", resetRoundUI);
+}
+
+/* ===== ROUND DISPLAY RENDER END ===== */
+
+/* ===== TIMER DISPLAY RENDER START ===== */
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+  const s = (seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+function renderTimerDisplay() {
+  const tiles = document
+    .getElementById("topBar")
+    .querySelectorAll(".topbar-panel");
+
+  const roundTile = tiles[3];
+  if (!roundTile) return;
+
+  const content = roundTile.querySelector(".topbar-panel-content");
+
+  const timeDiv = content.querySelector("#timerDisplay");
+  if (timeDiv) {
+    timeDiv.textContent = formatTime(encounterState.timerSeconds);
+  }
+}
+
+/* ===== TIMER DISPLAY RENDER END ===== */
+
+/* ===== TIMER CONTROLLER WIRING START ===== */
+
+document.addEventListener("click", e => {
+  if (e.target.id === "timerStartBtn") {
+    if (encounterState.timerRunning) {
+      pauseTimer();
+      e.target.textContent = "Start";
+    } else {
+      startTimer();
+      e.target.textContent = "Pause";
+    }
+  }
+
+  if (e.target.id === "timerResetBtn") {
+    resetTimer();
+    renderTimerDisplay();
+  }
+});
+
+setInterval(renderTimerDisplay, 250);
+
+/* ===== TIMER CONTROLLER WIRING END ===== */
+
+/* ===== TOP BAR INIT START ===== */
+
+function initTopBar() {
+  renderTopBar();
+  renderThreatDetailsPanel();
+  renderEnemyRoster();
+  renderPartyDisplay();
+  updateTopBarDisplay();
+  document.getElementById("addEnemyBtn")?.addEventListener("click", () => addEnemy());
+  renderRoundDisplay();
+  wireControls();
+  loadAllCSV();
+}
+
+initTopBar();
+loadEncounterFromStorage();
+refreshEncounter();
+
+/* ===== TOP BAR INIT END ===== */
+
+
+/* ===== CONTROL ACTION WIRING START ===== */
+
+function updateUndoButtonState() {
+const btn = document.getElementById("undoEncounterBtn");
+if (!btn) return;
+
+btn.disabled = !previousEncounterSnapshot;
+}
+
+function wireControls() {
+const saveBtn = document.getElementById("saveEncounterBtn");
+const loadBtn = document.getElementById("loadEncounterBtn");
+const clearBtn = document.getElementById("clearEncounterBtn");
+const undoBtn = document.getElementById("undoEncounterBtn");
+
+if (saveBtn) saveBtn.addEventListener("click", () => saveEncounter());
+if (loadBtn) loadBtn.addEventListener("click", () => loadEncounter());
+if (clearBtn) clearBtn.addEventListener("click", () => clearEncounter());
+
+if (undoBtn) {
+undoBtn.addEventListener("click", () => {
+restoreSnapshot();
+updateUndoButtonState();
+});
+}
+
+updateUndoButtonState();
+wireControls;
+}
+
+/* ===== CONTROL ACTION WIRING END ===== */
+
+/* ===== TOP BAR DISPLAY UPDATE START ===== */
+
+/* ===== DASHBOARD ELEMENT LOOKUP START ===== */
+function updateTopBarDisplay() {
+  const enemies = encounterState.enemies
+    .map(e => beastsData[e.beastIndex])
+    .filter(Boolean);
+
+  const trs = enemies
+    .map(b => Number(b.TR))
+    .filter(n => Number.isFinite(n));
+
+  const mathBar = document.getElementById("mathEncounterBar");
+  const mathPrimary = document.getElementById("mathPrimary");
+  const mathSecondary = document.getElementById("mathSecondary");
+
+  const xpBar = document.getElementById("xpBar");
+  const xpEncounter = document.getElementById("xpEncounter");
+  const xpExplain1 = document.getElementById("xpExplain1");
+  const xpExplain2 = document.getElementById("xpExplain2");
+
+  if (!mathBar || !xpBar) return;
+/* ===== DASHBOARD ELEMENT LOOKUP END ===== */
+
+
+/* ===== EMPTY ENCOUNTER DISPLAY START ===== */
+  if (!trs.length) {
+    mathBar.textContent = "Encounter TR: —";
+    mathPrimary.textContent = "Primary TR: —";
+    mathSecondary.textContent = "Secondary TR: —";
+
+    xpBar.textContent = "XP per Player: —";
+    xpEncounter.textContent = "Encounter XP: —";
+    xpExplain1.textContent = "";
+    xpExplain2.textContent = "";
+    return;
+  }
+/* ===== EMPTY ENCOUNTER DISPLAY END ===== */
+
+
+/* ===== ENCOUNTER MATH COMPUTE START ===== */
+  const primaryTR = Math.max(...trs);
+  const primaryIndex = trs.indexOf(primaryTR);
+  const primaryBeast = enemies[primaryIndex];
+
+  const secondaryTR = trs
+    .filter((tr, i) => i !== primaryIndex)
+    .reduce((a, b) => a + b, 0);
+
+  const encounterTR =
+    primaryTR +
+    Math.ceil(secondaryTR / (primaryTR + 1));
+
+  const totalXP = encounterTR * 500;
+
+  const party = encounterState.partySize;
+  const xpPerPlayer =
+    Number.isInteger(party) && party > 0
+      ? Math.ceil(totalXP / party)
+      : null;
+/* ===== ENCOUNTER MATH COMPUTE END ===== */
+
+
+/* ===== ENCOUNTER MATH RENDER START ===== */
+  mathBar.textContent = `Encounter TR: ${encounterTR}`;
+
+  mathPrimary.innerHTML =
+    `Primary TR: ${primaryTR}<br><em>${primaryBeast?.name || "Unknown"}</em>`;
+
+  mathSecondary.textContent =
+    `Secondary TR: ${secondaryTR}`;
+/* ===== ENCOUNTER MATH RENDER END ===== */
+
+
+/* ===== XP RENDER START ===== */
+  xpBar.textContent =
+    `XP per Player: ${xpPerPlayer ?? "Enter party size"}`;
+
+  xpEncounter.textContent =
+    `Encounter XP: ${totalXP}`;
+
+  xpExplain1.textContent =
+    "Encounter TR equals the strongest creature’s TR plus the rest divided by one higher than that TR so weaker enemies scale to the main threat, rounded up so they always contribute.";
+
+  xpExplain2.textContent =
+    `Encounter TR = ${primaryTR} + (${secondaryTR} ÷ ${primaryTR + 1}, rounded up) = ${encounterTR}. Encounter XP = ${encounterTR} × 500 = ${totalXP}. XP per player = ${party ?? "—"} → ${xpPerPlayer ?? "—"}.`;
+
+  /* force wrapping inside tile */
+  xpExplain1.style.wordBreak = "break-word";
+  xpExplain2.style.wordBreak = "break-word";
+  xpExplain1.style.whiteSpace = "normal";
+  xpExplain2.style.whiteSpace = "normal";
+/* ===== XP RENDER END ===== */
+
+}
+
+/* ===== TOP BAR DISPLAY UPDATE END ===== */
+
+/* ===== BEASTS PANEL TOGGLE START ===== */
+
+document.addEventListener("click", e => {
+  if (e.target.id !== "toggleBeastsBtn") return;
+
+  const content = document.getElementById("beastsContent");
+  const btn = e.target;
+  if (!content) return;
+
+  const collapsed = content.style.display === "none";
+
+  content.style.display = collapsed ? "block" : "none";
+  btn.textContent = collapsed ? "Hide Book of Beasts" : "Show Book of Beasts";
+});
+
+/* ===== BEASTS PANEL TOGGLE END ===== */
+
+  </script>
+
+</body>
+</html>
