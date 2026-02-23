@@ -17,7 +17,7 @@ body {
   font-family: Roboto, sans-serif;
   margin: 20px;
   min-height: 100vh;
-  background: linear-gradient(#634fa2, #48752c);
+  background: linear-gradient(#634fa2, #000000);
   background-attachment: fixed;
 }
 
@@ -97,6 +97,24 @@ button {
 
 <body>
 
+<!-- ===== ENCOUNTER HEADER START ===== -->
+<div style="
+  text-align:center;
+  margin-top:20px;
+  margin-bottom:10px;
+">
+  <img src="AtF Text Logo Purple.png" alt="After the Fall Logo" style="max-height:250px;">
+  <div style="
+    color:#d8d2e7;
+    font-size:36px;
+    font-weight:bold;
+    margin-top:8px;
+  ">
+    GM Encounter Dashboard
+  </div>
+</div>
+<!-- ===== ENCOUNTER HEADER END ===== -->
+
   <!-- ===== TOP BAR ROOT START ===== -->
 <div class="topbar-panel">
   <div class="topbar-panel-header">Encounter Dashboard</div>
@@ -149,19 +167,31 @@ button {
         <col style="width:3%;">
         <col style="width:35px;">
       </colgroup>
-      <thead>
-        <tr style="background:#8b7dbe; color:#d8d2e7;">
-          <th></th>
-          <th style="text-align:left;">Name</th>
-          <th style="text-align:left;">Description</th>
-          <th style="text-align:center;">Size & Type</th>
-          <th style="text-align:center;">Space / Reach</th>
-          <th style="text-align:center;">HP</th>
-          <th style="text-align:center;">Base AC</th>
-          <th style="text-align:center;">TR</th>
-          <th></th>
-        </tr>
-      </thead>
+<thead>
+  <tr style="background:#8b7dbe; color:#d8d2e7;">
+    <th></th>
+    <th style="text-align:left;">Name</th>
+    <th style="text-align:left;">Description</th>
+    <th style="text-align:center;">Size & Type</th>
+    <th style="text-align:center;">Space / Reach</th>
+    <th style="text-align:center;">HP</th>
+    <th style="text-align:center;">Base AC</th>
+    <th style="text-align:center;">TR</th>
+<th style="text-align:center;">
+  <button
+    id="rollInitiativeBtn"
+    style="
+      background:#634fa2;
+      color:#d8d2e7;
+      border:2px solid #8b7dbe;
+      font-weight:bold;
+      padding:4px 8px;
+      white-space:nowrap;
+    "
+  >Roll Initiative</button>
+</th>
+  </tr>
+</thead>
     </table>
 
     <div id="threatsContent" style="font-size:1.25em; display:grid; gap:12px;">
@@ -193,22 +223,13 @@ button {
 </div>
 <!-- ===== THREATS PANEL ROOT END ===== -->
 
-<!-- ===== DEBUG PANEL ROOT START ===== -->
-<div class="topbar-panel" style="margin-top:20px;">
-  <div class="topbar-panel-header">Debug State</div>
-  <div class="topbar-panel-content">
-    <pre id="debugState" style="font-size:0.8em;"></pre>
-  </div>
-</div>
-<!-- ===== DEBUG PANEL ROOT END ===== -->
-
-
   <script>
 
-/* ===== BEASTS CSV LOADER START ===== */
+/* ===== CSV LOADER START ===== */
 
 let beastsData = [];
 let equipmentData = [];
+let conditionsData = [];
 
 /* ===== CSV NORMALIZATION HELPERS START ===== */
 
@@ -320,11 +341,20 @@ async function loadEquipmentCSV() {
 async function loadAllCSV() {
   await Promise.all([
     loadBeastsCSV(),
-    loadEquipmentCSV()
+    loadEquipmentCSV(),
+    (async () => {
+      try {
+        const response = await fetch("conditions.csv");
+        const text = await response.text();
+        const table = parseCSV(text).filter(r => r.length);
+        conditionsData = tableToObjects(table);
+      } catch {
+        conditionsData = [];
+      }
+    })()
   ]);
 }
-
-/* ===== BEASTS CSV LOADER END ===== */
+/* ===== CSV LOADER END ===== */
 
 /* ===== BEASTS PANEL RENDER START ===== */
 
@@ -614,6 +644,218 @@ function renderBeastsPanel() {
 
   /* ===== ENCOUNTER MATH ENGINE END ===== */
 
+/* ===== ENCOUNTER CONDITION ENGINE START ===== */
+
+/* Canonical condition colors (Encounter-local) */
+function getEncounterConditionColor(type) {
+  const map = {
+    Bleeding: "#a8004d",
+    Gushing: "#ff0075",
+    Poisoned: "#4b2a8f",
+    Prone: "#8b7dbe",
+    Shaken: "#634fa2",
+    Frightened: "#48752c",
+    Horrified: "#9dc384",
+    Fuzzy: "#d8d2e7",
+    Blinded: "#bfbfbf",
+    "Slowed (Enc.)": "#9dc384",
+    Winded: "#634fa2"
+  };
+
+  return map[type] || "#bfbfbf";
+}
+
+/* Apply condition */
+function encounterApplyCondition(enemy, type) {
+  if (!enemy.conditions) enemy.conditions = {};
+  if (!enemy.conditions[type]) {
+    enemy.conditions[type] = { stage: 0, duration: null };
+  }
+}
+
+/* Resolve condition */
+function encounterResolveCondition(enemy, type) {
+  if (!enemy.conditions || !enemy.conditions[type]) return;
+
+  /* ===== REVERSE CHAINS ===== */
+
+  if (type === "Gushing") {
+    delete enemy.conditions["Gushing"];
+    enemy.conditions["Bleeding"] = { stage: 0, duration: null };
+    return;
+  }
+
+  if (type === "Horrified") {
+    delete enemy.conditions["Horrified"];
+    enemy.conditions["Frightened"] = { stage: 0, duration: null };
+    return;
+  }
+
+  if (type === "Frightened") {
+    delete enemy.conditions["Frightened"];
+    enemy.conditions["Shaken"] = { stage: 0, duration: null };
+    return;
+  }
+
+  if (type === "Blinded") {
+    delete enemy.conditions["Blinded"];
+    enemy.conditions["Fuzzy"] = { stage: 0, duration: null };
+    return;
+  }
+
+  /* ===== BASE CONDITIONS FULL REMOVE ===== */
+  delete enemy.conditions[type];
+}
+
+/* Advance staged condition */
+function encounterAdvanceCondition(enemy, type) {
+  if (!enemy.conditions || !enemy.conditions[type]) return;
+
+  /* ===== BLEEDING → GUSHING ===== */
+  if (type === "Bleeding") {
+    delete enemy.conditions["Bleeding"];
+    enemy.conditions["Gushing"] = { stage: 0, duration: null };
+    return;
+  }
+
+  /* ===== SHAKEN CHAIN ===== */
+  if (type === "Shaken") {
+    delete enemy.conditions["Shaken"];
+    enemy.conditions["Frightened"] = { stage: 0, duration: null };
+    return;
+  }
+
+  if (type === "Frightened") {
+    delete enemy.conditions["Frightened"];
+    enemy.conditions["Horrified"] = { stage: 0, duration: null };
+    return;
+  }
+
+  /* ===== FUZZY → BLINDED ===== */
+  if (type === "Fuzzy") {
+    delete enemy.conditions["Fuzzy"];
+    enemy.conditions["Blinded"] = { stage: 0, duration: null };
+    return;
+  }
+}
+
+/* Per-round processor */
+function encounterProcessRoundConditions(enemy) {
+
+  if (!enemy.conditions) return;
+
+  Object.keys(enemy.conditions).forEach(type => {
+
+    const conditionState = enemy.conditions[type];
+
+    const row = conditionsData.find(c =>
+      String(c.name || "").trim() === type
+    );
+
+    if (!row) return;
+
+    /* ===== HP CHANGE PER ROUND (CSV DRIVEN) ===== */
+    const hpChange = parseInt(row.hpChangePerRound || 0);
+
+    if (!isNaN(hpChange) && hpChange !== 0) {
+      enemy.currentHP = (enemy.currentHP ?? 0) + hpChange;
+    }
+
+    /* ===== DURATION COUNTDOWN ===== */
+    if (conditionState.duration != null) {
+      conditionState.duration -= 1;
+
+      if (conditionState.duration <= 0) {
+
+        if (row.downgradesTo && row.downgradesTo !== "none") {
+          delete enemy.conditions[type];
+          enemy.conditions[row.downgradesTo] = { stage: 0, duration: null };
+        } else {
+          delete enemy.conditions[type];
+        }
+
+      }
+    }
+
+  });
+
+  /* ===== POISON DURATION TICK ===== */
+  if (enemy.poison && enemy.poison.duration > 0) {
+    enemy.poison.duration -= 1;
+    if (enemy.poison.duration <= 0) {
+      enemy.poison = null;
+    }
+  }
+
+  /* ===== HP FLOOR ===== */
+  if (enemy.currentHP < -999) enemy.currentHP = -999;
+}
+
+/* ===== ENCOUNTER CONDITION EFFECT AGGREGATOR START ===== */
+
+function encounterGetConditionEffects(enemy) {
+
+  const effects = {
+    attackMod: 0,
+    saveMod: 0,
+    tacMod: 0,
+    missChance: 0,
+    abilityMods: {},
+    cannotAct: false,
+    cannotMove: false,
+    mustFlee: false,
+    noLargeActions: false,
+    oneSmallAction: false
+  };
+
+  if (!enemy.conditions) return effects;
+
+  Object.keys(enemy.conditions).forEach(type => {
+
+    const row = conditionsData.find(c =>
+      String(c.name || "").trim() === type
+    );
+
+    if (!row) return;
+
+    effects.attackMod += parseInt(row.attackModifier || 0);
+    effects.saveMod += parseInt(row.saveModifier || 0);
+    effects.tacMod += parseInt(row.tacModifier || 0);
+    effects.missChance += parseInt(row.missChance || 0);
+
+    if (row.abilityModifiers && row.abilityModifiers !== "none") {
+      row.abilityModifiers.split(";").forEach(pair => {
+        const [stat, val] = pair.split(":");
+        if (!stat || !val) return;
+        effects.abilityMods[stat.trim()] =
+          (effects.abilityMods[stat.trim()] || 0) + parseInt(val);
+      });
+    }
+
+    if (row.actionRestrictions?.includes("cannotAct"))
+      effects.cannotAct = true;
+
+    if (row.actionRestrictions?.includes("noLargeActions"))
+      effects.noLargeActions = true;
+
+    if (row.actionRestrictions?.includes("oneSmallAction"))
+      effects.oneSmallAction = true;
+
+    if (row.movementRestrictions?.includes("cannotMove"))
+      effects.cannotMove = true;
+
+    if (row.movementRestrictions?.includes("mustFlee"))
+      effects.mustFlee = true;
+
+  });
+
+  return effects;
+}
+
+/* ===== ENCOUNTER CONDITION EFFECT AGGREGATOR END ===== */
+
+/* ===== ENCOUNTER CONDITION ENGINE END ===== */
+
 /* ===== ENCOUNTER SESSION STATE START ===== */
 
 /*
@@ -630,14 +872,17 @@ This is the single source of truth for:
 const ENCOUNTER_SCHEMA_VERSION = 1;
 
 const encounterState = {
-version: ENCOUNTER_SCHEMA_VERSION,
-partySize: null,
-round: 1,
-timerSeconds: 0,
-timerRunning: false,
-enemies: []
+  version: ENCOUNTER_SCHEMA_VERSION,
+  partySize: null,
+  round: 1,
+  timerSeconds: 0,
+  timerRunning: false,
+  inCombat: false,
+  lastEncounterDuration: null,
+lastEncounterRounds: null,
+lastEncounterTR: null,
+  enemies: []
 };
-
 
 let timerInterval = null;
 
@@ -666,13 +911,12 @@ encounterState.round = 1;
 /* ----- Timer ----- */
 
 function startTimer() {
-if (encounterState.timerRunning) return;
+  encounterState.timerRunning = true;
 
-encounterState.timerRunning = true;
-
-timerInterval = setInterval(() => {
-encounterState.timerSeconds += 1;
-}, 1000);
+  timerInterval = setInterval(() => {
+    encounterState.timerSeconds += 1;
+    renderTimerDisplay();
+  }, 1000);
 }
 
 function pauseTimer() {
@@ -1143,15 +1387,30 @@ function computeAttackRows(b) {
 
       const atkType = mapAttackType(eqType === "ntrl" ? "mele" : type);
 
-      return {
-        type: atkType,
-        name: eq.eqpName || "—",
-        dmgType: eq.DMGTypeMaterial || "—",
-        dmg: eq.DMGorTAC || "—",
-        weight: eq.weight || "—",
-        abilityKey: abilityForAttack(type === "ha2h" ? "Melee (H2H)" : "Melee"),
-        skillKey: skillForAttack(type === "ha2h" ? "Melee (H2H)" : "Melee")
-      };
+return {
+  type: atkType,
+  name: eq.eqpName || "—",
+  dmgType: eq.DMGTypeMaterial || "—",
+  dmg: eq.DMGorTAC || "—",
+  weight: eq.weight || "—",
+  distance: eq.distance || "",
+  abilityKey: abilityForAttack(
+    atkType === "ha2h" ? "Melee (H2H)"
+    : atkType === "mele" ? "Melee"
+    : atkType === "rngd" ? "Ranged"
+    : atkType === "guns" ? "Firearms"
+    : atkType === "thrw" ? "Thrown"
+    : "Melee"
+  ),
+  skillKey: skillForAttack(
+    atkType === "ha2h" ? "Melee (H2H)"
+    : atkType === "mele" ? "Melee"
+    : atkType === "rngd" ? "Ranged"
+    : atkType === "guns" ? "Firearms"
+    : atkType === "thrw" ? "Thrown"
+    : "Melee"
+  )
+};
     })
     .filter(Boolean);
 }
@@ -1168,16 +1427,17 @@ function renderAttacksTable(b, idx) {
       <tr style="background:${stripe};">
         <td style="text-align:left;">${r.type}</td>
         <td style="text-align:left;">
-          <button
-            class="beastAttackBtn"
-            data-enemy="${idx}"
-            data-ability="${r.abilityKey}"
-            data-skill="${r.skillKey}"
-            data-name="${r.name}"
-            data-type="${r.type}"
-            data-damage="${r.dmg}"
-            style="background:#634fa2;color:#d8d2e7;border:2px solid #634fa2;border-radius:6px;padding:2px 6px;font-weight:bold;"
-          >${r.name}</button>
+<button
+  class="beastAttackBtn"
+  data-enemy="${idx}"
+  data-ability="${r.abilityKey}"
+  data-skill="${r.skillKey}"
+  data-name="${r.name}"
+  data-type="${r.type}"
+  data-damage="${r.dmg}"
+  data-distance="${r.distance}"
+  style="background:#634fa2;color:#d8d2e7;border:2px solid #634fa2;border-radius:6px;padding:2px 6px;font-weight:bold;"
+>${r.name}</button>
         </td>
         <td style="text-align:left;">${r.dmgType}</td>
         <td style="text-align:left;">${r.dmg}</td>
@@ -1243,19 +1503,30 @@ function renderThreatDetailsPanel() {
     const end = beastNum(b.end);
     const deathHP = (str + end) * -1;
 
-    let titleText = b.name || "Unknown Threat";
-    let titleGradient = "linear-gradient(to right,#634fa2,#8b7dbe)";
-    let titleColor = "#d8d2e7";
+let titleText = b.name || "Unknown Threat";
+let titleGradient = "linear-gradient(to right,#634fa2,#8b7dbe)";
+let titleColor = "#d8d2e7";
 
-    if (currentHP <= deathHP) {
-      titleText = `${b.name} is Dead!`;
-      titleGradient = "linear-gradient(to right,#8b0000,#ff4d4d)";
-      titleColor = "#000000";
-    } else if (currentHP <= 0) {
-      titleText = `${b.name} - Unconscious! Loses 1 HP per round until death at ${deathHP}`;
-      titleGradient = "linear-gradient(to right,#ff8c00,#ffd580)";
-      titleColor = "#000000";
-    }
+const enemyState = encounterState.enemies[i];
+const hasOtherConditions =
+  enemyState &&
+  enemyState.conditions &&
+  Object.keys(enemyState.conditions || {}).length > 0;
+
+if (currentHP <= deathHP) {
+  titleText = `${b.name} is Dead!`;
+  titleGradient = "linear-gradient(to right,#8b0000,#ff4d4d)";
+  titleColor = "#000000";
+}
+else if (currentHP <= 0) {
+  titleText = `${b.name} - Unconscious! Loses 1 HP per round until death at ${deathHP}`;
+  titleGradient = "linear-gradient(to right,#ff8c00,#ffd580)";
+  titleColor = "#000000";
+}
+else if (hasOtherConditions) {
+  titleGradient = "linear-gradient(to right,#ffffff,#bfbfbf)";
+  titleColor = "#000000";
+}
 
     /* ===== HP STATE COMPUTE END ===== */
 
@@ -1277,7 +1548,7 @@ function renderThreatDetailsPanel() {
         border-radius:12px;
         overflow:hidden;
       ">
-        <div style="
+                <div style="
           background:${titleGradient};
           color:${titleColor};
           font-weight:bold;
@@ -1285,28 +1556,112 @@ function renderThreatDetailsPanel() {
           display:flex;
           justify-content:space-between;
           align-items:center;
+          flex-direction:column;
         ">
-          <span>${titleText}</span>
-          <span>
-            Hit Points
-            <button
-              contenteditable="true"
-              onblur="commitHP(${i}, this)"
-              onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}"
-              style="
-                margin:0 4px;
-                background:#634fa2;
-                color:#d8d2e7;
-                border:2px solid #634fa2;
-                border-radius:6px;
-                padding:2px 6px;
-                font-weight:bold;
-              "
-            >${currentHP}</button>
-            of ${maxHP}
-          </span>
-        </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <span>${titleText}</span>
+            <span style="display:flex; align-items:center; gap:8px;">
 
+<button
+  onclick="openEncounterConditionsModal(${i})"
+  style="
+    background:${hasOtherConditions ? '#d0005f' : '#d8d2e7'};
+    color:${hasOtherConditions ? '#000000' : '#8b7dbe'};
+    border:2px solid ${hasOtherConditions ? '#000000' : '#8b7dbe'};
+    font-weight:bold;
+    border-radius:6px;
+    padding:2px 8px;
+  "
+>Conditions</button>
+
+              <span>
+                Hit Points
+                <button
+                  contenteditable="true"
+                  onblur="commitHP(${i}, this)"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}"
+                  style="
+                    margin:0 4px;
+                    background:#634fa2;
+                    color:#d8d2e7;
+                    border:2px solid #634fa2;
+                    border-radius:6px;
+                    padding:2px 6px;
+                    font-weight:bold;
+                  "
+                >${currentHP}</button>
+                of ${maxHP}
+              </span>
+
+            </span>
+          </div>
+
+${(() => {
+  const enemyState = encounterState.enemies[i];
+  if (!enemyState || !enemyState.conditions) return "";
+  const activeConditions = Object.keys(enemyState.conditions);
+  if (!activeConditions.length) return "";
+  if (currentHP <= deathHP || currentHP <= 0) return "";
+
+  const colorMap = {
+    "Bleeding": "#ca6f90",
+    "Gushing": "#d43243",
+
+    "Shaken": "#d3ce43",
+    "Frightened": "#d8772c",
+    "Horrified": "#000000",
+
+    "Fuzzy": "#c3c3c3",
+    "Blinded": "#4c4c4c",
+
+    "Poisoned": "#a5c28a",
+    "Prone": "#3e8c78",
+    "Hidden": "#ffffff",
+    "Winded": "#89aec0",
+    "Slowed (Enc.)": "#89c0ae"
+  };
+
+  const segmentWidth = 100 / activeConditions.length;
+
+  const segments = activeConditions.map(type => {
+
+    let background = colorMap[type] || "#bfbfbf";
+
+    // Bleed chain gradient
+    if (type === "Gushing") {
+      background = `linear-gradient(to right, #ca6f90, #d43243)`;
+    }
+
+    // Fear chain gradients
+    if (type === "Frightened") {
+      background = `linear-gradient(to right, #d3ce43, #d8772c)`;
+    }
+
+    if (type === "Horrified") {
+      background = `linear-gradient(to right, #d3ce43, #d8772c, #000000)`;
+    }
+
+    // Vision chain gradient
+    if (type === "Blinded") {
+      background = `linear-gradient(to right, #c3c3c3, #4c4c4c)`;
+    }
+
+    return `
+      <div style="
+        width:${segmentWidth}%;
+        background:${background};
+        height:8px;
+      "></div>
+    `;
+  }).join("");
+
+  return `
+    <div style="display:flex; width:100%; margin-top:6px;">
+      ${segments}
+    </div>
+  `;
+})()}
+        </div>
         <div style="padding:10px;">
 
           <div style="font-style:italic; margin-bottom:6px;">
@@ -1360,26 +1715,38 @@ function renderThreatDetailsPanel() {
 document.addEventListener("click", e => {
   if (!e.target.classList.contains("beastAttackBtn")) return;
 
-  const enemy = Number(e.target.dataset.enemy);
+  const enemyIndex = Number(e.target.dataset.enemy);
   const ability = e.target.dataset.ability;
   const skill = e.target.dataset.skill;
 
-  const beast = beastsData[encounterState.enemies[enemy].beastIndex];
+  const enemyObj = encounterState.enemies[enemyIndex];
+  if (!enemyObj) return;
+
+  const beast = beastsData[enemyObj.beastIndex];
   if (!beast) return;
 
-  rollAttack({
-    name: e.target.dataset.name,
-    type: e.target.dataset.type,
-    ability,
-    skill,
-    abilityVal: beastNum(beast[ability.toLowerCase()]),
-    skillVal: beastNum(beast[skill]),
-    damage: e.target.dataset.damage
-  });
+  const effects = encounterGetConditionEffects(enemyObj);
+
+  const baseAbility = beastNum(beast[ability.toLowerCase()]);
+  const abilityMod = effects.abilityMods[ability] || 0;
+
+  const baseSkill = beastNum(beast[skill]);
+
+rollAttack({
+  name: e.target.dataset.name,
+  type: e.target.dataset.type,
+  ability,
+  skill,
+  abilityVal: baseAbility + abilityMod,
+  skillVal: baseSkill + effects.attackMod,
+  damage: e.target.dataset.damage,
+  tr: beast.TR,
+  range: e.target.dataset.distance,
+  conditionList: Object.keys(enemyObj.conditions || {})
+});
 });
 
 /* ===== THREAT DETAILS: BUTTON WIRING END ===== */
-
 /* ===== ENEMY ROSTER RENDER START ===== */
 
 function renderEnemyRoster() {
@@ -1426,7 +1793,9 @@ function renderEnemyRoster() {
         <td style="text-align:center; padding:6px 0;">${b.hp || ""}</td>
         <td style="text-align:center; padding:6px 0;">${b.baseAC || ""}</td>
         <td style="text-align:center; padding:6px 0;">${b.TR || ""}</td>
-        <td style="padding:6px 0;"></td>
+<td style="text-align:center; padding:6px 0;">
+  ${e.initiative ?? ""}
+</td>
       </tr>
       <tr>
         <td colspan="9" style="height:6px;"></td>
@@ -1459,6 +1828,11 @@ function renderEnemyRoster() {
       refreshEncounter();
     });
   });
+
+  document
+    .getElementById("rollInitiativeBtn")
+    ?.addEventListener("click", rollEncounterInitiative);
+
 }
 
 /* ===== ENEMY ROSTER RENDER END ===== */
@@ -1469,7 +1843,15 @@ function addEnemy(beastIndex) {
   if (!Number.isInteger(beastIndex)) return;
 
   snapshotEncounter();
-  encounterState.enemies.push({ beastIndex });
+encounterState.enemies.push({
+  beastIndex,
+  initiative: null,
+
+  /* ===== CONDITIONS ENGINE STATE START ===== */
+  conditions: {},
+  poison: null
+  /* ===== CONDITIONS ENGINE STATE END ===== */
+});
   refreshEncounter();
 }
 
@@ -1490,6 +1872,43 @@ function removeEnemy(index) {
 /* ===== ENEMY TR EDIT CONTROLLER START ===== */
 
 /* ===== ENEMY TR EDIT CONTROLLER END ===== */
+
+/* ===== ENCOUNTER INITIATIVE START ===== */
+
+function rollEncounterInitiative() {
+
+  let output = `
+<div>
+  <strong><em>Initiative Rolls</em></strong>
+  <hr>
+`;
+
+  encounterState.enemies.forEach(enemy => {
+
+    const b = beastsData[enemy.beastIndex];
+    if (!b) return;
+
+    const per = beastNum(b.per);
+    const d10 = rollD10();
+    const total = per + d10;
+
+    enemy.initiative = total;
+
+    output += `
+      <div style="margin-bottom:6px;">
+        <strong>${b.name}</strong><br>
+        (PER ${per}) + 1d10 (${d10}) = ${total}
+      </div>
+    `;
+  });
+
+  output += `</div>`;
+
+  pushRollResult(output);
+  refreshEncounter();
+}
+
+/* ===== ENCOUNTER INITIATIVE END ===== */
 
 /* ===== ENCOUNTER SNAPSHOT SYSTEM START ===== */
 
@@ -1630,17 +2049,38 @@ function parseDamage(str) {
 function formatDamage(dmg, crit) {
   if (!dmg) return "";
 
-  const base = crit ? dmg.total * 2 : dmg.total;
+  const original = dmg.total;
 
-  let line = `Damage (${dmg.formula}): ${base}`;
+  if (!crit) {
+    let line = `Damage (${dmg.formula}): ${original}`;
+    if (dmg.element) {
+      line += ` ${dmg.element}`;
+    }
+
+    return `
+<div>${line}</div>
+`;
+  }
+
+  const doubled = original * 2;
+
+  let line = `Damage (${dmg.formula}): ${original} <span style="color:#00B050; font-weight:bold;">x2 = ${doubled}</span>`;
   if (dmg.element) {
     line += ` ${dmg.element}`;
   }
 
   return `
-<div>Range: —</div>
 <div>${line}</div>
 `;
+}
+
+function formatSkillLabel(skill) {
+  if (skill === "skillGun") return "Guns";
+  if (skill === "skillRanged") return "Ranged";
+  if (skill === "skillThrown") return "Thrown";
+  if (skill === "skillMelee") return "Melee";
+  if (skill === "skillHand2Hand") return "Hand 2 Hand";
+  return skill;
 }
 
 function rollAttack({
@@ -1650,14 +2090,33 @@ function rollAttack({
   skill,
   abilityVal,
   skillVal,
-  damage
+  damage,
+  tr,
+  range,
+  conditionList
 }) {
   const d10 = rollD10();
   const base = abilityVal + skillVal;
-  const total = base + d10;
+  /* ===== ENCOUNTER CONDITION ATTACK MOD START ===== */
+let total = base + d10;
+
+if (typeof encounterState !== "undefined" && encounterState?.activeEnemyIndex != null) {
+  const enemy = encounterState.enemies[encounterState.activeEnemyIndex];
+  if (enemy) {
+    const effects = encounterGetConditionEffects(enemy);
+    total += effects.attackMod;
+  }
+}
+/* ===== ENCOUNTER CONDITION ATTACK MOD END ===== */
 
   const body = mapBodyPart();
-  const dmg = d10 === 1 ? null : parseDamage(damage);
+  let resolvedDamage = damage;
+
+if (resolvedDamage && resolvedDamage.includes("TR")) {
+  resolvedDamage = resolvedDamage.replace(/TR/g, String(tr ?? 0));
+}
+
+const dmg = d10 === 1 ? null : parseDamage(resolvedDamage);
 
   let state = "normal";
   let critHeader = "";
@@ -1672,15 +2131,109 @@ function rollAttack({
     critHeader = `<div style="color:#cc0000;font-weight:bold;">Critical Failure! Attack Misses and Causes Complication</div>`;
   }
 
+const skillReadable =
+  skill === "skillMel" ? "Melee" :
+  skill === "skillHtH" ? "Hand 2 Hand" :
+  skill === "skillRan" ? "Ranged" :
+  skill === "skillGun" ? "Guns" :
+  skill === "skillThr" ? "Thrown" :
+  skill;
+
+/* ===== CONDITION DISPLAY START ===== */
+let conditionLine = "";
+
+if (Array.isArray(conditionList) && conditionList.length > 0) {
+
+  const colorMap = {
+    "Bleeding": "#ca6f90",
+    "Gushing": "#d43243",
+
+    "Shaken": "#d3ce43",
+    "Frightened": "#d8772c",
+    "Horrified": "#000000",
+
+    "Fuzzy": "#c3c3c3",
+    "Blinded": "#4c4c4c",
+
+    "Poisoned": "#a5c28a",
+    "Prone": "#3e8c78",
+    "Hidden": "#ffffff",
+    "Winded": "#89aec0",
+    "Slowed (Enc.)": "#89c0ae"
+  };
+
+  const styled = conditionList.map(type => {
+
+    let background = colorMap[type] || "#bfbfbf";
+
+    if (type === "Gushing") {
+      background = `linear-gradient(to right, #ca6f90, #d43243)`;
+    }
+
+    if (type === "Frightened") {
+      background = `linear-gradient(to right, #d3ce43, #d8772c)`;
+    }
+
+    if (type === "Horrified") {
+      background = `linear-gradient(to right, #d3ce43, #d8772c, #000000)`;
+    }
+
+    if (type === "Blinded") {
+      background = `linear-gradient(to right, #c3c3c3, #4c4c4c)`;
+    }
+
+    return `
+      <span style="
+        background:${background};
+        color:${type === "Hidden" ? "#000000" : "#ffffff"};
+        padding:2px 6px;
+        border-radius:4px;
+        font-weight:bold;
+        margin-right:4px;
+        display:inline-block;
+      ">
+        ${type}
+      </span>
+    `;
+  }).join("");
+
+  conditionLine = `<div style="margin-top:4px;">${styled}</div>`;
+}
+/* ===== CONDITION DISPLAY END ===== */
+
   const html = `
 <div>
   ${critHeader}
   <div><strong><em>${name} Attack, ${type}</em></strong></div>
-  <div>(${ability} + ${skill}) = (${abilityVal} + ${skillVal}) = ${base}</div>
+  <div>(${ability} + ${skillReadable}) = (${abilityVal} + ${skillVal}) = ${base}</div>
   <div>1d10 Roll = ${d10}</div>
   <div>Attack Roll = ${total}</div>
-  <div>Body Part Hit: ${body}</div>
-  ${d10 === 1 ? "" : formatDamage(dmg, d10 === 10)}
+  ${conditionLine}
+<div>Body Part Hit: ${body}</div>
+${(type === "Ranged" || type === "Firearms" || type === "Thrown") && range ? (() => {
+  let resolved = range;
+
+  if (range.includes("STR")) {
+    const str = abilityVal; // STR already passed in for melee/thrown
+    const multMatch = range.match(/STR\s*x\s*(\d+)/i);
+    const maxMatch = range.match(/max\s*(\d+)/i);
+
+    if (multMatch) {
+      const mult = Number(multMatch[1]);
+      let calc = str * mult;
+
+      if (maxMatch) {
+        const max = Number(maxMatch[1]);
+        calc = Math.min(calc, max);
+      }
+
+      resolved = `${calc}ft (${range})`;
+    }
+  }
+
+  return `<div>Range: ${resolved}</div>`;
+})() : ""}
+${d10 === 1 ? "" : formatDamage(dmg, d10 === 10)}
 </div>
 `;
 
@@ -1688,6 +2241,132 @@ function rollAttack({
 }
 
 /* ===== ROLL PANEL ENGINE END ===== */
+
+/* ===== ENCOUNTER CONDITIONS MODAL START ===== */
+
+let encounterModalTargetIndex = null;
+
+function openEncounterConditionsModal(index) {
+  encounterModalTargetIndex = index;
+  renderEncounterConditionsModal();
+  document.getElementById("encounterConditionsModal").style.display = "flex";
+}
+
+function closeEncounterConditionsModal() {
+  document.getElementById("encounterConditionsModal").style.display = "none";
+  encounterModalTargetIndex = null;
+}
+
+function renderEncounterConditionsModal() {
+  const enemy = encounterState.enemies[encounterModalTargetIndex];
+  if (!enemy) return;
+
+  const active = Object.keys(enemy.conditions || {});
+
+const activeHTML = active.length === 0
+  ? `<div style="color:#888;">No active conditions</div>`
+  : active.map(type => {
+
+      const conditionRow = conditionsData.find(c =>
+        String(c.name || "").trim() === type
+      );
+
+      const description = conditionRow?.description || "";
+
+      const canAdvance =
+        type === "Bleeding" ||
+        type === "Shaken" ||
+        type === "Frightened" ||
+        type === "Fuzzy";
+
+      const canReverse =
+        type === "Gushing" ||
+        type === "Frightened" ||
+        type === "Horrified" ||
+        type === "Blinded";
+
+      return `
+        <div style="margin-bottom:10px;">
+          <div style="font-weight:bold;">${type}</div>
+          <div style="font-size:14px; color:#444; margin-bottom:6px;">
+            ${description}
+          </div>
+
+          <div style="display:flex; gap:6px;">
+
+            ${canAdvance ? `
+              <button
+                onclick="
+                  encounterAdvanceCondition(encounterState.enemies[${encounterModalTargetIndex}], '${type}');
+                  renderEncounterConditionsModal();
+                  refreshEncounter();
+                "
+                style="
+                  background:#4b2a8f;
+                  color:#d8d2e7;
+                  border:2px solid #8b7dbe;
+                  border-radius:6px;
+                  font-weight:bold;
+                  padding:4px 8px;
+                "
+              >Advance</button>
+            ` : ""}
+
+            <button
+              onclick="
+                encounterResolveCondition(encounterState.enemies[${encounterModalTargetIndex}], '${type}');
+                renderEncounterConditionsModal();
+                refreshEncounter();
+              "
+              style="
+                background:#4b2a8f;
+                color:#d8d2e7;
+                border:2px solid #8b7dbe;
+                border-radius:6px;
+                font-weight:bold;
+                padding:4px 8px;
+              "
+            >Resolve</button>
+
+          </div>
+        </div>
+      `;
+    }).join("");
+
+const addButtons = [
+  "Bleeding",
+  "Hidden",
+  "Poisoned",
+  "Prone",
+  "Shaken",
+  "Fuzzy",
+  "Winded",
+  "Slowed (Enc.)"
+]
+
+.map(type => `
+      <button
+        onclick="
+          encounterApplyCondition(encounterState.enemies[${encounterModalTargetIndex}], '${type}');
+          renderEncounterConditionsModal();
+          refreshEncounter();
+        "
+        style="margin:4px;"
+      >${type}</button>
+  `).join("");
+
+  document.getElementById("encounterConditionsModalContent").innerHTML = `
+    <h3>Active Conditions</h3>
+    ${activeHTML}
+    <hr/>
+    <h3>Add Condition</h3>
+    ${addButtons}
+  `;
+}
+
+/* ===== ENCOUNTER CONDITIONS MODAL END ===== */
+
+
 
 /* ===== ENCOUNTER STORAGE ADAPTER START ===== */
 
@@ -1763,14 +2442,17 @@ function validateEncounterState() {
     encounterState.enemies = [];
   }
 
-  encounterState.enemies = encounterState.enemies
-    .map(e => ({
-      beastIndex: Number.isInteger(e.beastIndex) ? e.beastIndex : -1
-    }))
-    .filter(e =>
-      e.beastIndex >= 0 &&
-      beastsData[e.beastIndex]
-    );
+encounterState.enemies = encounterState.enemies
+  .map(e => ({
+    beastIndex: Number.isInteger(e.beastIndex) ? e.beastIndex : -1,
+    currentHP: e.currentHP ?? null,
+    conditions: e.conditions ?? {},
+    poison: e.poison ?? null
+  }))
+  .filter(e =>
+    e.beastIndex >= 0 &&
+    beastsData[e.beastIndex]
+  );
 
   if (!Number.isInteger(encounterState.round) || encounterState.round < 1) {
     encounterState.round = 1;
@@ -1788,8 +2470,19 @@ function validateEncounterState() {
 /* ===== ROUND CONTROLLER START ===== */
 
 function advanceRound() {
+
   incrementRound();
+
+  /* ===== ENCOUNTER CONDITION ROUND PROCESS START ===== */
+  if (Array.isArray(encounterState.enemies)) {
+    encounterState.enemies.forEach(enemy => {
+      encounterProcessRoundConditions(enemy);
+    });
+  }
+  /* ===== ENCOUNTER CONDITION ROUND PROCESS END ===== */
+
   renderRoundDisplay();
+  refreshEncounter();
 }
 
 function resetRoundUI() {
@@ -1821,23 +2514,68 @@ function renderRoundDisplay() {
     font-size:22px;
   `;
 
+  /* ===== IDLE STATE ===== */
+  if (!encounterState.inCombat) {
+
+ const lastLine = encounterState.lastEncounterDuration != null
+  ? `
+    <div style="margin-top:12px; font-size:16px; text-align:center;">
+      <div><strong>Last Encounter:</strong></div>
+      <div>Encounter TR ${encounterState.lastEncounterTR ?? "—"}</div>
+      <div>Rounds ${encounterState.lastEncounterRounds ?? "—"} &nbsp; Length ${formatTime(encounterState.lastEncounterDuration)}</div>
+    </div>
+  `
+  : "";
+
+    content.innerHTML = `
+      <div style="
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        height:100%;
+      ">
+        <button id="startCombatBtn" style="${btnStyle}; font-size:24px; padding:16px 32px;">
+          START COMBAT
+        </button>
+        ${lastLine}
+      </div>
+    `;
+
+    document.getElementById("startCombatBtn")
+      ?.addEventListener("click", () => {
+
+        encounterState.round = 1;
+        encounterState.timerSeconds = 0;
+        encounterState.inCombat = true;
+
+        /* start existing timer engine */
+        startTimer();   // ← this must already exist in your file
+
+        renderRoundDisplay();
+      });
+
+    return;
+  }
+
+  /* ===== ACTIVE COMBAT STATE ===== */
+
   content.innerHTML = `
     <div>Round ${encounterState.round}</div>
 
     <div style="display:flex; gap:10px; margin:8px 0;">
-      <button id="roundAdvanceBtn" style="${btnStyle}">+</button>
-      <button id="roundResetBtn" style="${btnStyle}">Reset</button>
+      <button id="roundAdvanceBtn" style="${btnStyle}">Next Round</button>
     </div>
 
     <hr>
 
+    <div>Encounter Time</div>
     <div id="timerDisplay">${formatTime(encounterState.timerSeconds)}</div>
 
-    <div style="display:flex; gap:10px; margin-top:8px;">
-      <button id="timerStartBtn" style="${btnStyle}">
-        ${encounterState.timerRunning ? "Pause" : "Start"}
+    <div style="margin-top:14px;">
+      <button id="endCombatBtn" style="${btnStyle}">
+        End Combat
       </button>
-      <button id="timerResetBtn" style="${btnStyle}">Reset</button>
     </div>
   `;
 
@@ -1846,8 +2584,22 @@ function renderRoundDisplay() {
     ?.addEventListener("click", advanceRound);
 
   document
-    .getElementById("roundResetBtn")
-    ?.addEventListener("click", resetRoundUI);
+    .getElementById("endCombatBtn")
+    ?.addEventListener("click", () => {
+
+      encounterState.lastEncounterDuration = encounterState.timerSeconds;
+encounterState.lastEncounterRounds = encounterState.round;
+encounterState.lastEncounterTR = computeEncounterTR();
+
+      encounterState.timerRunning = false;
+      pauseTimer();   // ← your existing pause function
+
+      encounterState.timerSeconds = 0;
+      encounterState.round = 1;
+      encounterState.inCombat = false;
+
+      renderRoundDisplay();
+    });
 }
 
 /* ===== ROUND DISPLAY RENDER END ===== */
@@ -1954,6 +2706,30 @@ wireControls;
 
 /* ===== CONTROL ACTION WIRING END ===== */
 
+/* ===== ENCOUNTER TR REUSE FUNCTION START ===== */
+function computeEncounterTR() {
+  if (!Array.isArray(encounterState.enemies) || encounterState.enemies.length === 0)
+    return 0;
+
+  const enemies = encounterState.enemies
+    .map(e => beastsData[e.beastIndex])
+    .filter(Boolean);
+
+  if (!enemies.length) return 0;
+
+  const trs = enemies.map(b => Number(b.TR) || 0);
+
+  const primaryTR = Math.max(...trs);
+  const primaryIndex = trs.indexOf(primaryTR);
+
+  const secondaryTR = trs
+    .filter((tr, i) => i !== primaryIndex)
+    .reduce((a, b) => a + b, 0);
+
+  return primaryTR + Math.ceil(secondaryTR / (primaryTR + 1));
+}
+/* ===== ENCOUNTER TR REUSE FUNCTION END ===== */
+
 /* ===== TOP BAR DISPLAY UPDATE START ===== */
 
 /* ===== DASHBOARD ELEMENT LOOKUP START ===== */
@@ -2016,7 +2792,6 @@ function updateTopBarDisplay() {
       : null;
 /* ===== ENCOUNTER MATH COMPUTE END ===== */
 
-
 /* ===== ENCOUNTER MATH RENDER START ===== */
   mathBar.textContent = `Encounter TR: ${encounterTR}`;
 
@@ -2026,7 +2801,6 @@ function updateTopBarDisplay() {
   mathSecondary.textContent =
     `Secondary TR: ${secondaryTR}`;
 /* ===== ENCOUNTER MATH RENDER END ===== */
-
 
 /* ===== XP RENDER START ===== */
   xpBar.textContent =
@@ -2070,6 +2844,42 @@ document.addEventListener("click", e => {
 /* ===== BEASTS PANEL TOGGLE END ===== */
 
   </script>
+<!-- ===== ENCOUNTER CONDITIONS MODAL START ===== -->
+<div id="encounterConditionsModal" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+">
+  <div style="
+    background:#ffffff;
+    padding:20px;
+    width:500px;
+    max-height:80vh;
+    overflow:auto;
+    border-radius:10px;
+  ">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2>Conditions</h2>
+      <button onclick="closeEncounterConditionsModal()">Close</button>
+    </div>
+    <div id="encounterConditionsModalContent"></div>
+  </div>
+</div>
+<!-- ===== ENCOUNTER CONDITIONS MODAL END ===== -->
+
+<div style="
+  text-align:center;
+  color:#d8d2e7;
+  font-size:20px;
+  margin-top:40px;
+  padding-bottom:20px;
+">
+  <strong><em>After the Fall</strong>, its contents, and its applications are <strong>© 2026 D. Ryan Mowry,</strong> All Rights Reserved.</em>
+</div>
 
 </body>
 </html>

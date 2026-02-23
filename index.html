@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to the Deadlands</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Roboto Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #bdd6ac);
+    color: #48752c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  .logo {
+    max-width: 500px;
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    margin-bottom: 40px;
+    font-size: 2.4em;
+    font-weight: 700;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .main-btn {
+    padding: 16px 44px;
+    font-size: 1.2em;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+/* PLAYER BUTTON */
+.player-btn {
+  background: #48752c;        /* Dark Green */
+  color: #bdd6ac;             /* Light Green text */
+  border: 2px solid #bdd6ac;  /* Light Green outline */
+}
+
+.player-btn:hover {
+  background: #bdd6ac;
+  color: #48752c;
+}
+
+/* GM BUTTON */
+.gm-btn {
+  background: #634fa2;        /* Dark Purple */
+  color: #d8d2e7;             /* Light Purple text */
+  border: 2px solid #d8d2e7;  /* Light Purple outline */
+}
+
+.gm-btn:hover {
+  background: #d8d2e7;
+  color: #634fa2;
+}
+</style>
+</head>
+
+<body>
+
+  <div class="container">
+    <img src="logo.png" alt="After the Fall Logo" class="logo">
+
+    <h1>Welcome to the Second Age.</h1>
+
+    <div class="button-group">
+<button class="main-btn player-btn" onclick="location.href='player.html'">
+  Player
+</button>
+
+<button class="main-btn gm-btn" onclick="location.href='gm.html'">
+  GM
+</button>
+    </div>
+  </div>
+
+</body>
+</html>

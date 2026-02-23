@@ -401,6 +401,21 @@ button {
 </div>
 <!-- ===== WIZARD PROGRESS BAR END ===== -->
 
+<!-- ===== WIZARD GLOBAL NAV ROW START ===== -->
+<div style="width:100%; margin:0 0 16px 0;">
+  <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:flex-end; gap:12px;">
+
+    <button onclick="location.href='player.html'">
+      Player Resources
+    </button>
+
+    <button onclick="location.href='character-sheet.html'">
+      Character Sheet
+    </button>
+
+  </div>
+</div>
+<!-- ===== WIZARD GLOBAL NAV ROW END ===== -->
 
   <!-- STEP 0 FULL SCREEN -->
   <div id="step0Layout">
@@ -633,7 +648,7 @@ button {
         <hr style="margin:16px 0;">
 
         <h2>Deity</h2>
-        <div id="deitySelect" style="font-weight:bold; margin-bottom:8px;"></div>
+        <select id="deitySelect" style="margin-bottom:8px; width:100%;"></select>
         <div id="deityInfo" class="summary-block" style="display:none;">
           <div class="summary-title" id="deityName"></div>
           <div><strong>Alignment(s):</strong> <span id="deityAlignments"></span></div>
@@ -1141,9 +1156,31 @@ function renderBookOfMagicTable() {
 
 const list = (spellbook || [])
   .filter(s => {
+
+    const type = String(s.class || "").trim().toUpperCase();
+    const lvl = Number(s.level);
+    const cls = (classes.find(c => c.id === character.classId)?.id || "").toUpperCase();
+
+    // Priest filtering stays exactly as-is
     if (isPriest() && !isSpellAllowedForPriest(s)) return false;
+
+    // Non-spellcasters see everything
     if (!isWizardWarlock()) return true;
-    return isCantripOrLevel1(s);
+
+    // Cantrips always allowed
+    if (type === "CAN") return true;
+
+    // Wizard: only level 1 wizard spells
+    if (cls === "WIZARD") {
+      return type === "WIZ" && lvl === 1;
+    }
+
+    // Warlock: only level 1 warlock spells
+    if (cls === "WARLOCK") {
+      return type === "WAR" && lvl === 1;
+    }
+
+    return false;
   })
   
 .sort((a, b) => {
@@ -2040,6 +2077,40 @@ row.appendChild(text);
 
 
 /* ===== STEP 7 EQUIPMENT STATE GUARD START ===== */
+
+/* ===== BUILD STARTING EQUIPMENT START ===== */
+function buildStartingEquipment() {
+  const cls = classes.find(c => c.id === character.classId);
+  if (!cls) return;
+
+  const addFirstAidToBranches = raw => {
+    if (!raw) return "";
+
+    return raw
+      .split("||")
+      .map(branch => {
+        const items = branch.split("|").map(s => s.trim()).filter(Boolean);
+        if (!items.includes("first_aid_kit")) {
+          items.push("first_aid_kit");
+        }
+        return items.join("|");
+      })
+      .join("||");
+  };
+
+  character.equipment = character.equipment || {};
+  character.equipment.weapons = null;
+  character.equipment.armor = null;
+  character.equipment.gear = null;
+
+character._startingEquipment = {
+  weapons: cls?.startingWeapons || "",
+  armor: cls?.startingArmor || "",
+  gear: buildStartingEquipmentPreview(cls)
+};
+}
+/* ===== BUILD STARTING EQUIPMENT END ===== */
+
 function renderStartingEquipment() {
   // Rebuild starting equipment once if missing (refresh / back)
   if (!character._startingEquipment) {
@@ -2194,6 +2265,20 @@ const kits = chosen.filter(e =>
     const deityDescription = document.getElementById("deityDescription");
     const deityPrimordialWrap = document.getElementById("deityPrimordialWrap");
     const deityPrimordialNote = document.getElementById("deityPrimordialNote");
+deitySelect?.addEventListener("change", () => {
+  character.deityId = deitySelect.value || "";
+  renderDeityInfo();
+});
+
+/* ===== DEITY SELECT CHANGE HANDLER START ===== */
+if (deitySelect) {
+  deitySelect.onchange = function () {
+    character.deityId = this.value || null;
+    renderDeityInfo();
+    update();
+  };
+}
+/* ===== DEITY SELECT CHANGE HANDLER END ===== */
 
 /* ===== PRIEST ALIGNMENT FILTER START ===== */
 function filterPriestAlignment() {
@@ -2238,28 +2323,25 @@ function renderDeityInfo() {
     return;
   }
 
-  deitySelect.textContent =
-    (deities.find(d => d.id === id)?.name) || id;
+  const d = deities.find(x => x.id === id);
+  if (!d) return;
 
-      const d = deities.find(x => x.id === id);
-      if (!d) return;
+  character.deityId = id;
+  deityInfo.style.display = "block";
+  filterPriestAlignment();
 
-      character.deityId = id;
-      deityInfo.style.display = "block";
-filterPriestAlignment();
-
-      deityName.textContent = d.name;
-      deityAlignments.textContent = d.alignment;
-      deityTheme.textContent = d.theme;
-      deityDescription.textContent = d.description || "";
-
-      if (String(d.primordial).toLowerCase() === "true") {
-        deityPrimordialWrap.style.display = "block";
-        deityPrimordialNote.textContent = d.primordialNote || "";
-      } else {
-        deityPrimordialWrap.style.display = "none";
-      }
+  deityInfo.innerHTML = `
+    <div><strong>${d.name || d.id}</strong></div>
+    <div><strong>Alignment(s):</strong> ${d.alignment || "—"}</div>
+    ${d.theme ? `<div><strong>Theme:</strong> ${d.theme}</div>` : ""}
+    ${d.description ? `<div style="margin-top:4px;">${d.description}</div>` : ""}
+    ${
+      String(d.primordial).toLowerCase() === "true"
+        ? `<div style="margin-top:6px;"><em>${d.primordialNote || ""}</em></div>`
+        : ""
     }
+  `;
+}
 
     function renderAlignment() {
       const order = document.getElementById("alignOrder").value;
@@ -2426,6 +2508,75 @@ function confirmCharacter() {
 
   const existing = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
   const savedCharacter = structuredClone(character);
+/* ===== STARTING EQUIPMENT HYDRATION START ===== */
+
+if (Array.isArray(savedCharacter.equipment?.weapons)) {
+  savedCharacter.equipment.weapons =
+    savedCharacter.equipment.weapons
+      .map(name =>
+        equipment.find(e =>
+          e.eqpName.replace(/\s+/g,"_").toLowerCase() === name.toLowerCase()
+        )?.id
+      )
+      .filter(Boolean);
+}
+
+if (Array.isArray(savedCharacter.equipment?.armor)) {
+  const armorObj = {};
+
+  savedCharacter.equipment.armor.forEach(name => {
+    const item = equipment.find(e =>
+      e.eqpName.replace(/\s+/g,"_").toLowerCase() === name.toLowerCase()
+    );
+
+    if (!item || !item.Area) return;
+
+    const area = item.Area.toLowerCase();
+
+    if (area === "arms") {
+      armorObj["right arm"] = item.id;
+      armorObj["left arm"] = item.id;
+    }
+    else if (area === "legs") {
+      armorObj["right leg"] = item.id;
+      armorObj["left leg"] = item.id;
+    }
+    else {
+      armorObj[area] = item.id;
+    }
+  });
+
+  savedCharacter.equipment.armor = armorObj;
+}
+
+
+
+if (Array.isArray(savedCharacter.equipment?.gear)) {
+  savedCharacter.inventory = savedCharacter.inventory || {
+    backpack: new Array(16).fill(null),
+    clothing: new Array(3).fill(null)
+  };
+
+  savedCharacter.equipment.gear.forEach(name => {
+    const item = equipment.find(e =>
+      e.eqpName.replace(/\s+/g,"_").toLowerCase() === name.toLowerCase()
+    );
+    if (!item) return;
+
+    for (let i = 0; i < savedCharacter.inventory.backpack.length; i++) {
+      if (savedCharacter.inventory.backpack[i] === null) {
+        savedCharacter.inventory.backpack[i] = {
+          itemId: item.id,
+          size: 1,
+          anchor: true
+        };
+        break;
+      }
+    }
+  });
+}
+
+/* ===== STARTING EQUIPMENT HYDRATION END ===== */
 
   savedCharacter.classes = [{
     classId: character.classId,
@@ -2559,6 +2710,9 @@ function renderIdentityBlock(show) {
     if (character.alignment.order && character.alignment.moral)
       html += `<strong>Alignment</strong> ${character.alignment.order} ${character.alignment.moral} &nbsp;&nbsp; `;
     html += `<strong>Deity</strong> ${deity ? deity.name : "None"}<br>`;
+if (show(8) && deity?.description) {
+  html += `<div style="margin:6px 0 0 0; font-style:italic;">${deity.description}</div>`;
+}
 
     if (character.appearance.age) html += `<strong>Age</strong> ${character.appearance.age} &nbsp;&nbsp; `;
     if (character.appearance.height) html += `<strong>Height</strong> ${character.appearance.height} &nbsp;&nbsp; `;
@@ -2712,6 +2866,23 @@ html += renderSkillsBlock(show);
 
     mutationSelect.onchange = () => { character.mutation = mutationSelect.value; update(); };
 
+// ===== STARTING PREVIEW START
+function buildStartingEquipmentPreview(cls) {
+  if (!cls?.startingGear) return "";
+
+  return cls.startingGear
+    .split("||")
+    .map(branch => {
+      const items = branch.split("|").map(s => s.trim()).filter(Boolean);
+      if (!items.includes("first_aid_kit")) {
+        items.push("first_aid_kit");
+      }
+      return items.join("|");
+    })
+    .join("||");
+}
+// ===== Starting Preview End
+
     // ===== Step 2: Class =====
     classSelect.onchange = () => {
       character.classId = classSelect.value;
@@ -2745,7 +2916,7 @@ html += renderSkillsBlock(show);
               </div>
               <div>
                 <strong>Starting Gear Choices:</strong><br>
-                ${formatStartingOptions(cls.startingGear)}
+${formatStartingOptions(buildStartingEquipmentPreview(cls))}
               </div>
             </div>
           `
@@ -2756,11 +2927,7 @@ html += renderSkillsBlock(show);
       character.equipment.armor = null;
       character.equipment.gear = null;
 
-      character._startingEquipment = {
-        weapons: cls?.startingWeapons || "",
-        armor: cls?.startingArmor || "",
-        gear: cls?.startingGear || ""
-      };
+buildStartingEquipment();
 
       update();
     };

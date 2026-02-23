@@ -139,6 +139,15 @@ html, body {
 <button class="core-btn" onclick="location.href='character-sheet.html'">
   Character Sheet
 </button>
+
+<!-- ===== CHARACTER MANAGER BUTTON START ===== -->
+<button class="core-btn" onclick="toggleCharacterManager()">
+  View / Delete Characters
+</button>
+
+<div id="characterManagerPanel" style="display:none; margin-top:12px;"></div>
+<!-- ===== CHARACTER MANAGER BUTTON END ===== -->
+
         </div>
       </div>
 
@@ -165,6 +174,123 @@ html, body {
 
     </div>
   </div>
+<!-- ===== CHARACTER MANAGER SCRIPT START ===== -->
+<script>
+function toggleCharacterManager() {
+  const panel = document.getElementById("characterManagerPanel");
+  if (!panel) return;
 
+  if (panel.style.display === "none") {
+    renderCharacterManager();
+    panel.style.display = "block";
+  } else {
+    panel.style.display = "none";
+  }
+}
+
+function renderCharacterManager() {
+  const panel = document.getElementById("characterManagerPanel");
+  if (!panel) return;
+
+  const characters = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+
+  if (!characters.length) {
+    panel.innerHTML = "<em>No saved characters found.</em>";
+    return;
+  }
+
+/* ===== CHARACTER MANAGER RENDER FORMAT UPDATE START ===== */
+panel.innerHTML = characters.map((c, index) => {
+
+  const name =
+    (c && c.appearance && c.appearance.name)
+      ? c.appearance.name
+      : "Unnamed Character";
+
+  let classLine = "";
+
+  if (Array.isArray(c.classes) && c.classes.length) {
+
+    classLine = c.classes.map(cls => {
+      const level = Number(cls.level) || 1;
+      const className = cls.classId
+        ? cls.classId.replace(/_/g, " ").replace(/\b\w/g, x => x.toUpperCase())
+        : "Class";
+      return `Level ${level} ${className}`;
+    }).join(", ");
+
+  } else if (c.classId) {
+
+    const level = Number(c.level) || 1;
+    const className =
+      c.classId.replace(/_/g, " ").replace(/\b\w/g, x => x.toUpperCase());
+
+    classLine = `Level ${level} ${className}`;
+  }
+
+  const savedAt = c.savedAt ? `Last Saved: ${c.savedAt}` : "";
+
+  return `
+    <div style="
+        padding:12px;
+        margin-bottom:8px;
+        border-radius:10px;
+        background: linear-gradient(to right, #bdd6ac, #9dc384);
+    ">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>${name}</strong>, ${classLine}
+          <div style="font-size:0.85em; margin-top:4px;">${savedAt}</div>
+        </div>
+        <button
+                style="
+                  width:auto;
+                  padding:8px 14px;
+                  font-size:0.9em;
+                  font-weight:700;
+                  border-radius:8px;
+                  border:2px solid #bdd6ac;
+                  background:#48752c;
+                  color:#bdd6ac;
+                  cursor:pointer;
+                "
+                onclick="deleteCharacter(${index})">
+          Delete
+        </button>
+      </div>
+    </div>
+  `;
+}).join("");
+/* ===== CHARACTER MANAGER RENDER FORMAT UPDATE END ===== */
+}
+
+function deleteCharacter(index) {
+  const characters = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+  if (!characters[index]) return;
+
+  /* ===== DELETE NAME FIX START ===== */
+const name =
+  (characters[index] &&
+   characters[index].appearance &&
+   characters[index].appearance.name)
+    ? characters[index].appearance.name
+    : "Unnamed Character";
+/* ===== DELETE NAME FIX END ===== */
+
+  const confirmed = confirm(
+    `Are you sure you want to delete ${name}? This is the really real world, there ain't no coming back.`
+  );
+
+  if (!confirmed) return;
+
+  characters.splice(index, 1);
+  localStorage.setItem("atfCharacters", JSON.stringify(characters));
+  renderCharacterManager();
+}
+</script>
+<!-- ===== CHARACTER MANAGER SCRIPT END ===== -->
+
+</body>
+</html>
 </body>
 </html>

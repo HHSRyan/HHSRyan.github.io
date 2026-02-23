@@ -11,7 +11,7 @@
   <style>
 body {
       font-family: Roboto, sans-serif;
-      Font-size: 1.5em:
+      font-size: 1.2em;
       margin: 20px;
       background: linear-gradient(#634fa2, #000000);
     }
@@ -48,7 +48,6 @@ body {
       .container { grid-template-columns: 1fr; }
     }
 
-    #step0Layout { display: none; }
 
 .panel {
   background: #bdd6ac;
@@ -110,13 +109,22 @@ body {
   align-items: center;
 }
 
-    select, input, textarea {
-      padding: 8px;
-      font-size: 16px;
-      width: 100%;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
+select, textarea {
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
 
 #characterSelect {
   background: #634fa2;
@@ -177,6 +185,12 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   user-select: none;
   border: 2px solid #8b7dbe;
   font-weight: bold;
+
+  font-size: 0.9em;
+  line-height: 1.1;
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 100%;
 }
 /* ===== EDITABLE FIELDS END ===== */
 
@@ -221,15 +235,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   outline: none;
 }
 
-
-
-    .step { display: none; }
-
-    .nav {
-      display: flex;
-      gap: 8px;
-      margin: 6px 0 12px 0;
-    }
+     .nav {
+       display: flex;
+       gap: 8px;
+       margin: 6px 0 12px 0;
+     }
 
 /* ===============================
    SUMMARY PANEL – PAPER SHEET
@@ -523,15 +533,13 @@ body.wizard-progress {
   <!-- TOP BAR (Row 1) -->
   <div class="panel" id="topBarPanel" style="grid-column: 1 / 3;">
 <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
-  <span>Character Info</span>
+  <span id="characterInfoTitle">Character Info</span>
 
   <div style="display:flex; gap:8px; align-items:center;">
     <button id="saveCharBtn">Save</button>
-<button id="downloadCharacterBtn">Download</button>
-
-    <select id="characterSelect" style="width:320px; margin:0; padding:6px 10px; font-size:14px;">
-      <option value="">-- Select Saved Character --</option>
-    </select>
+    <button id="loadCharBtn">Load</button>
+    <button id="downloadCharacterBtn">Download</button>
+<button id="playerResourcesBtn" onclick="window.open('player.html','_blank')">Player Resources</button>
   </div>
 </div>
 
@@ -666,18 +674,36 @@ body.wizard-progress {
       align-items: center;
     ">
       <span>Containers</span>
-      <button id="dropItemBtn"
-        style="
-          background:#48752c;
-          color:#bdd6ac;
-          border:2px solid #bdd6ac;
-          border-radius:6px;
-          padding:6px 12px;
-          font-weight:bold;
-          cursor:pointer;
-        ">
-        Drop
-      </button>
+
+      <div style="display:flex; gap:8px; align-items:center;">
+
+        <button id="equipItemBtn"
+          style="
+            background:#48752c;
+            color:#bdd6ac;
+            border:2px solid #bdd6ac;
+            border-radius:6px;
+            padding:6px 12px;
+            font-weight:bold;
+            cursor:pointer;
+          ">
+          Equip
+        </button>
+
+        <button id="dropItemBtn"
+          style="
+            background:#48752c;
+            color:#bdd6ac;
+            border:2px solid #bdd6ac;
+            border-radius:6px;
+            padding:6px 12px;
+            font-weight:bold;
+            cursor:pointer;
+          ">
+          Drop
+        </button>
+
+      </div>
     </div>
 
     <!-- ===== LEFT: CONTAINERS CONTENT START ===== -->
@@ -724,7 +750,7 @@ body.wizard-progress {
     <!-- CLOTHING (3 SLOTS) -->
     <div style="border:4px solid #48752c; border-radius:10px; overflow:hidden;">
       <div style="background:#48752c; color:#bdd6ac; padding:12px 16px; font-weight:bold; font-style:italic;">
-        Clothing (3 Slots)
+        Clothing (3 Individual Slots)
       </div>
 
       <div style="padding:12px; font-size:1.25em;">
@@ -808,23 +834,25 @@ body.wizard-progress {
     </div>
   </div>
 <!-- CLOTHING (3 SLOTS) END -->
-  <!-- ITEM DETAILS -->
-  <div style="margin-top:12px; background:#48752c; color:#bdd6ac; padding:10px 14px; font-weight:bold; font-style:italic; border-radius:6px 6px 0 0;">
+<!-- ===== ITEM DETAILS PANEL START ===== -->
+<div style="margin-top:16px; border:4px solid #48752c; border-radius:12px; overflow:hidden;">
+
+  <div style="
+    background:#48752c;
+    color:#bdd6ac;
+    padding:12px 16px;
+    font-weight:bold;
+    font-style:italic;
+  ">
     Item Details
   </div>
 
-  <div style="border:2px solid #48752c; border-top:none; padding:10px; font-size:1.1em;">
-    <div style="display:grid; grid-template-columns:1fr 2fr 80px 80px; gap:8px; font-weight:bold; margin-bottom:6px;">
-      <div>Item</div>
-      <div>Description</div>
-      <div>Slots</div>
-      <div>Weight</div>
-    </div>
-
-    <div id="backpackItemsList">
-      <em>No items.</em>
-    </div>
+  <div id="itemDetailsTableContainer" style="padding:12px;">
+    <em>No items.</em>
   </div>
+
+</div>
+<!-- ===== ITEM DETAILS PANEL END ===== -->
 
   <!-- WEIGHT & MOVEMENT (UNCHANGED) -->
   <div style="margin-top:16px; border:4px solid #8b7dbe; background:#d8d2e7; border-radius:10px; overflow:hidden;">
@@ -868,20 +896,25 @@ body.wizard-progress {
   "
 >
 
-<!-- Base AC row (replaces Clothing label) -->
-<div style="font-size:1.0em; font-weight:bold; font-style:italic;">
-  <span style="color:#48752c;">Base AC: </span>
-  <span id="armorBaseACValue" style="color:#000;"></span>
+<!-- Base AC row -->
+<div style="font-weight:bold; color:#48752c;">
+  Base AC:
 </div>
+
+<div id="armorBaseACValue" style="color:#000; justify-self:start;">
+</div>
+
 <div></div>
 <div></div>
-<div></div>
+
 <div id="armor-clothing-bonus">
   <span class="armor-bonus">+1 Against</span>
 </div>
+
 <div id="armor-clothing-weakness">
   <span class="armor-weakness">-1 Against</span>
 </div>
+
 <div></div>
 <div></div>
 
@@ -952,12 +985,94 @@ body.wizard-progress {
   <!-- Right Leg -->
   <div><strong>Right Leg</strong></div>
   <div id="armor-rightleg-name">None</div>
-<div id="armor-rightleg-ac"></div>
+  <div id="armor-rightleg-ac"></div>
   <div id="armor-rightleg-material"></div>
   <div id="armor-rightleg-bonus"></div>
   <div id="armor-rightleg-weakness"></div>
   <div id="armor-rightleg-tac">TAC</div>
   <div id="armor-rightleg-weight">Wt.</div>
+
+  <!-- AC Bonus -->
+  <div style="display:flex; align-items:center;">
+    <strong>AC Bonus</strong>
+  </div>
+
+  <!-- Description column -->
+  <div style="grid-column: span 3; display:flex; align-items:center;">
+    <input type="text"
+           id="armor-ac-label"
+           value="None"
+           style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:6px; font-weight:bold; padding:6px 10px; width:100%;"
+           onchange="if(character){character.armorACLabel=this.value;update();}">
+  </div>
+
+  <!-- AC column -->
+  <div style="display:flex; align-items:center; gap:6px;">
+    <span style="font-weight:bold;">Amount</span>
+    <input type="text"
+           id="armor-ac-added"
+           value="0"
+           inputmode="numeric"
+           style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:6px; width:70px; height:36px; text-align:center;"
+           onchange="if(character){character.armorACAdded=Number(this.value)||0;update();}">
+  </div>
+
+  <div></div>
+  <div></div>
+  <div></div>
+  
+  <!-- Cover -->
+  <div style="display:flex; align-items:center;">
+    <strong>Cover</strong>
+  </div>
+
+  <!-- Partial Cover label -->
+  <div style="text-align:right; display:flex; align-items:center; justify-content:flex-end;">
+    Partial Cover
+  </div>
+
+  <!-- Partial Cover checkbox -->
+  <div style="justify-self:start; align-self:center;">
+    <input type="checkbox"
+           id="cover-partial"
+           style="transform:scale(1.5);"
+           onchange="
+             const full = document.getElementById('cover-full');
+             if(this.checked){
+               if(full) full.checked = false;
+               if(character){ character.cover='partial'; }
+             } else {
+               if(character){ character.cover=null; }
+             }
+             update();
+           ">
+  </div>
+
+  <!-- Full Cover label -->
+  <div style="text-align:right; display:flex; align-items:center; justify-content:flex-end;">
+    Full Cover
+  </div>
+
+  <!-- Full Cover checkbox -->
+  <div style="justify-self:start; align-self:center;">
+    <input type="checkbox"
+           id="cover-full"
+           style="transform:scale(1.5);"
+           onchange="
+             const partial = document.getElementById('cover-partial');
+             if(this.checked){
+               if(partial) partial.checked = false;
+               if(character){ character.cover='full'; }
+             } else {
+               if(character){ character.cover=null; }
+             }
+             update();
+           ">
+  </div>
+
+  <div></div>
+  <div></div>
+  <div></div>
 
 </div>
 <!-- ===== RIGHT: ARMOR CONTENT END ===== -->
@@ -1162,29 +1277,25 @@ body.wizard-progress {
       </div>
 <div id="equipmentBookContent" style="padding:12px; display:none;">
 
-<!-- ===== EQUIPMENT FILTER BUTTONS START ===== -->
-<div style="margin-bottom:12px; display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; width:100%;">
+<select id="generalGearFilter" style="margin-bottom:8px; background:#634fa2; color:#d8d2e7; font-size:120%;">
+  <option value="all">All</option>
 
-<button onclick="toggleEquipmentFilter('alch', this)">Alchemical</button>
-
-<button onclick="toggleEquipmentFilter('ammo', this)">Ammunition</button>
-
-<button onclick="toggleCompositeFilter(['armr','arpk'], this)">Armor</button>
-
-<button onclick="toggleEquipmentFilter('clth', this)">Clothing</button>
-
-<button onclick="toggleEquipmentFilter('cont', this)">Containers</button>
-
-<button onclick="toggleEquipmentFilter('genr', this)">General Gear</button>
-
-<button onclick="toggleEquipmentFilter('kits', this)">Kits</button>
-
-<button onclick="toggleCompositeFilter(['potn','tome'], this)">Potions/Tomes</button>
-
-<button onclick="toggleCompositeFilter(['guns','ha2h','mele','rngd','thrw'], this)">Weapons</button>
-
-</div>
-<!-- ===== EQUIPMENT FILTER BUTTONS END ===== -->
+  <option value="alch">Alchemical Items</option> 
+  <option value="ammo">Ammunition</option> 
+  <option value="armr">Armor</option>
+  <option value="arpk">Armor Packs</option>
+  <option value="clth">Clothing</option>
+  <option value="cont">Containers</option>
+  <option value="kits">Kits</option>
+  <option value="guns">Firearms</option>
+  <option value="genr">General Gear</option>
+  <option value="ha2h">Hand to Hand</option>
+  <option value="mele">Melee</option>
+  <option value="potn">Potions</option>
+  <option value="rngd">Ranged</option>
+  <option value="thrw">Thrown</option>
+  <option value="tome">Tomes</option>
+</select>
 
   <table style="width:100%; border-collapse:collapse; font-size:1.2em;">
 
@@ -1274,6 +1385,10 @@ globalThis.activeEquipmentFilters = activeEquipmentFilters;
 
     let races = [];
     let classes = [];
+
+window.races = races;
+window.classes = classes;
+
 /* ===== ROUND STATE START ===== */
 let roundState = {
   active: false,
@@ -1287,10 +1402,6 @@ let spellbook = [];
     let deities = [];
     let equipment = [];
 let conditionsData = [];
-
-/* ===== EQUIPMENT FILTER STATE START ===== */
-let activeEquipmentFilters = new Set();
-/* ===== EQUIPMENT FILTER STATE END ===== */
 
 /* ===== LANGUAGES TABLE START ===== */
 const LANGUAGES = [
@@ -1310,7 +1421,180 @@ const LANGUAGES = [
 
 let currentStep = 999;
 let character = null;
+/* ===== GLOBAL DIRTY PROXY START ===== */
+
+function makeDirtyProxy(obj) {
+  return new Proxy(obj, {
+    set(target, prop, value) {
+      target[prop] = value;
+
+      if (typeof markDirty === "function") {
+        markDirty();
+      }
+
+      return true;
+    }
+  });
+}
+
+/* ===== GLOBAL DIRTY PROXY END ===== */
+
+/* ===== AUTO PERSIST START ===== */
+function persistCharacter() {
+  if (!character) return;
+
+  const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+  const index = Number(localStorage.getItem("atfActiveCharacterIndex"));
+
+  if (!Number.isInteger(index) || !saved[index]) return;
+
+  saved[index] = character;
+  localStorage.setItem("atfCharacters", JSON.stringify(saved));
+}
+/* ===== AUTO PERSIST END ===== */
+
+/* ===== DYING / UNCONSCIOUS STATE INIT START ===== */
+function ensureLifeState(c) {
+  if (!c) return;
+
+  if (c.isUnconscious == null) c.isUnconscious = false;
+  if (c.isDying == null) c.isDying = false;
+  if (c.isDead == null) c.isDead = false;
+  if (c.isStabilized == null) c.isStabilized = false;
+  if (c.unconsciousRounds == null) c.unconsciousRounds = 0;
+}
+/* ===== DYING / UNCONSCIOUS STATE INIT END ===== */
+
+/* ===== CHARACTER ID + UI STATE INIT START ===== */
+function ensureCharacterIdentity(c) {
+  if (!c.id) {
+    c.id = crypto.randomUUID();
+  }
+  if (!c.ui) {
+    c.ui = {
+      panels: {},
+      equipmentFilters: [],
+      cover: null
+    };
+  }
+}
+/* ===== CHARACTER ID + UI STATE INIT END ===== */
+
+/* ===== AUTO LOAD ACTIVE CHARACTER START ===== */
+
+const savedCharacters = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+const activeIndex = Number(localStorage.getItem("atfActiveCharacterIndex"));
+
+if (
+  Array.isArray(savedCharacters) &&
+  savedCharacters.length > 0 &&
+  Number.isInteger(activeIndex) &&
+  savedCharacters[activeIndex]
+) {
+  character = JSON.parse(JSON.stringify(savedCharacters[activeIndex]));
+  ensureCharacterIdentity(character);
+  globalThis.character = character;
+
+  // IMPORTANT: do NOT render yet
+  // Rendering must happen after CSV hydration
+}
+
+/* ===== AUTO LOAD ACTIVE CHARACTER END ===== */
 globalThis.character = character;
+
+/* ===== LOAD CHARACTER BUTTON START ===== */
+
+document.getElementById("loadCharBtn").addEventListener("click", () => {
+
+  const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+
+  if (!saved.length) {
+    alert("No saved characters found.");
+    return;
+  }
+
+  // Build simple picker overlay
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.6)";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.zIndex = "9999";
+
+  const box = document.createElement("div");
+  box.style.background = "#d8d2e7";
+  box.style.border = "4px solid #8b7dbe";
+  box.style.borderRadius = "10px";
+  box.style.padding = "16px";
+  box.style.maxWidth = "420px";
+  box.style.width = "90%";
+
+  const title = document.createElement("div");
+  title.innerHTML = "<strong>Select Character</strong>";
+  title.style.marginBottom = "12px";
+  box.appendChild(title);
+
+  saved.forEach((c, index) => {
+    const btn = document.createElement("button");
+    btn.style.display = "block";
+    btn.style.width = "100%";
+    btn.style.marginBottom = "8px";
+    btn.style.textAlign = "left";
+
+    const name = c?.appearance?.name || "Unnamed Character";
+    btn.textContent = name;
+
+btn.onclick = () => {
+
+  // HARD REPLACE STATE
+  character = JSON.parse(JSON.stringify(c));
+
+  /* ===== ENSURE EQUIPMENT STRUCTURE START ===== */
+  if (!character.equipment) character.equipment = {};
+
+  if (character.equipment.weapons == null) {
+    character.equipment.weapons = [];
+  } else if (!Array.isArray(character.equipment.weapons)) {
+    character.equipment.weapons = [character.equipment.weapons];
+  }
+
+  if (
+    !character.equipment.armor ||
+    typeof character.equipment.armor !== "object" ||
+    Array.isArray(character.equipment.armor)
+  ) {
+    character.equipment.armor = {};
+  }
+  /* ===== ENSURE EQUIPMENT STRUCTURE END ===== */
+
+  globalThis.character = character;
+
+  // SINGLE SOURCE OF TRUTH
+  localStorage.setItem("atfActiveCharacterIndex", index);
+  localStorage.setItem("atfSelectedCharacter", index);
+
+  // Clear transient UI-only state
+  character.inventorySelection = { container: null, index: null };
+
+  document.body.removeChild(overlay);
+
+  update();     // full redraw
+};
+
+    box.appendChild(btn);
+  });
+  const cancel = document.createElement("button");
+  cancel.textContent = "Cancel";
+  cancel.onclick = () => document.body.removeChild(overlay);
+  box.appendChild(cancel);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+});
+
+/* ===== LOAD CHARACTER BUTTON END ===== */
 
 /* ===== LANGUAGE STORAGE INIT START ===== */
 if (!character) {
@@ -1463,6 +1747,172 @@ function placeItemInInventory(itemId, size) {
 
 /* ===== INVENTORY PLACEMENT ENGINE END ===== */
 
+/* ===== ITEM DETAILS RENDERER START ===== */
+
+function renderItemDetailsTable() {
+  const container = document.getElementById("itemDetailsTableContainer");
+  if (!container || !character) return;
+
+  const rows = [];
+  let totalWeight = 0;
+
+  /* === Currency (FIRST ROW) === */
+  const silver = character.currency?.silver || 0;
+  const gold   = character.currency?.gold || 0;
+  const totalOunces = silver + gold;
+
+  const currencyWeight = Math.floor(totalOunces / 8) * 0.5;
+  totalWeight += currencyWeight;
+
+  rows.push({
+    custom: true,
+    name: "Currency Weight",
+    desc: `${silver} oz silver and ${gold} oz gold`,
+    slots: "N/A",
+    weight: currencyWeight,
+    location: "Pocket"
+  });
+
+  /* === Standard Backpack (SECOND ROW) === */
+  totalWeight += 1;
+
+  rows.push({
+    custom: true,
+    name: "Standard Backpack",
+    desc: "A backpack with a 16 slot capacity.",
+    slots: "N/A",
+    weight: 1,
+    location: "Torso"
+  });
+
+  /* === Backpack (anchor items only) === */
+  character.inventory.backpack.forEach((slot, i) => {
+    if (slot && slot.anchor) {
+      rows.push({
+        itemId: slot.itemId,
+        location: `Backpack Slot ${i + 1}`
+      });
+    }
+  });
+
+  /* === Clothing === */
+  character.inventory.clothing.forEach((slot, i) => {
+    if (slot) {
+      rows.push({
+        itemId: slot.itemId,
+        location: `Clothing Slot ${i + 1}`
+      });
+    }
+  });
+
+  /* === Equipped Armor === */
+  Object.entries(character.equipment?.armor || {}).forEach(([key, id]) => {
+    if (!id) return;
+
+    const label =
+      key === "head" ? "Head" :
+      key === "torso" ? "Torso" :
+      key === "leftarm" ? "Left Arm" :
+      key === "rightarm" ? "Right Arm" :
+      key === "leftleg" ? "Left Leg" :
+      key === "rightleg" ? "Right Leg" :
+      key;
+
+    rows.push({ itemId: id, location: label });
+  });
+
+  /* === Equipped Weapons === */
+  const weaponMapReadable = {
+    mele: "Melee",
+    ha2h: "Hand to Hand",
+    rngd: "Ranged",
+    guns: "Firearms",
+    thrw: "Thrown"
+  };
+
+  (character.equipment?.weapons || []).forEach(id => {
+    const eq = equipment.find(e => e.id === id);
+    if (!eq) return;
+    const label = weaponMapReadable[eq.eqpType] || "Equipped";
+    rows.push({ itemId: id, location: label });
+  });
+
+  if (!rows.length) {
+    container.innerHTML = "<em>No items.</em>";
+    return;
+  }
+
+  let html = `
+    <table style="width:100%; border-collapse:collapse; font-size:.8em;">
+      <thead>
+        <tr style="background:#9dc384; color:#48752c;">
+          <th style="text-align:left; padding:6px;">Item</th>
+          <th style="text-align:left; padding:6px;">Description</th>
+          <th style="text-align:center; padding:6px;">Slots</th>
+          <th style="text-align:center; padding:6px;">Weight</th>
+          <th style="text-align:center; padding:6px;">Location</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  rows.forEach((r, idx) => {
+
+const bg = idx % 2 === 0
+  ? "#bdd6ac"
+  : "linear-gradient(to right, #bdd6ac, #9dc384)";
+
+    /* === Custom Rows (Currency + Backpack) === */
+    if (r.custom) {
+      html += `
+        <tr style="background:${bg}; background-attachment:fixed;">
+          <td style="padding:6px; text-align:left;">${r.name}</td>
+          <td style="padding:6px; text-align:left;">${r.desc}</td>
+          <td style="padding:6px; text-align:center;">${r.slots}</td>
+          <td style="padding:6px; text-align:center;">${r.weight}</td>
+          <td style="padding:6px; text-align:center;">${r.location}</td>
+        </tr>
+      `;
+      return;
+    }
+
+    const item = equipment.find(e => e.id === r.itemId);
+    if (!item) return;
+
+    const itemWeight = Number(item.weight) || 0;
+    totalWeight += itemWeight;
+
+    html += `
+      <tr style="background:${bg}; background-attachment:fixed;">
+        <td style="padding:6px; text-align:left;">
+          ${item.eqpName || ""}
+        </td>
+        <td style="padding:6px; text-align:left;">
+          ${item.eqpDesc || ""}
+        </td>
+        <td style="padding:6px; text-align:center;">
+          ${item.slots || ""}
+        </td>
+        <td style="padding:6px; text-align:center;">
+          ${itemWeight}
+        </td>
+        <td style="padding:6px; text-align:center;">
+          ${r.location}
+        </td>
+      </tr>
+    `;
+  });
+
+  html += "</tbody></table>";
+
+  container.innerHTML = html;
+
+  /* === Store total weight for future movement logic === */
+  character.totalWeight = totalWeight;
+}
+
+/* ===== ITEM DETAILS RENDERER END ===== */
+
 /* ===== INVENTORY DEBUG EXPORTS START ===== */
 globalThis.findBackpackSpace = findBackpackSpace;
 globalThis.findClothingSpace = findClothingSpace;
@@ -1476,9 +1926,12 @@ function purchaseEquipment(itemId) {
   const item = equipment.find(e => e.id === itemId);
   if (!item) return;
 
-  if (!character.equipment) character.equipment = {};
+  const itemName = item.eqpName || item.id;
 
-  // ===== WEAPON AUTO-EQUIP =====
+  if (!character.equipment) character.equipment = {};
+  if (!character.equipment.weapons) character.equipment.weapons = [];
+  if (!character.equipment.armor) character.equipment.armor = {};
+
   const weaponMap = {
     mele: "melee",
     ha2h: "melee",
@@ -1489,105 +1942,169 @@ function purchaseEquipment(itemId) {
 
   const atkType = weaponMap[item.eqpType];
 
-  if (atkType) {
-    if (!Array.isArray(character.equipment.weapons))
-      character.equipment.weapons = [];
+  /* ==============================
+     WEAPON AUTO EQUIP (STRICT 1)
+     ============================== */
+if (atkType) {
 
-    const hasType = character.equipment.weapons.some(w => {
-      const wid = typeof w === "string" ? w : w.id;
-      const eq = equipment.find(e => e.id === wid);
-      return eq && weaponMap[eq.eqpType] === atkType;
-    });
+  const existingIndex = character.equipment.weapons.findIndex(wid => {
+    const eq = equipment.find(e => e.id === wid);
+    return eq && weaponMap[eq.eqpType] === atkType;
+  });
 
-    if (!hasType) {
-character.equipment.weapons.push(itemId);
+  if (existingIndex !== -1) {
 
-if (Array.isArray(character.selectedEquipment)) {
-  character.selectedEquipment =
-    character.selectedEquipment.filter(x => x !== itemId);
-}
+    const existingId = character.equipment.weapons[existingIndex];
+    const existingItem = equipment.find(e => e.id === existingId);
+    const existingName = existingItem?.eqpName || existingId;
+    const size = Number(existingItem?.slots) || 1;
 
-update();
-return;
+    const confirmReplace = confirm(
+      `Are you sure you want to replace ${existingName} with ${itemName}?`
+    );
+
+    if (!confirmReplace) return;
+
+    const placed = placeItemInInventory(existingId, size);
+
+    if (!placed) {
+      const drop = confirm("Not enough room in container. Drop?");
+      if (!drop) return;
     }
 
+    character.equipment.weapons.splice(existingIndex, 1);
   }
 
-  // ===== ARMOR AUTO-EQUIP =====
-  if (item.eqpType === "armr") {
+  character.equipment.weapons.push(itemId);
+  update();
+  return;
+}
+
+/* ==============================
+   ARMOR AUTO EQUIP
+   ============================== */
+if (item.eqpType === "armr") {
+
+  if (!character.equipment) character.equipment = {};
+  if (!character.equipment.armor) character.equipment.armor = {};
+
+  const rawSlot = (item.Area || "").toLowerCase();
+  if (!rawSlot) {
+    alert("Armor slot not defined on item.");
+    return;
+  }
+
+  const applyArmorToSlot = key => {
+
     if (!character.equipment.armor)
       character.equipment.armor = {};
 
-    const slot = (item.armorSlot || item.slot || "").toLowerCase();
+    const existingId = character.equipment.armor[key];
 
-    const applyArmor = key => {
+    const completeApply = () => {
       character.equipment.armor[key] = itemId;
       update();
     };
 
-    if (slot === "arms" || slot === "legs") {
-      const overlay = document.createElement("div");
-      overlay.style.position = "fixed";
-      overlay.style.inset = "0";
-      overlay.style.background = "rgba(0,0,0,0.6)";
-      overlay.style.display = "flex";
-      overlay.style.alignItems = "center";
-      overlay.style.justifyContent = "center";
-      overlay.style.zIndex = "9999";
+if (existingId) {
 
-      const box = document.createElement("div");
-      box.style.background = "#d8d2e7";
-      box.style.border = "4px solid #8b7dbe";
-      box.style.borderRadius = "10px";
-      box.style.padding = "16px";
+  const existingItem = equipment.find(e => e.id === existingId);
+  const existingName = existingItem?.eqpName || existingId;
+  const size = Number(existingItem?.slots) || 1;
 
-      const title = document.createElement("div");
-      title.innerHTML = `<strong>Apply to which ${slot.slice(0,-1)}?</strong>`;
-      title.style.marginBottom = "12px";
-      box.appendChild(title);
+  const confirmReplace = confirm(
+    `Are you sure you want to replace ${existingName} with ${item.eqpName}?`
+  );
 
-      const mkBtn = label => {
-        const b = document.createElement("button");
-        b.textContent = label;
-        b.style.display = "block";
-        b.style.width = "100%";
-        b.style.marginBottom = "8px";
-        b.onclick = () => {
-          document.body.removeChild(overlay);
-          applyArmor(label.toLowerCase() + slot.slice(0,-1));
-        };
-        return b;
+  if (!confirmReplace) return;
+
+  const placed = placeItemInInventory(existingId, size);
+
+  if (!placed) {
+    const drop = confirm("Not enough room in container. Drop?");
+    if (!drop) return;
+  }
+}
+
+completeApply();
+  };
+
+  if (rawSlot === "arms" || rawSlot === "legs") {
+
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(0,0,0,0.6)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "9999";
+
+    const box = document.createElement("div");
+    box.style.background = "#bdd6ac";
+    box.style.border = "4px solid #48752c";
+    box.style.borderRadius = "10px";
+    box.style.padding = "16px";
+    box.style.minWidth = "260px";
+
+    const title = document.createElement("div");
+    title.innerHTML = `<strong>Apply ${item.eqpName} to which ${rawSlot.slice(0,-1)}?</strong>`;
+    title.style.marginBottom = "12px";
+    box.appendChild(title);
+
+    const makeBtn = (label, action) => {
+      const b = document.createElement("button");
+      b.textContent = label;
+      b.style.display = "block";
+      b.style.width = "100%";
+      b.style.marginBottom = "8px";
+      b.style.padding = "6px";
+      b.style.fontWeight = "bold";
+      b.onclick = () => {
+        document.body.removeChild(overlay);
+        action();
       };
+      return b;
+    };
 
-      box.appendChild(mkBtn("Right"));
-      box.appendChild(mkBtn("Left"));
+    box.appendChild(
+      makeBtn("Right", () =>
+        applyArmorToSlot("right" + rawSlot.slice(0,-1))
+      )
+    );
 
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-      return;
-    }
+    box.appendChild(
+      makeBtn("Left", () =>
+        applyArmorToSlot("left" + rawSlot.slice(0,-1))
+      )
+    );
 
-    if (slot && !character.equipment.armor[slot]) {
-applyArmor(slot);
+    box.appendChild(
+      makeBtn("Container", () => {
+        const size = Number(item.slots) || 1;
+        placeItemInInventory(itemId, size);
+        update();
+      })
+    );
 
-if (Array.isArray(character.selectedEquipment)) {
-  character.selectedEquipment =
-    character.selectedEquipment.filter(x => x !== itemId);
-}
-
-return;
-    }
-// ===== REMOVE FROM SELECTED AFTER ADD =====
-if (Array.isArray(character.selectedEquipment)) {
-  character.selectedEquipment =
-    character.selectedEquipment.filter(x => x !== itemId);
-}
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    return;
   }
 
+  if (rawSlot === "head" || rawSlot === "torso") {
+    applyArmorToSlot(rawSlot);
+    return;
+  }
 
-  // ===== FALLBACK: CONTAINER =====
+  return;
+}
+
+  /* ==============================
+     FALLBACK TO CONTAINER
+     ============================== */
+
   const size = Number(item.slots) || 1;
-
   const result = placeItemInInventory(itemId, size);
 
   if (!result) {
@@ -1595,16 +2112,10 @@ if (Array.isArray(character.selectedEquipment)) {
     return;
   }
 
-  if (Array.isArray(character.selectedEquipment)) {
-    character.selectedEquipment =
-      character.selectedEquipment.filter(x => x !== itemId);
-  }
-
   update();
 }
 
 globalThis.purchaseEquipment = purchaseEquipment;
-
 /* ===== EQUIPMENT PURCHASE HANDLER END ===== */
 
 function getConditionModifiers() {
@@ -1849,20 +2360,22 @@ function computeCurrentStats() {
     };
   });
 
-  Object.entries(character.skills || {}).forEach(([k, v]) => {
-    const base = Number(v.value) || 0;
-    const delta =
-      (mods.ATK &&
-        ["melee","ranged","guns","handtohand","thrown"].includes(k))
-        ? mods.ATK
-        : 0;
+Object.entries(character.skills || {}).forEach(([k, v]) => {
+  const id = skillKey(k);
+  const base = Number(v.value) || 0;
 
-    skills[k] = {
-      base,
-      delta,
-      total: base + delta
-    };
-  });
+  const delta =
+    (mods.ATK &&
+      ["melee","ranged","guns","handtohand","thrown"].includes(id))
+      ? mods.ATK
+      : 0;
+
+  skills[id] = {
+    base,
+    delta,
+    total: base + delta
+  };
+});
 
   return { abilities, skills };
 }
@@ -1942,7 +2455,9 @@ function renderTopBar() {
   const deity = deities.find(d => d.id === character.deityId);
 
 document.getElementById("topBarContent").innerHTML = `
-  <div id="topBarGrid" style="display:grid; grid-template-columns:160px auto auto auto; column-gap:32px; align-items:start;">
+  <div id="topBarGrid" style="display:flex; flex-direction:column; gap:12px;">
+
+  <div style="display:grid; grid-template-columns:160px auto auto auto; column-gap:32px; align-items:start;">
 <div id="logoBox">
   <img src="AtF Text Logo.png" id="logoImg">
 </div>
@@ -1956,9 +2471,25 @@ document.getElementById("topBarContent").innerHTML = `
     tabindex="0"
   >${character.appearance.name || "—"}</span>
 </div>
-  <div><strong>Race</strong> ${race ? race.name : "—"}</div>
-  <div><strong>Alignment</strong> ${character.alignment.order || "—"} ${character.alignment.moral || ""}</div>
-  <div><strong>Deity</strong> ${deity ? deity.name : "—"}</div>
+<div><strong>Race</strong> ${race ? race.name : "—"}</div>
+
+<div>
+  <strong>Alignment</strong>
+  <span
+    id="editAlignment"
+    class="editable-field"
+    tabindex="0"
+  >${character.alignment.order || "—"} ${character.alignment.moral || ""}</span>
+</div>
+
+<div>
+  <strong>Deity</strong>
+  <span
+    id="editDeity"
+    class="editable-field"
+    tabindex="0"
+  >${deity ? deity.name : "—"}</span>
+</div>
   <div>
   <strong>Player Name</strong>
   <span
@@ -1967,14 +2498,14 @@ document.getElementById("topBarContent").innerHTML = `
     tabindex="0"
   >${character.player || "—"}</span>
 </div>
+
 <!-- ===== REST BUTTONS UNDER PLAYER NAME START ===== -->
 <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
-  <button><strong>Quick Rest</strong></button>
-  <button><strong>Short Rest</strong></button>
-  <button><strong>Long Rest</strong></button>
+  <button id="quickRestBtn"><strong>Quick Rest</strong></button>
+  <button id="shortRestBtn"><strong>Short Rest</strong></button>
+  <button id="longRestBtn"><strong>Long Rest</strong></button>
 </div>
 <!-- ===== REST BUTTONS UNDER PLAYER NAME END ===== -->
-
 
 </div>
 
@@ -2059,6 +2590,7 @@ document.getElementById("topBarContent").innerHTML = `
       <div>
   <strong>Experience Points</strong>
   <span id="editXp" class="editable-field" tabindex="0">${character.xp || 0}</span>
+
   of ${
     (() => {
       const totalLevel = Array.isArray(character.classes)
@@ -2068,6 +2600,23 @@ document.getElementById("topBarContent").innerHTML = `
       return next ? next.XP : "—";
     })()
   }
+
+${character.pendingLevelUp ? `
+  <span style="
+    margin-left:10px;
+    background:#48752c;
+    color:#bdd6ac;
+    border:2px solid #9dc384;
+    border-radius:6px;
+    padding:2px 6px;
+font-weight:bold;
+font-size:0.8em;
+display:inline-block;
+  ">
+    Level Up Available
+  </span>
+` : ""}
+
 </div>
 
 
@@ -2152,14 +2701,561 @@ document.getElementById("topBarContent").innerHTML = `
 </div>
 <!-- ===== TOP BAR LANGUAGES END ===== -->
 
+  </div>   <!-- closes Column 4 -->
+</div>   <!-- closes 4-column grid row -->
+
+  <!-- ===== TOKEN CELL START ===== -->
+  <div style="grid-column:1; margin-top:12px;">
+
+    ${
+      character.token
+        ? `
+<img
+  src="${character.token}"
+  id="characterTokenImg"
+  style="
+    width:100%;
+    height:auto;
+    display:block;
+    cursor:pointer;
+  "
+/>
+        `
+        : `
+          <button
+            id="addTokenBtn"
+            style="
+              width:100%;
+              background:#634fa2;
+              color:#d8d2e7;
+              border:2px solid #8b7dbe;
+              border-radius:6px;
+              padding:8px;
+              font-weight:bold;
+              cursor:pointer;
+            "
+          >
+            Add Token
+          </button>
+         
+        `
+    }
+
+  </div>
+  <!-- ===== TOKEN CELL END ===== -->
+
+  <div style="grid-column:2 / 5; margin-top:12px;">
+    <strong>Description</strong>
+    <div
+      id="editDescription"
+      class="editable-field"
+      tabindex="0"
+      style="display:block; margin-top:6px;"
+    >
+      ${character.appearance?.description || "—"}
+    </div>
   </div>
 
-${character.appearance?.description
-  ? `<div style="grid-column:1 / -1; margin-top:12px;"><em>${character.appearance.description}</em></div>`
-  : ``}
+</div>   <!-- closes #topBarGrid -->
 `;
 
 }
+
+/* ===== DIRTY TRACKING START ===== */
+
+let isDirty = false;
+let originalSaveText = null;
+let originalSaveWidth = null;
+
+function markDirty() {
+  const btn = document.getElementById("saveCharBtn");
+  if (!btn) return;
+
+  originalSaveText = btn.textContent;
+
+  isDirty = true;
+
+  btn.textContent = "UnSAVEd Changes!";
+
+  /* controlled width instead of doubling */
+  btn.style.width = "360px";   /* adjust if needed */
+
+  btn.style.background = "linear-gradient(to top, #a8004d, #ff0075)";
+  btn.style.color = "#ffffff";
+  btn.style.border = "3px solid #ffffff";  /* 1px thicker */
+  btn.style.fontWeight = "bold";
+  btn.style.fontStyle = "normal";
+  btn.style.textAlign = "center";
+}
+
+
+function clearDirty() {
+  const btn = document.getElementById("saveCharBtn");
+  if (!btn) return;
+
+  isDirty = false;
+
+  btn.textContent = originalSaveText || "Save";
+
+  btn.style.width = "";
+  btn.style.background = "#d8d2e7";
+  btn.style.color = "#634fa2";
+  btn.style.border = "2px solid #8b7dbe";
+  btn.style.fontWeight = "bold";
+  btn.style.fontStyle = "normal";
+  btn.style.textAlign = "center";
+}
+
+
+const saveBtn = document.getElementById("saveCharBtn");
+if (saveBtn) {
+  saveBtn.addEventListener("click", () => {
+    clearDirty();
+  });
+}
+
+/* ===== DIRTY TRACKING END ===== */
+
+/* ===== TOKEN UPLOAD START ===== */
+
+function openTokenFilePicker() {
+
+  alert("Tokens must be square. Image will be cropped automatically.");
+
+  let input = document.getElementById("hiddenTokenInput");
+
+  if (!input) {
+    input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.id = "hiddenTokenInput";
+    input.style.display = "none";
+    document.body.appendChild(input);
+
+    input.addEventListener("change", function(ev) {
+      const file = ev.target.files[0];
+      if (!file || !character) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+        const img = new Image();
+
+        img.onload = function() {
+
+          const size = Math.min(img.width, img.height);
+          const sx = (img.width - size) / 2;
+          const sy = (img.height - size) / 2;
+
+          const canvas = document.createElement("canvas");
+          canvas.width = 160;
+          canvas.height = 160;
+
+          const ctx = canvas.getContext("2d");
+
+          ctx.drawImage(
+            img,
+            sx, sy, size, size,
+            0, 0, 160, 160
+          );
+
+          character.token = canvas.toDataURL("image/png");
+
+          markDirty();
+          update();
+        };
+
+        img.src = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  input.value = "";
+  input.click();
+}
+
+document.addEventListener("click", function(e) {
+
+  if (e.target.id === "addTokenBtn") {
+    openTokenFilePicker();
+  }
+
+  if (e.target.id === "characterTokenImg") {
+    openTokenModal();
+  }
+
+});
+
+/* ===== TOKEN UPLOAD END ===== */
+
+/* ===== TOKEN MODAL START ===== */
+
+function openTokenModal() {
+
+  const overlay = document.createElement("div");
+  overlay.id = "tokenModalOverlay";
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+  overlay.style.background = "rgba(0,0,0,0.4)";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.zIndex = "9999";
+
+  const modal = document.createElement("div");
+  modal.style.background = "#ffffff";
+  modal.style.borderRadius = "12px";
+  modal.style.padding = "24px";
+  modal.style.width = "420px";
+  modal.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
+  modal.style.fontFamily = "sans-serif";
+
+  modal.innerHTML = `
+    <div style="font-size:18px; margin-bottom:12px;">
+      <strong>Replace or Delete token?</strong>
+    </div>
+    <div style="margin-bottom:20px;">
+      Tokens must be square. Image will be cropped automatically.
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button id="tokenCancelBtn">Cancel</button>
+      <button id="tokenDeleteBtn">Delete</button>
+      <button id="tokenReplaceBtn">Replace</button>
+    </div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  document.getElementById("tokenCancelBtn").onclick = function() {
+    overlay.remove();
+  };
+
+  document.getElementById("tokenDeleteBtn").onclick = function() {
+    if (!character) return;
+    delete character.token;
+    overlay.remove();
+    markDirty();
+    update();
+  };
+
+  document.getElementById("tokenReplaceBtn").onclick = function() {
+    overlay.remove();
+    openTokenFilePicker();
+  };
+}
+
+/* ===== TOKEN MODAL END ===== */
+
+/* ===== LEVEL UP MODAL START ===== */
+
+function openLevelUpModal() {
+
+  const overlay = document.createElement("div");
+  overlay.id = "levelUpModalOverlay";
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+  overlay.style.background = "rgba(0,0,0,0.4)";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.zIndex = "9999";
+
+const modal = document.createElement("div");
+
+modal.style.background = "#d8d2e7";        // light purple
+modal.style.color = "#634fa2";             // dark purple text
+modal.style.borderRadius = "16px";
+modal.style.padding = "28px";
+modal.style.width = "600px";
+modal.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
+modal.style.border = "3px solid #634fa2";
+modal.style.textAlign = "left";
+modal.style.display = "block";
+modal.style.flex = "none";
+modal.style.justifyContent = "flex-start";
+modal.style.alignItems = "flex-start";
+
+  modal.innerHTML = `
+    <div style="font-size:20px; margin-bottom:16px;">
+      <strong>Level Up</strong>
+    </div>
+
+<div id="levelUpContent" style="width:100%; text-align:left;">
+
+  ${(() => {
+    const totalLevel = Array.isArray(character.classes)
+      ? character.classes.reduce((sum, c) => sum + (Number(c.level) || 0), 0)
+      : Number(character.level || 0);
+
+    return `
+      <div style="margin-bottom:16px;">
+        <strong>Congratulations ${character.appearance?.name || ""}!</strong>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        You are now Total Level ${totalLevel + 1}.
+      </div>
+
+<div style="margin-top:20px;">
+
+  <label style="display:flex; align-items:center; gap:10px; margin-bottom:14px; cursor:pointer;">
+    <input type="radio" name="levelUpType" value="existing" checked>
+    <span id="existingClassLabel"></span>
+  </label>
+
+  <div id="existingClassDropdownContainer" style="margin-left:28px; margin-bottom:14px;">
+    <select id="existingClassSelect"></select>
+  </div>
+
+  <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+    <input type="radio" name="levelUpType" value="new">
+    <span>Take Level 1 in a new class</span>
+  </label>
+
+</div>
+<div style="margin-top:16px;">
+  <select id="levelClassSelect"></select>
+  <div id="levelUpHPSection" style="margin-top:20px;"></div>
+<div id="levelUpSkillsSection" style="margin-top:24px;"></div>
+</div>
+    `;
+  })()}
+
+</div>
+
+    <div style="margin-top:24px; display:flex; justify-content:flex-end; gap:10px;">
+      <button id="levelUpCancelBtn">Cancel</button>
+      <button id="levelUpConfirmBtn">Confirm</button>
+    </div>
+  `;
+
+/* ===== LEVEL UP CLASS POPULATION START ===== */
+
+const select = modal.querySelector("#levelClassSelect");
+/* ===== EXISTING CLASS LOGIC START ===== */
+
+const existingClasses = Array.isArray(character.classes)
+  ? character.classes
+  : [];
+
+const existingLabel = modal.querySelector("#existingClassLabel");
+const existingSelect = modal.querySelector("#existingClassSelect");
+const existingContainer = modal.querySelector("#existingClassDropdownContainer");
+
+if (existingClasses.length === 1) {
+
+  const only = existingClasses[0];
+  const clsDef = classes.find(c => c.id === only.classId);
+
+  existingLabel.textContent = `Level up (${clsDef?.name || "Class"})`;
+
+  existingContainer.style.display = "none";
+
+  character.levelUpInProgress = character.levelUpInProgress || {};
+  character.levelUpInProgress.selectedClassId = only.classId;
+
+}
+else {
+
+  existingLabel.textContent = "Add a level to an existing class";
+
+  existingSelect.innerHTML = "";
+
+  existingClasses.forEach(c => {
+
+    if (Number(c.level) >= 10) return;
+
+    const clsDef = classes.find(cl => cl.id === c.classId);
+    if (!clsDef) return;
+
+    const opt = document.createElement("option");
+    opt.value = c.classId;
+    opt.textContent = `${clsDef.name} (Level ${c.level})`;
+
+    existingSelect.appendChild(opt);
+
+  });
+
+  character.levelUpInProgress = character.levelUpInProgress || {};
+
+  existingSelect.addEventListener("change", function() {
+    character.levelUpInProgress.selectedClassId = this.value;
+    calculateLevelUpHP();
+  });
+
+}
+
+/* ===== EXISTING CLASS LOGIC END ===== */
+if (select) {
+  select.style.background = "#634fa2";
+  select.style.color = "#d8d2e7";
+  select.style.border = "2px solid #634fa2";
+  select.style.padding = "8px";
+  select.style.borderRadius = "8px";
+}
+
+if (select) {
+
+  const existingClasses = Array.isArray(character.classes)
+    ? character.classes
+    : [];
+
+  const totalClasses = existingClasses.length;
+
+  const levelUpTypeRadios = modal.querySelectorAll('input[name="levelUpType"]');
+  const existingContainer = modal.querySelector("#existingClassDropdownContainer");
+
+  function populateNewClassOptions() {
+
+    select.innerHTML = "";
+
+    classes.forEach(cls => {
+
+      const existing = existingClasses.find(c => c.classId === cls.id);
+      const level = existing ? Number(existing.level) : 0;
+
+      if (existing) return;
+      if (level >= 10) return;
+      if (totalClasses >= 3) return;
+
+      const option = document.createElement("option");
+      option.value = cls.id;
+      option.textContent = cls.name;
+
+      select.appendChild(option);
+    });
+  }
+
+  populateNewClassOptions();
+select.addEventListener("change", function() {
+  character.levelUpInProgress.selectedClassId = this.value;
+  calculateLevelUpHP();
+});
+
+levelUpTypeRadios.forEach(radio => {
+  radio.addEventListener("change", function() {
+
+    if (this.value === "existing") {
+
+      select.style.display = "none";
+
+      if (existingContainer) {
+        existingContainer.style.display =
+          existingClasses.length > 1 ? "block" : "none";
+      }
+
+      if (existingClasses.length === 1) {
+        character.levelUpInProgress.selectedClassId =
+          existingClasses[0].classId;
+      } else {
+        const existingSelect =
+          modal.querySelector("#existingClassSelect");
+
+        character.levelUpInProgress.selectedClassId =
+          existingSelect ? existingSelect.value : null;
+      }
+
+    } else {
+
+      if (existingContainer) {
+        existingContainer.style.display = "none";
+      }
+
+      select.style.display = "block";
+
+      character.levelUpInProgress.selectedClassId = select.value;
+    }
+
+    calculateLevelUpHP();
+    calculateLevelUpSkillPoints();
+  });
+});
+
+  // Default state on open
+  select.style.display = "none";
+}
+
+/* ===== LEVEL UP HP WIRE START ===== */
+
+character.levelUpInProgress = character.levelUpInProgress || {};
+
+// Do NOT overwrite selectedClassId here.
+// It is already set correctly by existing/new class logic above.
+
+calculateLevelUpHP();
+calculateLevelUpSkillPoints();
+
+select.addEventListener("change", function() {
+  character.levelUpInProgress.selectedClassId = this.value;
+  calculateLevelUpHP();
+  calculateLevelUpSkillPoints();
+});
+
+/* ===== LEVEL UP HP WIRE END ===== */
+
+/* ===== LEVEL UP CLASS POPULATION END ===== */
+
+overlay.appendChild(modal);
+document.body.appendChild(overlay);
+calculateLevelUpHP();
+calculateLevelUpSkillPoints();
+
+document.getElementById("levelUpCancelBtn").onclick = function() {
+    overlay.remove();
+};
+
+document.getElementById("levelUpConfirmBtn").onclick = function() {
+
+  const preview = character.levelUpInProgress;
+  if (!preview || !preview.selectedClassId) return;
+
+  // ===== APPLY CLASS LEVEL =====
+  const existing = character.classes.find(c => c.classId === preview.selectedClassId);
+
+  if (existing) {
+    existing.level = Number(existing.level) + 1;
+  } else {
+    character.classes.push({
+      classId: preview.selectedClassId,
+      level: 1
+    });
+  }
+
+  // ===== APPLY SKILLS =====
+  Object.keys(preview.skillAllocations || {}).forEach(k => {
+    const add = Number(preview.skillAllocations[k] || 0);
+    if (add > 0) {
+      character.skills[k].base += add;
+      character.skills[k].value = character.skills[k].base;
+    }
+  });
+
+  // ===== CLEAR FLAGS =====
+  character.pendingLevelUp = false;
+  character.levelUpInProgress = null;
+
+if (typeof saveCharacter === "function") {
+  saveCharacter();
+}
+
+if (typeof update === "function") {
+  update();
+}
+
+overlay.remove();
+};
+}
+
+/* ===== LEVEL UP MODAL END ===== */
 
 function key(s) {
   return s.toLowerCase().replace(/[^a-z]/g, "");
@@ -2480,7 +3576,117 @@ document.getElementById("rollCol0Body").innerHTML =
 document.addEventListener("click", e => {
 
   /* ===== Editable numeric fields ===== */
-  const editableMap = {
+  
+/* ===== ALIGNMENT DROPDOWN START ===== */
+if (e.target.id === "editAlignment") {
+
+  const container = document.createElement("span");
+
+  const orderSelect = document.createElement("select");
+  ["Strict","Neutral","Chaotic"].forEach(o => {
+    const opt = document.createElement("option");
+    opt.value = o;
+    opt.textContent = o;
+    if (character.alignment?.order === o) opt.selected = true;
+    orderSelect.appendChild(opt);
+  });
+
+  const moralSelect = document.createElement("select");
+
+  let allowedMorals = ["Good","Indifferent","Evil"];
+
+  const deityObj = deities.find(d => d.id === character.deityId);
+  if (deityObj && deityObj.alignment) {
+    allowedMorals = deityObj.alignment.split(",").map(s => s.trim());
+  }
+
+  allowedMorals.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    if (character.alignment?.moral === m) opt.selected = true;
+    moralSelect.appendChild(opt);
+  });
+
+  container.appendChild(orderSelect);
+  container.appendChild(document.createTextNode(" "));
+  container.appendChild(moralSelect);
+
+  e.target.replaceWith(container);
+  orderSelect.focus();
+
+  function commit() {
+    character.alignment.order = orderSelect.value;
+    character.alignment.moral = moralSelect.value;
+    update();
+  }
+
+  orderSelect.addEventListener("change", commit);
+  moralSelect.addEventListener("change", commit);
+
+  return;
+}
+/* ===== ALIGNMENT DROPDOWN END ===== */
+
+
+/* ===== DEITY DROPDOWN START ===== */
+if (e.target.id === "editDeity") {
+
+  const select = document.createElement("select");
+
+  deities.forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d.id;
+    opt.textContent = d.name;
+    if (d.id === character.deityId) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  e.target.replaceWith(select);
+  select.focus();
+
+  select.addEventListener("change", () => {
+    character.deityId = select.value;
+
+    const deityObj = deities.find(d => d.id === character.deityId);
+    if (deityObj && deityObj.alignment) {
+      const allowed = deityObj.alignment.split(",").map(s => s.trim());
+      if (!allowed.includes(character.alignment?.moral)) {
+        character.alignment.moral = allowed[0];
+      }
+    }
+
+    update();
+  });
+
+  return;
+}
+/* ===== DEITY DROPDOWN END ===== */
+
+/* ===== DESCRIPTION EDIT START ===== */
+if (e.target.id === "editDescription") {
+
+  const div = e.target;
+  const textarea = document.createElement("textarea");
+
+  textarea.value = character.appearance?.description || "";
+  textarea.style.width = "100%";
+  textarea.style.minHeight = "80px";
+  textarea.style.fontSize = "0.95em";
+
+  div.replaceWith(textarea);
+  textarea.focus();
+
+  textarea.addEventListener("blur", () => {
+    character.appearance.description = textarea.value;
+    update();
+  });
+
+  return;
+}
+/* ===== DESCRIPTION EDIT END ===== */
+
+const editableMap = {
     editXp:       { path: ["xp"], min: 0 },
     editLuck:     { path: ["luck"], min: 0, max: 3 },
     editTeam:     { path: ["team"], min: 0, max: 6 },
@@ -2562,10 +3768,9 @@ span.style.padding = "4px 8px";
 span.style.fontWeight = "bold";
 span.style.cursor = "pointer";
 
-    input.replaceWith(span);
+input.replaceWith(span);
 
-    renderTopBar();
-    renderArmorPanel();
+update();
   }
 });
 
@@ -2589,7 +3794,7 @@ span.style.cursor = "pointer";
         const val = input.value.trim() || "—";
         character.appearance.name = val;
 
-        renderTopBar();
+        update();
       }
     });
   }
@@ -2609,35 +3814,33 @@ span.style.cursor = "pointer";
         const val = input.value.trim() || "—";
         character.player = val;
 
-        renderTopBar();
+        update();
       }
     });
   }
 
 
-  if (e.target.id === "editHpCurrent" && character) {
-    const span = e.target;
-    const input = document.createElement("input");
-    input.type = "number";
-    input.min = 0;
-    input.max = character.baseHP;
-    input.value = Number(span.textContent) || character.baseHP;
-    input.style.width = "80px";
+if (e.target.id === "editHpCurrent" && character) {
+  const span = e.target;
+  const input = document.createElement("input");
+  input.type = "number";
+  input.max = character.baseHP;
+  input.value = Number(span.textContent) ?? character.baseHP;
+  input.style.width = "80px";
 
-    span.replaceWith(input);
-    input.focus();
+  span.replaceWith(input);
+  input.focus();
 
-    input.addEventListener("keydown", ev => {
-      if (ev.key === "Enter") {
-        let val = Number(input.value);
-        if (!Number.isFinite(val)) val = character.baseHP;
-        if (val < 0) val = 0;
-        if (val > character.baseHP) val = character.baseHP;
+  input.addEventListener("keydown", ev => {
+    if (ev.key === "Enter") {
+      let val = Number(input.value);
+      if (!Number.isFinite(val)) val = character.baseHP;
+      if (val > character.baseHP) val = character.baseHP;
 
-        character.hpCurrent = val;
+      character.hpCurrent = val;
 
-        renderTopBar();
-      }
+      update();
+    }
     });
   }
 
@@ -2653,6 +3856,7 @@ function skillKey(s) {
 function renderConditionsPanel() {
   const el = document.getElementById("conditionsContent");
   if (!el || !character) return;
+  ensureLifeState(character);
 
 /* ===== COMBAT & CONDITIONS PANEL START ===== */
 el.innerHTML = `
@@ -2701,40 +3905,134 @@ el.innerHTML = `
 `;
 /* ===== COMBAT & CONDITIONS PANEL END ===== */
 
+/* ===== LIFE STATE BANNER START ===== */
+
+ensureLifeState(character);
+
+const conditionsBoxes = el.querySelectorAll("div[style*='#9dc384']");
+const conditionsBox = conditionsBoxes.length > 0 ? conditionsBoxes[0] : null;
+
+const STR = Number(character.STR || 0);
+const END = Number(character.END || 0);
+const deathThreshold = -1 * (STR + END);
+
+let lifeMessage = "";
+
+if (character.isDead) {
+  lifeMessage = (character.name || "Character") + " is DEAD.";
+  if (conditionsBox) {
+    conditionsBox.style.background = "#8b0000";
+    conditionsBox.style.color = "#ffffff";
+  }
+} else if (character.isDying && !character.isStabilized) {
+  lifeMessage =
+    (character.name || "Character") +
+    " is dying, and will be dead at " +
+    deathThreshold +
+    " HP.";
+  if (conditionsBox) {
+    conditionsBox.style.background = "#ffb347";
+    conditionsBox.style.color = "#000000";
+  }
+} else if (character.isUnconscious && character.isStabilized) {
+  lifeMessage =
+    (character.name || "Character") +
+    " is unconscious but stable.";
+  if (conditionsBox) {
+    conditionsBox.style.background = "#ffcc80";
+    conditionsBox.style.color = "#000000";
+  }
+}
+
+if (lifeMessage && conditionsBox) {
+  const banner = document.createElement("div");
+  banner.style.fontWeight = "bold";
+  banner.style.marginBottom = "8px";
+  banner.textContent = lifeMessage;
+
+  const buttonsArea = document.getElementById("conditionsButtons");
+  if (buttonsArea) buttonsArea.prepend(banner);
+}
+
+/* ===== LIFE STATE BANNER END ===== */
+
   /* ===== POPULATE ROUND ENGINE UI START ===== */
   const re = document.getElementById("roundEngine");
   if (re) {
 
     if (!roundState.active) {
 
-      re.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:10px;">
+re.innerHTML = `
+  <div style="display:flex; flex-direction:column; gap:10px;">
 
-          <button id="roundStartBtn"
-            style="
-              font-size:1.25em;
-font-weight:bold;
+    <!-- ROLL INITIATIVE -->
+    <button id="rollInitiativeBtn"
+      style="
+        font-size:1.25em;
+        font-weight:bold;
 font-style:italic;
-padding:14px;
-background:linear-gradient(to right,#634fa2,#8b7dbe);
-color:#d8d2e7;
-border:2px solid #d8d2e7;
-border-radius:8px;
-cursor:pointer;
-            ">
-            Initiate Combat
-          </button>
+        padding:14px;
+        background:linear-gradient(to right,#d8d2e7,#8b7dbe);
+        color:#634fa2;
+        border:2px solid #8b7dbe;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+      Roll Initiative
+    </button>
 
-          ${
-            roundState.lastEncounterTime
-              ? `<div style="font-weight:bold; color:#bdd6ac;">
-                   Last Encounter: ${roundState.lastEncounterTime}
-                 </div>`
-              : ""
-          }
+    <!-- INITIATE COMBAT -->
+    <button id="roundStartBtn"
+      style="
+        font-size:1.25em;
+        font-weight:bold;
+font-style:italic;
+        padding:14px;
+        background:linear-gradient(to right,#8b7dbe,#634fa2);
+        color:#d8d2e7;
+        border:2px solid #634fa2;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+        Initiate Combat
+    </button>
 
-        </div>
-      `;
+    ${
+      roundState.lastEncounterTime
+        ? `<div style="font-weight:bold; color:#bdd6ac;">
+             Last Encounter: ${roundState.lastEncounterTime}
+           </div>`
+        : ""
+    }
+
+  </div>
+`;
+
+      const rollBtn = document.getElementById("rollInitiativeBtn");
+      if (rollBtn) {
+        rollBtn.onclick = function () {
+
+          const per = Number(character?.abilities?.PER?.value || 0);
+          const bonus = Number(character?.initiativeBonus ?? 0);
+          const roll = Math.floor(Math.random() * 10) + 1;
+          const total = per + bonus + roll;
+
+          const output = `
+Initiative Roll<br>
+(PER + Bonuses) = (${per} + ${bonus}) = ${per + bonus}<br>
+1d10 Roll = ${roll}<br>
+<strong>Total Initiative = ${total}</strong>
+          `;
+
+          document.getElementById("rollCol2Body").innerHTML =
+            document.getElementById("rollCol1Body").innerHTML;
+
+          document.getElementById("rollCol1Body").innerHTML =
+            document.getElementById("rollCol0Body").innerHTML;
+
+          document.getElementById("rollCol0Body").innerHTML = output;
+        };
+      }
 
     } else {
 
@@ -2867,6 +4165,123 @@ if (c === "Winded") {
   }
   /* ===== ROUND DISPLAY SYNC END ===== */
 }
+
+/* ===== REST BUTTON HANDLERS START ===== */
+
+document.addEventListener("click", function(e) {
+
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  if (!character) return;
+
+function blockIfInvalid() {
+  if (roundState?.active) {
+    alert("Cannot rest during combat.");
+    return true;
+  }
+
+  const currentHP = Number(character.hpCurrent ?? character.baseHP ?? 0);
+
+  if (currentHP <= 0) {
+    alert("Cannot rest while Dying.");
+    return true;
+  }
+
+  if (character.conditionStates?.["Bleeding"] !== undefined) {
+    alert("Cannot rest while Bleeding or Gushing.");
+    return true;
+  }
+
+  return false;
+}
+
+  if (btn.id === "quickRestBtn") {
+
+    if (blockIfInvalid()) return;
+
+    if (!confirm(
+      "Quick Rest (15 minutes)\n\n• Recover 1 HP\n• Does not remove conditions\n\nContinue?"
+    )) return;
+
+    const maxHP = character.baseHP ?? 0;
+    character.hpCurrent = Math.min(maxHP, (character.hpCurrent ?? maxHP) + 1);
+
+    update();
+    alert("Quick Rest Complete.");
+  }
+
+  if (btn.id === "shortRestBtn") {
+
+    if (blockIfInvalid()) return;
+
+    if (!confirm(
+      "Short Rest (1 hour)\n\n• Recover 5 HP\n• Remove Winded\n\nContinue?"
+    )) return;
+
+    const maxHP = character.baseHP ?? 0;
+    character.hpCurrent = Math.min(maxHP, (character.hpCurrent ?? maxHP) + 5);
+
+    if (character.conditionStates?.["Winded"] !== undefined) {
+      delete character.conditionStates["Winded"];
+    }
+
+    update();
+    alert("Short Rest Complete.");
+  }
+
+  if (btn.id === "longRestBtn") {
+
+if (character.pendingLevelUp) {
+  openLevelUpModal();
+  return;
+}
+
+    if (blockIfInvalid()) return;
+
+    if (!confirm(
+      "Long Rest (8 hours)\n\n• Recover Base HP + Level\n• Regain 1 Luck (max 3)\n• Remove Winded\n• Reduce other conditions by one step\n\nContinue?"
+    )) return;
+
+    const totalLevel = Array.isArray(character.classes)
+      ? character.classes.reduce((sum, c) => sum + (Number(c.level) || 0), 0)
+      : Number(character.level || 0);
+
+    const maxHP = character.baseHP ?? 0;
+
+    character.hpCurrent = Math.min(
+      maxHP,
+      (character.hpCurrent ?? maxHP) + (maxHP + totalLevel)
+    );
+
+    character.luck = Math.min(3, (character.luck ?? 0) + 1);
+
+    if (character.conditionStates) {
+
+      if (character.conditionStates["Winded"] !== undefined) {
+        delete character.conditionStates["Winded"];
+      }
+
+      Object.keys(character.conditionStates).forEach(key => {
+        if (key === "Bleeding") return;
+
+        const idx = Number(character.conditionStates[key]);
+        if (!Number.isFinite(idx)) return;
+
+        if (idx <= 0) {
+          delete character.conditionStates[key];
+        } else {
+          character.conditionStates[key] = idx - 1;
+        }
+      });
+    }
+
+    update();
+    alert("Long Rest Complete.");
+  }
+
+});
+
+/* ===== REST BUTTON HANDLERS END ===== */
 
 function renderStatsPanel() {
   const el = document.getElementById("statsContent");
@@ -3217,7 +4632,36 @@ function renderArmorPanel() {
 
   const race = races.find(r => r.id === character.raceId);
   const baseAC = race ? Number(race.baseAC) : 0;
-document.getElementById("armorBaseACValue").textContent = baseAC;
+
+  const coverBonus =
+    character?.cover === "full" ? 4 :
+    character?.cover === "partial" ? 2 : 0;
+
+  const bonusAmount = Number(character?.armorACAdded) || 0;
+  const bonusLabel = (character?.armorACLabel || "").trim();
+
+  /* Mechanical total */
+  const finalBaseAC = baseAC + coverBonus + bonusAmount;
+
+  /* Build display string from mechanical truth */
+  let displayText = String(baseAC);
+
+  if (coverBonus === 2) {
+    displayText += " + 2 Partial Cover";
+  }
+
+  if (coverBonus === 4) {
+    displayText += " + 4 Full Cover";
+  }
+
+  if (bonusAmount !== 0) {
+    displayText += " + " + bonusAmount;
+    if (bonusLabel !== "" && bonusLabel.toLowerCase() !== "none") {
+      displayText += " " + bonusLabel;
+    }
+  }
+
+  document.getElementById("armorBaseACValue").textContent = displayText;
 
   const slots = [
     "clothing","head","torso",
@@ -3225,15 +4669,15 @@ document.getElementById("armorBaseACValue").textContent = baseAC;
     "leftleg","rightleg"
   ];
 
-  /* initialize all slots with base AC */
+  /* initialize all slots with final Base AC (includes cover) */
   const tacTotals = {
-    clothing: baseAC,
-    head: baseAC,
-    torso: baseAC,
-    leftarm: baseAC,
-    rightarm: baseAC,
-    leftleg: baseAC,
-    rightleg: baseAC
+    clothing: finalBaseAC,
+    head: finalBaseAC,
+    torso: finalBaseAC,
+    leftarm: finalBaseAC,
+    rightarm: finalBaseAC,
+    leftleg: finalBaseAC,
+    rightleg: finalBaseAC
   };
 
   slots.forEach(s => {
@@ -3241,22 +4685,42 @@ document.getElementById("armorBaseACValue").textContent = baseAC;
     if (wtEl) wtEl.textContent = "";
   });
 
-  if (!character.equipment) return;
+if (!character.equipment || !character.equipment.armor) {
 
-  const armorList = Array.isArray(character.equipment.armor)
-    ? character.equipment.armor
-    : [character.equipment.armor];
+  const slots = [
+    "clothing","head","torso",
+    "leftarm","rightarm",
+    "leftleg","rightleg"
+  ];
+
+  slots.forEach(s => {
+    const nameEl = document.getElementById(`armor-${s}-name`);
+    const matEl  = document.getElementById(`armor-${s}-material`);
+    const acEl   = document.getElementById(`armor-${s}-ac`);
+    const tacEl  = document.getElementById(`armor-${s}-tac`);
+    const wtEl   = document.getElementById(`armor-${s}-weight`);
+
+    if (nameEl) nameEl.textContent = "";
+    if (matEl)  matEl.textContent = "";
+    if (acEl)   acEl.textContent = "";
+    if (tacEl)  tacEl.innerHTML = "";
+    if (wtEl)   wtEl.textContent = "";
+  });
+
+  return;
+}
+
+  const armorObj = character.equipment.armor;
 
   const norm = s => s.replace(/_/g, " ").toLowerCase();
 
-  armorList.forEach(aid => {
+  Object.entries(armorObj).forEach(([area, aid]) => {
+
     const item =
       equipment.find(e => e.id === aid) ||
       equipment.find(e => norm(e.eqpName) === norm(aid));
 
-    if (!item || !item.Area) return;
-
-    const area = item.Area.toLowerCase().replace(/\s/g, "");
+    if (!item) return;
 
 const nameEl = document.getElementById(`armor-${area}-name`);
 const matEl  = document.getElementById(`armor-${area}-material`);
@@ -3348,14 +4812,8 @@ const data = MATERIALS[mat];
 
     });
 
-  /* Apply cover + AC added */
-  const acAdded = Number(character?.armorACAdded) || 0;
-  const coverBonus =
-    document.getElementById("cover-full")?.checked ? 4 :
-    document.getElementById("cover-partial")?.checked ? 2 : 0;
-
-  Object.keys(tacTotals).forEach(k => {
-    tacTotals[k] += acAdded + coverBonus;
+/* AC bonus already applied in Base AC — do NOT reapply */
+Object.keys(tacTotals).forEach(k => {
     const el = document.getElementById(`armor-${k}-tac`);
     if (el) el.innerHTML = `<strong>TAC ${tacTotals[k]}</strong>`;
   });
@@ -3563,7 +5021,7 @@ body.innerHTML = items.map(e => `
 `).join("");
 
 document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
-  btn.onclick = () => addEquipmentToSheet(btn.dataset.id);
+  btn.onclick = () => purchaseEquipment(btn.dataset.id);
 });
 }
 
@@ -3579,7 +5037,7 @@ function renderEquipmentCategory(type, bodyId) {
   );
 
   body.innerHTML = items.map(e => `
-<tr>
+<tr data-type="${e.eqpType}">
   <td><button class="addEquipmentBtn" data-id="${e.id}" style="font-size:0.5em; padding:2px 6px;">Add</button></td>
   <td style="text-align:left;">${e.eqpName || ""}</td>
   <td style="text-align:left;">
@@ -3624,9 +5082,11 @@ function renderEquipmentCategory(type, bodyId) {
   `).join("");
 
   document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
-    btn.onclick = () => addEquipmentToSheet(btn.dataset.id);
+    btn.onclick = () => purchaseEquipment(btn.dataset.id);
   });
 }
+
+/* ===== EQUIPMENT CATEGORY RENDERERS (FIXED: NO OVERWRITES) ===== */
 
 function renderAmmunition() {
   renderEquipmentCategory("ammo", "ammunitionBody");
@@ -3636,36 +5096,101 @@ function renderArmor() {
   renderEquipmentCategory("armr", "armorBody");
 }
 
-function renderGeneralGear() {
-  renderEquipmentCategory("genr", "generalGearBody");
-}
-
-function renderMagicalItems() {
-  renderEquipmentCategory("potn", "magicalItemsBody");
-}
-
 function renderAlchemical() {
   renderEquipmentCategory("alch", "alchemicalItemsBody");
 }
 
-function renderContainers() {
-  renderEquipmentCategory("cont", "generalGearBody");
+/* General Gear bucket: genr + clth + kits + cont */
+function renderGeneralGearBucket() {
+  const body = document.getElementById("generalGearBody");
+  if (!body || !Array.isArray(equipment)) return;
+
+  const items = equipment
+    .filter(e => ["genr", "clth", "kits", "cont"].includes(e.eqpType))
+    .sort((a, b) =>
+      a.eqpType.localeCompare(b.eqpType) ||
+      a.eqpName.localeCompare(b.eqpName)
+    );
+
+  body.innerHTML = items.map(e => `
+<tr>
+  <td><button class="addEquipmentBtn" data-id="${e.id}" style="font-size:0.5em; padding:2px 6px;">Add</button></td>
+  <td style="text-align:left;">${e.eqpName || ""}</td>
+  <td style="text-align:left;">${e.eqpDesc || ""}</td>
+  <td style="text-align:center;">${
+({
+  guns: "Firearms",
+  mele: "Melee",
+  ha2h: "Hand to Hand",
+  rngd: "Ranged",
+  thrw: "Thrown",
+  armr: "Armor",
+  arpk: "Armor Pack",
+  genr: "General Gear",
+  cont: "Containers",
+  kits: "Kits",
+  clth: "Clothing",
+  ammo: "Ammunition",
+  alch: "Alchemical Items",
+  potn: "Potions",
+  tome: "Tomes"
+})[e.eqpType] || ""
+}</td>
+  <td style="text-align:center;">${e.DMGorTAC || ""}</td>
+  <td style="text-align:center;">${e.DMGTypeMaterial || ""}</td>
+  <td style="text-align:center;">${e.cost || ""}</td>
+  <td style="text-align:center;">${e.slots ?? ""}</td>
+  <td style="text-align:center;">${e.weight ?? ""}</td>
+  <td></td>
+</tr>
+  `).join("");
+
+  document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
+    btn.onclick = () => purchaseEquipment(btn.dataset.id);
+  });
 }
 
-function renderClothing() {
-  renderEquipmentCategory("clth", "generalGearBody");
+/* Potions + Tomes bucket */
+function renderPotionsAndTomes() {
+
+  const body = document.getElementById("magicalItemsBody");
+  if (!body || !Array.isArray(equipment)) return;
+
+  const items = equipment
+    .filter(e => ["potn", "tome"].includes(e.eqpType))
+    .sort((a, b) =>
+      a.eqpType.localeCompare(b.eqpType) ||
+      a.eqpName.localeCompare(b.eqpName)
+    );
+
+  body.innerHTML = items.map(e => `
+<tr>
+  <td><button class="addEquipmentBtn" data-id="${e.id}" style="font-size:0.5em; padding:2px 6px;">Add</button></td>
+  <td style="text-align:left;">${e.eqpName || ""}</td>
+  <td style="text-align:left;">${e.eqpDesc || ""}</td>
+  <td style="text-align:center;">${
+({
+  potn: "Potions",
+  tome: "Tomes"
+})[e.eqpType] || ""
+}</td>
+  <td style="text-align:center;">${e.DMGorTAC || ""}</td>
+  <td style="text-align:center;">${e.DMGTypeMaterial || ""}</td>
+  <td style="text-align:center;">${e.cost || ""}</td>
+  <td style="text-align:center;">${e.slots ?? ""}</td>
+  <td style="text-align:center;">${e.weight ?? ""}</td>
+  <td></td>
+</tr>
+  `).join("");
+
+  document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
+    btn.onclick = () => purchaseEquipment(btn.dataset.id);
+  });
 }
 
-function renderKits() {
-  renderEquipmentCategory("kits", "generalGearBody");
-}
-
+/* Armor Packs intentionally disabled */
 function renderArmorPacks() {
-  renderEquipmentCategory("arpk", "armorBody");
-}
-
-function renderTomes() {
-  renderEquipmentCategory("tome", "magicalItemsBody");
+  return;
 }
 
 function renderWeapons() {
@@ -3675,11 +5200,11 @@ function renderWeapons() {
   const weaponTypes = ["guns", "mele", "ha2h", "rngd", "thrw"];
 
   const items = equipment
-  .filter(e => weaponTypes.includes(e.eqpType))
-  .sort((a, b) =>
-    a.eqpType.localeCompare(b.eqpType) ||
-    a.eqpName.localeCompare(b.eqpName)
-  );
+    .filter(e => weaponTypes.includes(e.eqpType))
+    .sort((a, b) =>
+      a.eqpType.localeCompare(b.eqpType) ||
+      a.eqpName.localeCompare(b.eqpName)
+    );
 
   body.innerHTML = items.map(e => `
     <tr data-type="${e.eqpType}">
@@ -3695,7 +5220,6 @@ function renderWeapons() {
   thrw: "Thrown",
 
   armr: "Armor",
-  arpk: "Armor Pack",
 
   genr: "General Gear",
   cont: "Containers",
@@ -3719,29 +5243,8 @@ function renderWeapons() {
   `).join("");
 
   document.querySelectorAll(".addEquipmentBtn").forEach(btn => {
-    btn.onclick = () => addEquipmentToSheet(btn.dataset.id);
+    btn.onclick = () => purchaseEquipment(btn.dataset.id);
   });
-}
-
-function addEquipmentToSheet(id) {
-  if (!character) return;
-
-  if (!Array.isArray(character.selectedEquipment))
-    character.selectedEquipment = [];
-
-  if (!character.selectedEquipment.includes(id))
-    character.selectedEquipment.push(id);
-
-  renderSelectedEquipment();
-}
-
-function removeEquipmentFromSheet(id) {
-  if (!character || !Array.isArray(character.selectedEquipment)) return;
-
-  character.selectedEquipment =
-    character.selectedEquipment.filter(x => x !== id);
-
-  renderSelectedEquipment();
 }
 
 /* ===== INVENTORY CONTAINER RENDER START ===== */
@@ -3770,24 +5273,31 @@ function renderContainers() {
         character.inventorySelection.index === i;
 
       const sel = character.inventorySelection;
-let isSelectedItem = false;
 
-if (sel && sel.container === "backpack") {
-  const selectedSlot = pack[sel.index];
-  if (selectedSlot && slot && slot.itemId === selectedSlot.itemId) {
-    isSelectedItem = true;
-  }
-}
+      let isSelected = false;
 
-if (isSelectedItem) {
-  cell.style.background = "#8b7dbe";
-  cell.style.border = "2px solid #634fa2";
-  cell.style.color = "#d8d2e7";
-} else {
-  cell.style.background = "#9dc384";
-  cell.style.border = "2px solid #48752c";
-  cell.style.color = "#48752c";
-}
+      if (sel && sel.container === "backpack") {
+        const selectedSlot = pack[sel.index];
+
+        if (selectedSlot && selectedSlot.anchor) {
+          const start = sel.index;
+          const end = sel.index + (selectedSlot.size || 1);
+
+          if (i >= start && i < end) {
+            isSelected = true;
+          }
+        }
+      }
+
+      if (isSelected) {
+        cell.style.background = "linear-gradient(to bottom, #bdd6ac, #48752c)";
+        cell.style.border = "2px solid #48752c";
+        cell.style.color = "#48752c";
+      } else {
+        cell.style.background = "#9dc384";
+        cell.style.border = "2px solid #48752c";
+        cell.style.color = "#48752c";
+      }
 
       if (!slot) {
         cell.textContent = String(i + 1);
@@ -3804,6 +5314,15 @@ if (isSelectedItem) {
 
       cell.innerHTML = `${name}<br>${sizeText}`;
       cell.title = `${name} — ${sizeText}`;
+
+/* ===== AUTO FONT FIT START ===== */
+cell.style.fontSize = "0.75em";
+
+while (cell.scrollHeight > cell.clientHeight && parseFloat(cell.style.fontSize) > 0.55) {
+  cell.style.fontSize = (parseFloat(cell.style.fontSize) - 0.05) + "em";
+}
+/* ===== AUTO FONT FIT END ===== */
+
     }
   }
 
@@ -3815,19 +5334,16 @@ for (let i = 0; i < 3; i++) {
   const slot = clothing[i];
 
   const sel = character.inventorySelection;
-  let isSelectedItem = false;
 
-  if (sel && sel.container === "clothing") {
-    const selectedSlot = clothing[sel.index];
-    if (selectedSlot && slot && slot.itemId === selectedSlot.itemId) {
-      isSelectedItem = true;
-    }
-  }
+  const isSelected =
+    sel &&
+    sel.container === "clothing" &&
+    sel.index === i;
 
-  if (isSelectedItem) {
-    cell.style.background = "#8b7dbe";
-    cell.style.border = "2px solid #634fa2";
-    cell.style.color = "#d8d2e7";
+  if (isSelected) {
+    cell.style.background = "linear-gradient(to bottom, #bdd6ac, #48752c)";
+    cell.style.border = "2px solid #48752c";
+    cell.style.color = "#48752c";
   } else {
     cell.style.background = "#9dc384";
     cell.style.border = "2px solid #48752c";
@@ -3846,6 +5362,14 @@ for (let i = 0; i < 3; i++) {
 
   cell.textContent = item ? (item.eqpName || slot.itemId) : slot.itemId;
   cell.title = item ? (item.eqpName || slot.itemId) : slot.itemId;
+
+/* ===== AUTO FONT FIT START ===== */
+cell.style.fontSize = "0.65em";
+
+while (cell.scrollHeight > cell.clientHeight && parseFloat(cell.style.fontSize) > 0.55) {
+  cell.style.fontSize = (parseFloat(cell.style.fontSize) - 0.05) + "em";
+}
+/* ===== AUTO FONT FIT END ===== */
 }
   // ===== Item details list (anchor items only) =====
   const list = document.getElementById("backpackItemsList");
@@ -3878,6 +5402,188 @@ for (let i = 0; i < 3; i++) {
   }
 }
 /* ===== INVENTORY CONTAINER RENDER END ===== */
+
+/* ===== WEIGHT & MOVEMENT PANEL START ===== */
+function renderWeightMovementPanel() {
+
+  const el = document.getElementById("weightMovementContent");
+  if (!el || !character) return;
+
+  const STR = Number(character.abilities?.STR?.value || 0);
+  const baseSpeed = Number(
+    (races.find(r => r.id === character.raceId)?.charDistance || 0)
+  ) + 20;
+
+  let totalWeight = 0;
+
+  /* ===== INVENTORY WEIGHT ===== */
+  if (character.inventory) {
+    Object.values(character.inventory).forEach(container => {
+      if (!Array.isArray(container)) return;
+      container.forEach(slot => {
+        if (slot && slot.itemId) {
+          const item = equipment.find(e => e.id === slot.itemId);
+          if (item) totalWeight += Number(item.weight || 0);
+        }
+      });
+    });
+  }
+
+  /* ===== EQUIPPED WEIGHT ===== */
+  if (character.equipment) {
+
+    if (Array.isArray(character.equipment.weapons)) {
+      character.equipment.weapons.forEach(id => {
+        const item = equipment.find(e => e.id === id);
+        if (item) totalWeight += Number(item.weight || 0);
+      });
+    }
+
+    if (character.equipment.armor) {
+      Object.values(character.equipment.armor).forEach(id => {
+        const item = equipment.find(e => e.id === id);
+        if (item) totalWeight += Number(item.weight || 0);
+      });
+    }
+
+    if (Array.isArray(character.equipment.gear)) {
+      character.equipment.gear.forEach(id => {
+        const item = equipment.find(e => e.id === id);
+        if (item) totalWeight += Number(item.weight || 0);
+      });
+    }
+  }
+
+totalWeight += 1; // Manual backpack weight
+
+  const baseWeight = STR * 10;
+  const haul = baseWeight + 50;
+  const lift = STR * 30 + 50;
+  const drag = STR * 50 + 50;
+
+  let finalSpeed = baseSpeed;
+  let statusLine = "";
+  let weightLine = `Weight: ${totalWeight} of ${baseWeight}`;
+
+  if (totalWeight > baseWeight && totalWeight <= haul) {
+    finalSpeed = Math.floor(baseSpeed * 0.75);
+    if (finalSpeed === baseSpeed) finalSpeed = baseSpeed - 5;
+
+    weightLine += ` - <span style="
+      background:#ffd966;
+      padding:4px 8px;
+      border-radius:6px;
+      font-weight:bold;
+    ">Overweight!</span>`;
+
+    statusLine = `<div style="color:#ffd966; font-weight:bold;">
+      MOVEMENT SPEED: ${finalSpeed}
+    </div>
+    <div style="color:#ffd966;">
+      ${character.appearance?.name || "Character"} can only move 75% of normal speed!
+    </div>`;
+  }
+
+  if (totalWeight > haul) {
+    finalSpeed = Math.floor(baseSpeed * 0.5);
+    if (finalSpeed === baseSpeed) finalSpeed = baseSpeed - 5;
+
+    weightLine += ` - <span style="
+      background:#e06666;
+      padding:4px 8px;
+      border-radius:6px;
+      font-weight:bold;
+    ">Encumbered!</span>`;
+
+    statusLine = `<div style="color:#e06666; font-weight:bold;">
+      MOVEMENT SPEED: ${finalSpeed}
+    </div>
+    <div style="color:#e06666;">
+      ${character.appearance?.name || "Character"} can only move 50% of normal speed and cannot run!
+    </div>`;
+  }
+
+  if (!statusLine) {
+    statusLine = `<div>
+      MOVEMENT SPEED: ${baseSpeed}
+    </div>`;
+  }
+
+const isOver = totalWeight > baseWeight && totalWeight <= haul;
+const isEnc  = totalWeight > haul;
+
+let containerBg = "#634fa2";
+let textColor   = "#d8d2e7";
+let stateLabel  = "";
+
+if (isOver) {
+  containerBg = "linear-gradient(to right, #fffd00, #ffc100)";
+  textColor   = "#634fa2";   // dark purple text
+  stateLabel  = "OVERWEIGHT";
+}
+
+if (isEnc) {
+  containerBg = "linear-gradient(to right, #ff0052, #ff0013)";
+  textColor   = "#ffffff";   // white text
+  stateLabel  = "ENCUMBERED";
+}
+
+el.innerHTML = `
+
+<div style="
+  background:${containerBg};
+  color:${textColor};
+  padding:16px;
+  border-radius:14px;
+  font-size:1.35em;
+  font-weight:bold;
+  text-align:center;
+  transition:all 0.2s ease;
+">
+
+  ${stateLabel ? `<div style="margin-bottom:6px; font-size:0.85em; letter-spacing:1px;">
+    ${stateLabel}
+  </div>` : ""}
+
+  <div style="margin-bottom:8px;">
+    Current Movement Speed<em>:</em> ${isOver || isEnc ? finalSpeed : baseSpeed}
+  </div>
+
+  <div>
+    Weight: ${totalWeight} of ${baseWeight}
+  </div>
+
+</div>
+
+<div style="
+  margin-top:18px;
+  font-size:1.2em;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px 36px;
+  text-align:center;
+">
+
+  <div>
+    <strong>Base Weight</strong> <em>(STR x 10):</em> ${baseWeight}
+  </div>
+
+  <div>
+    <strong>Haul</strong> <em>(STR x 10)+50:</em> ${haul}
+  </div>
+
+  <div>
+    <strong>Lift</strong> <em>(STR x 30)+50:</em> ${lift}
+  </div>
+
+  <div>
+    <strong>Drag</strong> <em>(STR x 50)+50:</em> ${drag}
+  </div>
+
+</div>
+`;
+}
+/* ===== WEIGHT & MOVEMENT PANEL END ===== */
 
 /* ===== DROP SELECTED ITEM START ===== */
 function dropSelectedItem() {
@@ -3915,10 +5621,13 @@ function dropSelectedItem() {
 /* ===== DROP SELECTED ITEM END ===== */
 
 function renderSelectedEquipment() {
-  const el = document.getElementById("equipmentContent");
+  const el = document.getElementById("equipmentPanel");
   if (!el || !character) return;
 
-  const list = character.selectedEquipment || [];
+  const list = [
+  ...(character.equipment?.weapons || []),
+  ...Object.values(character.equipment?.armor || {})
+];
 
 let html = `
 <div style="background:linear-gradient(to right, #48752c, #9dc384); color:#bdd6ac; font-weight:bold; font-style:italic; padding:6px 10px; border-radius:8px;">
@@ -3978,18 +5687,21 @@ return "<tr>"
   + "</tr>";
 }).join("");
 
-html += `
-</tbody>
-</table>
-`;
-/* ===== EQUIPMENT MAP RENDER END ===== */
+  html += `
+  </tbody>
+  </table>
+  `;
+  /* ===== EQUIPMENT MAP RENDER END ===== */
 
-html += `
-</tbody>
-</table>
-`;
+  html += `
+  </tbody>
+  </table>
+  `;
 
-  el.innerHTML = html;
+  const contentEl = document.getElementById("equipmentContent");
+  if (contentEl) {
+    contentEl.innerHTML = html;
+  }
 }
 
 /* ===== MASTER BOOK RENDER ===== */
@@ -3997,21 +5709,18 @@ function renderEquipmentBook() {
 
   if (!Array.isArray(equipment)) return;
 
-  renderWeapons();
-  renderArmor();
-  renderGeneralGear();
-  renderMagicalItems();
-  renderAmmunition();
-  renderAlchemical();
-  renderClothing();
-  renderKits();
-  renderContainers();
-  renderArmorPacks();
-  renderTomes();
-  renderPotions();
+// FILTER STATE DISABLED
+activeEquipmentFilters.clear();
 
-  applyEquipmentFilters();
+renderWeapons();
+renderArmor();
+renderAmmunition();
+renderAlchemical();
+renderGeneralGearBucket();
+renderPotionsAndTomes();
+
 }
+
 function renderFeatsPanel() {
   const el = document.getElementById("featsContent");
   if (!el) return;
@@ -4086,65 +5795,56 @@ function renderFeatsPanel() {
   el.innerHTML = html || "<em>No feats.</em>";
 }
 
-/* ===== MULTI-FILTER TOGGLE START ===== */
-function toggleEquipmentFilter(type, button) {
-  if (activeEquipmentFilters.has(type)) {
-    activeEquipmentFilters.delete(type);
-
-    button.style.background = "#634fa2";
-    button.style.color = "#d8d2e7";
-    button.style.border = "2px solid #8b7dbe";
-  } else {
-    activeEquipmentFilters.add(type);
-
-    button.style.background = "#d8d2e7";
-    button.style.color = "#634fa2";
-    button.style.border = "2px solid #8b7dbe";
-  }
-
-  applyEquipmentFilters();
-}
-/* ===== MULTI-FILTER TOGGLE END ===== */
-
-/* ===== COMPOSITE FILTER HELPER START ===== */
-function toggleCompositeFilter(types, button) {
-  const allActive = types.every(t => activeEquipmentFilters.has(t));
-
-  if (allActive) {
-    types.forEach(t => activeEquipmentFilters.delete(t));
-    button.style.background = "#634fa2";
-    button.style.color = "#d8d2e7";
-    button.style.border = "2px solid #8b7dbe";
-  } else {
-    types.forEach(t => activeEquipmentFilters.add(t));
-    button.style.background = "#d8d2e7";
-    button.style.color = "#634fa2";
-    button.style.border = "2px solid #8b7dbe";
-  }
-
-  applyEquipmentFilters();
-}
-
-/* ===== COMPOSITE FILTER HELPER END ===== */
 
 function applyEquipmentFilters() {
-
+  // FILTERS DISABLED — show everything that was rendered
   const rows = document.querySelectorAll("#equipmentBookContent tr[data-type]");
-
   rows.forEach(row => {
-    const type = row.dataset.type;
-
-    if (activeEquipmentFilters.size === 0) {
-      row.style.display = "none";
-    } else {
-      row.style.display = activeEquipmentFilters.has(type) ? "" : "none";
-    }
+    row.style.display = "";
   });
-
 }
 
-function update() {
+/* ===== XP THRESHOLD DETECTION START ===== */
 
+function getTotalLevel() {
+  if (Array.isArray(character.classes)) {
+    return character.classes.reduce(
+      (sum, c) => sum + (Number(c.level) || 0),
+      0
+    );
+  }
+  return Number(character.level) || 0;
+}
+
+function getXPThreshold(level) {
+  // Placeholder progression — replace with advancement.csv logic later
+  // Example: 100 XP per level
+  return level * 100;
+}
+
+function evaluateLevelUp() {
+  if (!character) return;
+
+  const totalLevel = getTotalLevel();
+  const threshold = getXPThreshold(totalLevel);
+
+  character.pendingLevelUp =
+    Number(character.xp || 0) >= threshold;
+}
+
+/* ===== XP THRESHOLD DETECTION END ===== */
+
+function update() {
+  ensureLifeState(character);
+  evaluateLevelUp();
+/* ===== TOP BAR TITLE UPDATE START ===== */
+const titleEl = document.getElementById("characterInfoTitle");
+
+if (titleEl) {
+  const name = character?.appearance?.name || "Unnamed Character";
+  titleEl.textContent = `Character Info: ${name}`;
+}
+/* ===== TOP BAR TITLE UPDATE END ===== */
 
 /* ===== ENSURE INVENTORY START ===== */
 if (character && !character.inventory) {
@@ -4173,11 +5873,44 @@ if (character && !character.inventorySelection) {
   renderSpellcastingPanel();
   renderSelectedEquipment();
   renderContainers();
+  renderWeightMovementPanel();
 
   const dropBtn = document.getElementById("dropItemBtn");
   if (dropBtn) dropBtn.onclick = dropSelectedItem;
 
+  const equipBtn = document.getElementById("equipItemBtn");
+  if (equipBtn) equipBtn.onclick = function () {
+
+    if (!character || !character.inventorySelection) return;
+
+    const sel = character.inventorySelection;
+    if (sel.container == null || sel.index == null) return;
+
+    const containerArr = character.inventory?.[sel.container];
+    if (!Array.isArray(containerArr)) return;
+
+    const slot = containerArr[sel.index];
+    if (!slot || !slot.anchor) return;
+
+    const itemId = slot.itemId;
+    if (!itemId) return;
+
+    const size = slot.size || 1;
+
+    // Attempt equip first (this handles all confirmations and arm/leg overlays)
+    purchaseEquipment(itemId);
+
+    // ALWAYS remove original container instance
+    for (let i = 0; i < size; i++) {
+      containerArr[sel.index + i] = null;
+    }
+
+    character.inventorySelection = { container: null, index: null };
+
+    update();
+  };
   renderEquipmentBook();
+
 
   const spellPanel = document.getElementById("spellcastingPanel");
   const isCaster =
@@ -4189,16 +5922,20 @@ if (character && !character.inventorySelection) {
 
   if (spellPanel) spellPanel.style.display = isCaster ? "block" : "none";
 
-  const idxStr = localStorage.getItem("atfSelectedCharacter");
+/* ===== SPELL RESULTS VISIBILITY START ===== */
+const spellResultsPanel = document.getElementById("spellResultsPanel");
+if (spellResultsPanel) {
+  spellResultsPanel.style.display = isCaster ? "block" : "none";
+}
+/* ===== SPELL RESULTS VISIBILITY END ===== */
+
+  const idxStr = localStorage.getItem("atfActiveCharacterIndex");
   const idx = Number(idxStr);
 
   if (Number.isFinite(idx)) {
     const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
     if (saved[idx]) {
-      saved[idx] = {
-        ...JSON.parse(JSON.stringify(character)),
-        savedAt: saved[idx].savedAt || new Date().toLocaleString()
-      };
+      saved[idx] = character;
       localStorage.setItem("atfCharacters", JSON.stringify(saved));
     }
   }
@@ -4209,14 +5946,6 @@ if (character && !character.inventorySelection) {
   const show = step => currentStep >= step;
 
   let html = "";
-
-   /* ================= DESCRIPTION ================= */
-  if (show(8)) {
-    html += `<div style="grid-column:1 / 3; margin:10px 0;">
-      <button id="editDescriptionBtn" class="editable-field">Description:</button>
-      <em>${character.appearance.description || ""}</em>
-    </div>`;
-  }
 
   /* ================= CORE ================= */
   html += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">`;
@@ -4289,33 +6018,76 @@ if (e.gear)    html += `<div><strong>Starting Gear</strong> ${Array.isArray(e.ge
 
 }
 
-    function populateCharacterSelect() {
-      const sel = document.getElementById("characterSelect");
-      const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+function populateCharacterSelect() {
+  const sel = document.getElementById("characterSelect");
+  if (!sel) return;
 
-      // Remove any existing options except placeholder
-      while (sel.options.length > 1) sel.remove(1);
+  const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
 
-      saved.forEach((c, idx) => {
-        const name = (c && c.appearance && c.appearance.name) ? c.appearance.name : "Unnamed Character";
-        const savedAt = c && c.savedAt ? c.savedAt : "";
-        const opt = document.createElement("option");
-        opt.value = String(idx);
-        opt.textContent = savedAt ? `${name} (saved ${savedAt})` : name;
-        sel.appendChild(opt);
-      });
-    }
+  // Remove any existing options except placeholder
+  while (sel.options.length > 1) sel.remove(1);
 
-    function loadSelectedCharacter(indexStr) {
-      const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
-      const idx = Number(indexStr);
-      if (!Number.isFinite(idx) || !saved[idx]) {
-        character = null;
-        document.getElementById("summaryContent").innerHTML = "<em>Select a saved character to view their sheet.</em>";
-        return;
-      }
-character = JSON.parse(JSON.stringify(saved[idx])); // deep copy
+  saved.forEach((c, idx) => {
+    const name = (c && c.appearance && c.appearance.name) ? c.appearance.name : "Unnamed Character";
+    const savedAt = c && c.savedAt ? c.savedAt : "";
+    const opt = document.createElement("option");
+    opt.value = String(idx);
+    opt.textContent = savedAt ? `${name} (saved ${savedAt})` : name;
+    sel.appendChild(opt);
+  });
+
+  const active = Number(localStorage.getItem("atfActiveCharacterIndex"));
+  if (Number.isInteger(active)) {
+    sel.value = String(active);
+  }
+}
+
+function loadSelectedCharacter(indexStr) {
+  const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+  const idx = Number(indexStr);
+
+  if (!Number.isFinite(idx) || !saved[idx]) {
+
+    character = null;
+    window.character = null;
+
+    const ids = [
+      "summaryContent",
+      "spellcastingContent",
+      "selectedEquipmentContent",
+      "equipmentContent",
+      "conditionsContent",
+      "inventoryContent",
+      "attacksContent"
+    ];
+
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = "";
+    });
+
+    return;
+  }
+
+const rawCharacter = JSON.parse(JSON.stringify(saved[idx]));
+
+character = rawCharacter;
+window.character = character;
+
 if (!Array.isArray(character.personalSpells)) character.personalSpells = [];
+
+/* ===== ENSURE EQUIPMENT STRUCTURE START ===== */
+if (!character.equipment) character.equipment = {};
+
+if (!character.equipment.weapons) {
+  character.equipment.weapons = [];
+}
+
+if (!character.equipment.armor) {
+  character.equipment.armor = {};
+}
+/* ===== ENSURE EQUIPMENT STRUCTURE END ===== */
+
 window.character = character;
 
 /* === Ensure top-bar defaults === */
@@ -4362,37 +6134,55 @@ if (!hasLevels) {
 
 if (character.skills) {
   const fixed = {};
-  Object.entries(character.skills).forEach(([k,v]) => {
-    fixed[k.toLowerCase().replace(/[^a-z]/g,"")] = v;
+  Object.entries(character.skills).forEach(([k, v]) => {
+    const id = k.toLowerCase().replace(/[^a-z]/g, "");
+    // Preserve full skill object, just normalize key
+    fixed[id] = v;
   });
   character.skills = fixed;
 }
 
 if (!Array.isArray(character.conditions)) character.conditions = [];
 
+/* ===== LEVEL UP FLAGS START ===== */
+if (character.pendingLevelUp == null) character.pendingLevelUp = false;
+if (character.levelUpInProgress == null) character.levelUpInProgress = null;
+/* ===== LEVEL UP FLAGS END ===== */
+
 window.character = character;
-update();
+
+/* ===== FORCE SKILL DERIVATION AFTER LOAD ===== */
+if (typeof rebuildDerivedStats === "function") {
+  rebuildDerivedStats();
+}
+/* ===== END FORCE SKILL DERIVATION ===== */
+
+if (races.length && classes.length && deities.length) update();
     }
 
-    document.getElementById("characterSelect").addEventListener("change", (e) => {
-  const idx = e.target.value;
-  localStorage.setItem("atfSelectedCharacter", idx);
-  loadSelectedCharacter(idx);
-});
+const characterSelect = document.getElementById("characterSelect");
 
-populateCharacterSelect();    
+if (characterSelect) {
+  characterSelect.addEventListener("change", (e) => {
+    const idx = e.target.value;
+    localStorage.setItem("atfSelectedCharacter", idx);
+    loadSelectedCharacter(idx);
+  });
+
+  populateCharacterSelect();
+}
 
 document.getElementById("saveCharBtn").addEventListener("click", () => {
-  const idxStr = document.getElementById("characterSelect").value;
-  const idx = Number(idxStr);
-
-  if (!Number.isFinite(idx) || !character) return;
-
-  if (!confirm("Are you sure you want to overwrite this character?")) return;
+  if (!character) return;
 
   const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
 
-  saved[idx] = {
+  const activeIndex = Number(localStorage.getItem("atfActiveCharacterIndex"));
+  if (!Number.isInteger(activeIndex) || !saved[activeIndex]) return;
+
+  if (!confirm("Are you sure you want to overwrite this character?")) return;
+
+  saved[activeIndex] = {
     ...JSON.parse(JSON.stringify(character)),
     savedAt: new Date().toLocaleString()
   };
@@ -4400,7 +6190,6 @@ document.getElementById("saveCharBtn").addEventListener("click", () => {
   localStorage.setItem("atfCharacters", JSON.stringify(saved));
   alert("Character Saved");
 });
-
 document.getElementById("downloadCharacterBtn").addEventListener("click", () => {
   const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
   const idxStr = document.getElementById("characterSelect").value;
@@ -4434,6 +6223,12 @@ Promise.all([
     races = r;
     classes = c;
     feats = f;
+    deities = d;
+/* ===== HYDRATE AUTO-LOADED CHARACTER START ===== */
+if (character) {
+  update();
+}
+/* ===== HYDRATE AUTO-LOADED CHARACTER END ===== */
 
 /* ===== BOOK OF FEATS: POPULATE TYPE DROPDOWN START ===== */
 
@@ -4557,6 +6352,37 @@ document.addEventListener("change", e => {
   }
 });
 
+/* ===== BOOK OF THINGS FILTER START ===== */
+document.addEventListener("change", e => {
+  if (e.target.id !== "generalGearFilter") return;
+
+  const val = e.target.value;
+  const rows = document.querySelectorAll("#equipmentBookContent tbody tr");
+
+  rows.forEach(r => {
+    if (val === "all") {
+      r.style.display = "";
+      return;
+    }
+
+    const typeCell = r.children[3];
+    if (!typeCell) return;
+
+    const typeText = typeCell.textContent.trim();
+
+    const matchMap = {
+      genr: "General Gear",
+      clth: "Clothing",
+      kits: "Kits",
+      cont: "Containers"
+    };
+
+    r.style.display =
+      typeText === matchMap[val] ? "" : "none";
+  });
+});
+/* ===== BOOK OF THINGS FILTER END ===== */
+
 document.addEventListener("click", e => {
   if (e.target.id === "featsEligibleBtn") {
     setTimeout(renderFeatsTableFiltered, 0);
@@ -4621,11 +6447,26 @@ populateCharacterSelect();
 console.log("TRACE: after populate");
 /* ===== LOADER TRACE END ===== */
 
-    const last = localStorage.getItem("atfSelectedCharacter");
-    if (last !== null) {
-      document.getElementById("characterSelect").value = last;
-      loadSelectedCharacter(last);
-    }
+const last = localStorage.getItem("atfActiveCharacterIndex");
+const saved = JSON.parse(localStorage.getItem("atfCharacters") || "[]");
+const idx = Number(last);
+
+if (
+  Number.isInteger(idx) &&
+  saved[idx]
+) {
+character = JSON.parse(JSON.stringify(saved[idx]));
+ensureCharacterIdentity(character);
+globalThis.character = character;
+
+/* ===== ACTIVE CHARACTER INDEX SYNC START ===== */
+localStorage.setItem("atfSelectedCharacter", String(idx));
+/* ===== ACTIVE CHARACTER INDEX SYNC END ===== */
+
+if (typeof update === "function") {
+  update();
+}
+}
   })
   .catch(() => {
     populateCharacterSelect();
@@ -4693,6 +6534,41 @@ if (e.target.id === "armor-clothing-name") {
 }
 /* ===== CLOTHING EDIT BUTTON END ===== */
 
+/* ===== HP EDITABLE FIELD START ===== */
+if (e.target.id === "hp-current" && character) {
+
+  const span = e.target;
+
+  const input = document.createElement("input");
+  input.type = "number";
+  input.value = character.hpCurrent ?? 0;
+  input.style.width = "60px";
+
+  span.replaceWith(input);
+  input.focus();
+
+  input.addEventListener("keydown", ev => {
+    if (ev.key === "Enter") {
+
+      const val = Number(input.value);
+      character.hpCurrent = Number.isFinite(val) ? val : 0;
+
+      const newSpan = document.createElement("span");
+      newSpan.id = "hp-current";
+      newSpan.className = "editable-field";
+      newSpan.tabIndex = 0;
+      newSpan.textContent = character.hpCurrent;
+
+      input.replaceWith(newSpan);
+
+      update();
+    }
+  });
+
+  return;
+}
+/* ===== HP EDITABLE FIELD END ===== */
+
  if (e.target.id === "conditionsButton" && character) {
   if (!Array.isArray(conditionsData) || !conditionsData.length) {
     alert("No conditions loaded.");
@@ -4717,7 +6593,14 @@ if (e.target.id === "armor-clothing-name") {
 
 if (e.target.dataset.removeCondition && character) {
   const i = Number(e.target.dataset.removeCondition);
+
+  if (Array.isArray(character.conditions) && Number.isInteger(i)) {
+    character.conditions.splice(i, 1);
+  }
+
   renderConditionsPanel();
+  renderStatsPanel();
+
   return;
 }
 
@@ -4747,16 +6630,137 @@ if (e.target.classList && e.target.classList.contains("resolveBtn")) {
 }
 /* ===== CONDITION RESOLVE BUTTON HANDLER END ===== */
 
-if (e.target.id === "addConditionBtn" && character) {
-  if (!Array.isArray(conditionsData) || !conditionsData.length) return;
+/* ===== REST BUTTON HANDLERS START ===== */
 
-  const name = conditionsData[0].name || conditionsData[0].id;
-  if (!Array.isArray(character.conditions)) character.conditions = [];
-  character.conditions.push(name);
+if (e.target.id === "quickRestBtn" && character) {
 
-  renderConditionsPanel();
+  if (roundState?.active) {
+    alert("Cannot rest during combat.");
+    return;
+  }
+
+  if ((character.hpCurrent ?? 0) <= 0) {
+    alert("Cannot rest while Dying.");
+    return;
+  }
+
+  if (character.conditionStates && character.conditionStates["Bleeding"] !== undefined) {
+    alert("Cannot rest while Bleeding or Gushing.");
+    return;
+  }
+
+  const confirmRest = confirm(
+    "Quick Rest (15 minutes)\n\n• Recover 1 HP\n• Does not remove conditions\n\nContinue?"
+  );
+
+  if (!confirmRest) return;
+
+  const maxHP = character.baseHP ?? 0;
+  character.hpCurrent = Math.min(maxHP, (character.hpCurrent ?? maxHP) + 1);
+
+  update();
+  alert("Quick Rest Complete.");
   return;
 }
+
+if (e.target.id === "shortRestBtn" && character) {
+
+  if (roundState?.active) {
+    alert("Cannot rest during combat.");
+    return;
+  }
+
+  if ((character.hpCurrent ?? 0) <= 0) {
+    alert("Cannot rest while Dying.");
+    return;
+  }
+
+  if (character.conditionStates && character.conditionStates["Bleeding"] !== undefined) {
+    alert("Cannot rest while Bleeding or Gushing.");
+    return;
+  }
+
+  const confirmRest = confirm(
+    "Short Rest (1 hour)\n\n• Recover 5 HP\n• Remove Winded\n\nContinue?"
+  );
+
+  if (!confirmRest) return;
+
+  const maxHP = character.baseHP ?? 0;
+  character.hpCurrent = Math.min(maxHP, (character.hpCurrent ?? maxHP) + 5);
+
+  if (character.conditionStates && character.conditionStates["Winded"] !== undefined) {
+    delete character.conditionStates["Winded"];
+  }
+
+  update();
+  alert("Short Rest Complete.");
+  return;
+}
+
+if (e.target.id === "fullRestBtn" && character) {
+
+  if (roundState?.active) {
+    alert("Cannot rest during combat.");
+    return;
+  }
+
+  if ((character.hpCurrent ?? 0) <= 0) {
+    alert("Cannot take a Full Rest while Dying.");
+    return;
+  }
+
+  if (character.conditionStates && character.conditionStates["Bleeding"] !== undefined) {
+    alert("Cannot rest while Bleeding or Gushing.");
+    return;
+  }
+
+  const confirmRest = confirm(
+    "Full Rest (8 hours)\n\n• Recover Base HP + Level\n• Regain 1 Luck (max 3)\n• Remove Winded\n• Reduce other conditions by one step\n\nContinue?"
+  );
+
+  if (!confirmRest) return;
+
+  const totalLevel = Array.isArray(character.classes)
+    ? character.classes.reduce((sum, c) => sum + (Number(c.level) || 0), 0)
+    : Number(character.level || 0);
+
+  const maxHP = character.baseHP ?? 0;
+  character.hpCurrent = Math.min(
+    maxHP,
+    (character.hpCurrent ?? maxHP) + (maxHP + totalLevel)
+  );
+
+  character.luck = Math.min(3, (character.luck ?? 0) + 1);
+
+  if (character.conditionStates) {
+
+    if (character.conditionStates["Winded"] !== undefined) {
+      delete character.conditionStates["Winded"];
+    }
+
+    Object.keys(character.conditionStates).forEach(key => {
+
+      if (key === "Bleeding") return;
+
+      let idx = Number(character.conditionStates[key]);
+      if (!Number.isFinite(idx)) return;
+
+      if (idx <= 0) {
+        delete character.conditionStates[key];
+      } else {
+        character.conditionStates[key] = idx - 1;
+      }
+
+    });
+  }
+
+  update();
+  alert("Full Rest Complete.");
+  return;
+}
+
+/* ===== REST BUTTON HANDLERS END ===== */
 
 /* ===== ROUND ENGINE CLICK HANDLERS START ===== */
 
@@ -4800,10 +6804,58 @@ if (e.target.id === "roundNextBtn") {
   roundState.round += 1;
   roundState.roundStart = Date.now();
 
-  renderConditionsPanel();
+  ensureLifeState(character);
+
+  /* ===== PER ROUND EFFECTS START ===== */
+
+  // 1️⃣ Bleeding / Gushing
+  if (character.conditionStates && character.conditionStates["Bleeding"] !== undefined) {
+    const idx = Number(character.conditionStates["Bleeding"]);
+    if (idx === 0) character.hpCurrent -= 1;
+    if (idx === 1) character.hpCurrent -= 2;
+  }
+
+  // 2️⃣ HP-based Unconscious / Dying trigger
+  const STR = Number(character.STR || 0);
+  const END = Number(character.END || 0);
+  const deathThreshold = -1 * (STR + END);
+
+  if (character.hpCurrent <= 0 && !character.isDead) {
+    character.isUnconscious = true;
+    if (!character.isStabilized) character.isDying = true;
+  }
+
+  // 3️⃣ Dying drain (stacks with bleeding)
+  if (character.isDying && !character.isStabilized) {
+    character.hpCurrent -= 1;
+  }
+
+  // 4️⃣ Death threshold
+  if (character.hpCurrent <= deathThreshold) {
+    character.isDead = true;
+    character.isDying = false;
+    character.isUnconscious = false;
+  }
+
+  // 5️⃣ Crit unconscious countdown
+  if (character.unconsciousRounds > 0) {
+    character.unconsciousRounds -= 1;
+    if (character.unconsciousRounds <= 0 && character.hpCurrent > 0) {
+      character.isUnconscious = false;
+    }
+  }
+
+  // 6️⃣ Clear states if healed above 0
+  if (character.hpCurrent > 0 && !character.isDead) {
+    character.isDying = false;
+    character.isStabilized = false;
+  }
+
+  /* ===== PER ROUND EFFECTS END ===== */
+
+  update();
   return;
 }
-
 if (e.target.id === "roundEndBtn") {
 
   if (!roundState.active) return;
@@ -5079,11 +7131,213 @@ if (e.target.dataset.rmvspell && character) {
 ["cover-partial","cover-full","armor-ac-added"].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
-  el.addEventListener("change", renderArmorPanel);
+
+  el.addEventListener("change", () => {
+    const scrollY = window.scrollY;
+    renderArmorPanel();
+    window.scrollTo(0, scrollY);
+  });
 });
 
 
 })();
+
+/* ===== LEVEL UP HP PREVIEW START ===== */
+
+function calculateLevelUpHP() {
+
+  if (!character || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+  if (!preview.selectedClassId) return;
+
+  const race = races.find(r => r.id === character.raceId);
+  const cls  = classes.find(c => c.id === preview.selectedClassId);
+
+  if (!race || !cls) return;
+
+  const currentTotalLevel =
+    character.classes.reduce((sum, c) => sum + (Number(c.level) || 0), 0);
+
+  const newTotalLevel = currentTotalLevel + 1;
+
+  const racialHP = Number(race.hpPerLevel || 0);
+  const classHP  = Number(cls.hpPerLevel || 0);
+
+  const hpGain = racialHP + classHP + newTotalLevel;
+
+  preview.hpGain = hpGain;
+  preview.hpPreview = character.maxHP + hpGain;
+
+  renderLevelUpHP();
+}
+
+function renderLevelUpHP() {
+
+  const container = document.getElementById("levelUpHPSection");
+  if (!container || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+
+  container.innerHTML = `
+    <div>
+      <strong>Hit Point Gain</strong><br>
+      You gain <strong>${preview.hpGain}</strong> HP.<br>
+      New Max HP: <strong>${preview.hpPreview}</strong>
+    </div>
+  `;
+}
+
+/* ===== LEVEL UP HP PREVIEW END ===== */
+
+/* ===== LEVEL UP SKILL PREVIEW START ===== */
+
+function calculateLevelUpSkillPoints() {
+
+  if (!character || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+
+  const intVal = Number(character.abilities?.INT?.value || 0);
+
+  let points = 1;
+  if (intVal >= 4 && intVal <= 7) points = 2;
+  if (intVal >= 8) points = 3;
+
+  preview.totalSkillPoints = points;
+
+  if (!preview.skillAllocations) {
+    preview.skillAllocations = {};
+  }
+
+  // ===== NEW CLASS SKILL BONUS LOGIC =====
+
+  preview.classSkillBonuses = {};
+
+  const levelUpType =
+    document.querySelector('input[name="levelUpType"]:checked')?.value;
+
+  if (levelUpType === "new" && preview.selectedClassId) {
+
+    const newClass = classes.find(c => c.id === preview.selectedClassId);
+
+    if (newClass && newClass.classSkills) {
+
+      const newSkills = newClass.classSkills
+        .split(",")
+        .map(s => s.trim());
+
+      // Collect existing class skills
+      const existingSkillSet = new Set();
+
+      (character.classes || []).forEach(c => {
+        const def = classes.find(cl => cl.id === c.classId);
+        if (def && def.classSkills) {
+          def.classSkills.split(",")
+            .map(s => s.trim())
+            .forEach(s => existingSkillSet.add(s));
+        }
+      });
+
+      newSkills.forEach(skill => {
+        if (!existingSkillSet.has(skill)) {
+          preview.classSkillBonuses[skill] = 2;
+        }
+      });
+
+    }
+  }
+
+  renderLevelUpSkills();
+}
+
+function renderLevelUpSkills() {
+
+  const container = document.getElementById("levelUpSkillsSection");
+  if (!container || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+
+  const skillKeys = Object.keys(character.skills);
+
+  let allocated = 0;
+  skillKeys.forEach(k => {
+    allocated += Number(preview.skillAllocations?.[k] || 0);
+  });
+
+  let html = `
+    <div style="margin-bottom:10px;">
+      <strong>Skill Allocation</strong><br>
+      Points Remaining: <strong>${preview.totalSkillPoints - allocated}</strong> / ${preview.totalSkillPoints}
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px;">
+  `;
+
+  skillKeys.forEach(k => {
+
+const currentBase = character.skills[k]?.base || 0;
+const added = preview.skillAllocations?.[k] || 0;
+const classBonus = preview.classSkillBonuses?.[k] || 0;
+
+const effectiveTotal = currentBase + added + classBonus;
+
+const canIncrease =
+  allocated < preview.totalSkillPoints &&
+  added < 1; // only one manual increase per level
+
+    html += `
+      <div style="border:1px solid #634fa2; padding:6px; border-radius:6px;">
+        <div style="font-size:12px;">${k}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <button data-skill="${k}" data-dir="-">−</button>
+          <span>${effectiveTotal}</span>
+          <button data-skill="${k}" data-dir="+" ${canIncrease ? "" : "disabled"}>+</button>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+
+  container.innerHTML = html;
+
+  const confirmBtn = document.getElementById("levelUpConfirmBtn");
+  if (confirmBtn) {
+    confirmBtn.disabled = (allocated !== preview.totalSkillPoints);
+  }
+
+  container.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", function() {
+
+      const skill = this.dataset.skill;
+      const dir = this.dataset.dir;
+
+      preview.skillAllocations[skill] =
+        Number(preview.skillAllocations[skill] || 0);
+
+      if (dir === "+" &&
+          allocated < preview.totalSkillPoints &&
+          character.skills[skill].base +
+          preview.skillAllocations[skill] <
+          character.skills[skill].max) {
+
+        preview.skillAllocations[skill]++;
+      }
+
+      if (dir === "-" &&
+          preview.skillAllocations[skill] > 0) {
+
+        preview.skillAllocations[skill]--;
+      }
+
+      renderLevelUpSkills();
+    });
+  });
+}
+
+/* ===== LEVEL UP SKILL PREVIEW END ===== */
+
   </script>
 </body>
 </html>
+
