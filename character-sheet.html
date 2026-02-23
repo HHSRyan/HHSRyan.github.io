@@ -2958,6 +2958,38 @@ function openLevelUpModal() {
 
   const overlay = document.createElement("div");
   overlay.id = "levelUpModalOverlay";
+/* ===== LEVEL UP SCROLLBAR STYLE START ===== */
+
+if (!document.getElementById("levelUpScrollbarStyle")) {
+
+  const style = document.createElement("style");
+  style.id = "levelUpScrollbarStyle";
+
+  style.innerHTML = `
+    #levelUpModalOverlay div::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    #levelUpModalOverlay div::-webkit-scrollbar-track {
+      background: #634fa2; /* dark purple */
+    }
+
+    #levelUpModalOverlay div::-webkit-scrollbar-thumb {
+      background: #d8d2e7; /* light purple */
+      border-radius: 6px;
+      border: 2px solid #634fa2;
+    }
+
+    #levelUpModalOverlay div {
+      scrollbar-color: #d8d2e7 #634fa2;
+      scrollbar-width: thin;
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+/* ===== LEVEL UP SCROLLBAR STYLE END ===== */
   overlay.style.position = "fixed";
   overlay.style.top = "0";
   overlay.style.left = "0";
@@ -2979,10 +3011,13 @@ modal.style.width = "600px";
 modal.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
 modal.style.border = "3px solid #634fa2";
 modal.style.textAlign = "left";
-modal.style.display = "block";
+modal.style.display = "flex";
+modal.style.flexDirection = "column";
+modal.style.maxHeight = "85vh";
+modal.style.overflowY = "auto";
 modal.style.flex = "none";
 modal.style.justifyContent = "flex-start";
-modal.style.alignItems = "flex-start";
+modal.style.alignItems = "stretch";
 
   modal.innerHTML = `
     <div style="font-size:20px; margin-bottom:16px;">
@@ -3008,7 +3043,7 @@ modal.style.alignItems = "flex-start";
 <div style="margin-top:20px;">
 
   <label style="display:flex; align-items:center; gap:10px; margin-bottom:14px; cursor:pointer;">
-    <input type="radio" name="levelUpType" value="existing" checked>
+    <input type="checkbox" name="levelUpType" value="existing">
     <span id="existingClassLabel"></span>
   </label>
 
@@ -3017,15 +3052,17 @@ modal.style.alignItems = "flex-start";
   </div>
 
   <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-    <input type="radio" name="levelUpType" value="new">
+   <input type="checkbox" name="levelUpType" value="new">
     <span>Take Level 1 in a new class</span>
   </label>
 
 </div>
 <div style="margin-top:16px;">
   <select id="levelClassSelect"></select>
-  <div id="levelUpHPSection" style="margin-top:20px;"></div>
+<div id="levelUpHPSection" style="margin-top:20px;"></div>
+<div id="levelUpABISection" style="margin-top:24px;"></div>
 <div id="levelUpSkillsSection" style="margin-top:24px;"></div>
+<div id="levelUpFeatSection" style="margin-top:24px;"></div>
 </div>
     `;
   })()}
@@ -3141,43 +3178,67 @@ select.addEventListener("change", function() {
   calculateLevelUpHP();
 });
 
-levelUpTypeRadios.forEach(radio => {
-  radio.addEventListener("change", function() {
+levelUpTypeRadios.forEach(box => {
 
-    if (this.value === "existing") {
+  box.addEventListener("change", function() {
 
-      select.style.display = "none";
+    // If this box is being checked
+    if (this.checked) {
 
-      if (existingContainer) {
-        existingContainer.style.display =
-          existingClasses.length > 1 ? "block" : "none";
-      }
+      // Uncheck the other box
+      levelUpTypeRadios.forEach(other => {
+        if (other !== this) other.checked = false;
+      });
 
-      if (existingClasses.length === 1) {
-        character.levelUpInProgress.selectedClassId =
-          existingClasses[0].classId;
+character.levelUpInProgress.levelUpType = this.value;      
+if (this.value === "existing") {
+
+        select.style.display = "none";
+
+        if (existingContainer) {
+          existingContainer.style.display =
+            existingClasses.length > 1 ? "block" : "none";
+        }
+
+        if (existingClasses.length === 1) {
+          character.levelUpInProgress.selectedClassId =
+            existingClasses[0].classId;
+        } else {
+          const existingSelect =
+            modal.querySelector("#existingClassSelect");
+
+          character.levelUpInProgress.selectedClassId =
+            existingSelect ? existingSelect.value : null;
+        }
+
       } else {
-        const existingSelect =
-          modal.querySelector("#existingClassSelect");
 
-        character.levelUpInProgress.selectedClassId =
-          existingSelect ? existingSelect.value : null;
+        if (existingContainer) {
+          existingContainer.style.display = "none";
+        }
+
+        select.style.display = "block";
+
+        character.levelUpInProgress.selectedClassId = select.value;
       }
+
+      recalculateLevelUpState();
+      calculateLevelUpHP();
+      calculateLevelUpSkillPoints();
 
     } else {
 
-      if (existingContainer) {
-        existingContainer.style.display = "none";
-      }
+      // If unchecked, clear state
+      character.levelUpInProgress.selectedClassId = null;
+character.levelUpInProgress.levelUpType = null;
 
-      select.style.display = "block";
+      document.getElementById("levelUpHPSection").innerHTML = "";
+      document.getElementById("levelUpSkillsSection").innerHTML = "";
 
-      character.levelUpInProgress.selectedClassId = select.value;
     }
 
-    calculateLevelUpHP();
-    calculateLevelUpSkillPoints();
   });
+
 });
 
   // Default state on open
@@ -3187,15 +3248,11 @@ levelUpTypeRadios.forEach(radio => {
 /* ===== LEVEL UP HP WIRE START ===== */
 
 character.levelUpInProgress = character.levelUpInProgress || {};
-
-// Do NOT overwrite selectedClassId here.
-// It is already set correctly by existing/new class logic above.
-
-calculateLevelUpHP();
-calculateLevelUpSkillPoints();
+character.levelUpInProgress.selectedClassId = null;
 
 select.addEventListener("change", function() {
   character.levelUpInProgress.selectedClassId = this.value;
+  recalculateLevelUpState();
   calculateLevelUpHP();
   calculateLevelUpSkillPoints();
 });
@@ -3206,8 +3263,6 @@ select.addEventListener("change", function() {
 
 overlay.appendChild(modal);
 document.body.appendChild(overlay);
-calculateLevelUpHP();
-calculateLevelUpSkillPoints();
 
 document.getElementById("levelUpCancelBtn").onclick = function() {
     overlay.remove();
@@ -3215,43 +3270,86 @@ document.getElementById("levelUpCancelBtn").onclick = function() {
 
 document.getElementById("levelUpConfirmBtn").onclick = function() {
 
-  const preview = character.levelUpInProgress;
-  if (!preview || !preview.selectedClassId) return;
+  const state = character.levelUpInProgress;
+  if (!state || !state.selectedClassId) return;
+
+  if (state.skillPointsRemaining !== 0) return;
+  if (state.hasABI && !state.abiSelection) return;
+
+  if (state.featsRequired > 0) {
+    const validFeats =
+      (state.featSelections || []).filter(f => !!f).length;
+    if (validFeats < state.featsRequired) return;
+  }
 
   // ===== APPLY CLASS LEVEL =====
-  const existing = character.classes.find(c => c.classId === preview.selectedClassId);
+  const existing =
+    character.classes.find(c => c.classId === state.selectedClassId);
 
   if (existing) {
     existing.level = Number(existing.level) + 1;
   } else {
     character.classes.push({
-      classId: preview.selectedClassId,
+      classId: state.selectedClassId,
       level: 1
     });
   }
 
+  // ===== APPLY HP =====
+  character.baseHP =
+    Number(character.baseHP || 0) +
+    Number(state.hpGain || 0);
+
   // ===== APPLY SKILLS =====
-  Object.keys(preview.skillAllocations || {}).forEach(k => {
-    const add = Number(preview.skillAllocations[k] || 0);
+  Object.keys(state.skillAllocations || {}).forEach(k => {
+    const add = Number(state.skillAllocations[k] || 0);
     if (add > 0) {
       character.skills[k].base += add;
       character.skills[k].value = character.skills[k].base;
     }
   });
 
-  // ===== CLEAR FLAGS =====
+  // ===== APPLY ABI =====
+  if (state.hasABI && state.abiSelection) {
+    character.abilities[state.abiSelection].value =
+      Number(character.abilities[state.abiSelection].value || 0) + 1;
+  }
+
+  // ===== APPLY ADVANCEMENT FEATS =====
+  (state.featSelections || [])
+    .filter(f => !!f)
+    .forEach(featId => {
+      if (!character.feats.includes(featId)) {
+        character.feats.push(featId);
+      }
+    });
+
+  // ===== APPLY CLASS STARTING FEAT =====
+  if (state.autoClassFeat &&
+      state.levelUpType === "new") {
+
+    const featDef =
+      (window.feats || [])
+        .find(f => f.name === state.autoClassFeat.name);
+
+    if (featDef &&
+        !character.feats.includes(featDef.id)) {
+      character.feats.push(featDef.id);
+    }
+  }
+
   character.pendingLevelUp = false;
   character.levelUpInProgress = null;
 
-if (typeof saveCharacter === "function") {
-  saveCharacter();
-}
+  if (typeof saveCharacter === "function") {
+    saveCharacter();
+  }
 
-if (typeof update === "function") {
-  update();
-}
+  if (typeof update === "function") {
+    update();
+  }
 
-overlay.remove();
+  overlay.remove();
 };
 }
 
@@ -6219,11 +6317,19 @@ Promise.all([
   loadCSV(spellbookURL).catch(() => []),
   loadCSV(conditionsURL).catch(() => [])
 ])
+
 .then(([r, c, f, d, e, ca, adv, sb, cond]) => {
-    races = r;
-    classes = c;
-    feats = f;
-    deities = d;
+
+races.splice(0, races.length, ...r);
+classes.splice(0, classes.length, ...c);
+
+feats = f;
+window.feats = feats;
+
+deities = d;
+
+window.advancement = adv;
+
 /* ===== HYDRATE AUTO-LOADED CHARACTER START ===== */
 if (character) {
   update();
@@ -7142,13 +7248,15 @@ if (e.target.dataset.rmvspell && character) {
 
 })();
 
-/* ===== LEVEL UP HP PREVIEW START ===== */
+/* ===== LEVEL UP STATE ENGINE START ===== */
 
-function calculateLevelUpHP() {
+function recalculateLevelUpState() {
 
-  if (!character || !character.levelUpInProgress) return;
+  if (!character) return;
 
+  character.levelUpInProgress = character.levelUpInProgress || {};
   const preview = character.levelUpInProgress;
+
   if (!preview.selectedClassId) return;
 
   const race = races.find(r => r.id === character.raceId);
@@ -7157,18 +7265,91 @@ function calculateLevelUpHP() {
   if (!race || !cls) return;
 
   const currentTotalLevel =
-    character.classes.reduce((sum, c) => sum + (Number(c.level) || 0), 0);
+    (character.classes || [])
+      .reduce((sum, c) => sum + (Number(c.level) || 0), 0);
 
   const newTotalLevel = currentTotalLevel + 1;
+
+  preview.newTotalLevel = newTotalLevel;
+
+  /* ===== ADVANCEMENT LOOKUP ===== */
+
+  const advRow = (window.advancement || []).find(a =>
+    Number(a.totalLevel) === newTotalLevel
+  );
+
+  preview.advancementRow = advRow || null;
+
+  preview.hasABI =
+    advRow && String(advRow.abiIncrease).toUpperCase() === "TRUE";
+
+  preview.hasFeat =
+    advRow && String(advRow.featIncrease).toUpperCase() === "TRUE";
+
+  /* ===== HP CALC ===== */
 
   const racialHP = Number(race.hpPerLevel || 0);
   const classHP  = Number(cls.hpPerLevel || 0);
 
-  const hpGain = racialHP + classHP + newTotalLevel;
+  preview.hpGain = racialHP + classHP + newTotalLevel;
+  preview.hpPreview = Number(character.baseHP || 0) + preview.hpGain;
 
-  preview.hpGain = hpGain;
-  preview.hpPreview = character.maxHP + hpGain;
+  /* ===== SKILL POINT CALC ===== */
 
+  const intVal = Number(character.abilities?.INT?.value || 0);
+  const points = 1 + Math.floor(intVal / 4);
+
+  preview.skillPointsAvailable = points;
+
+  preview.skillAllocations = preview.skillAllocations || {};
+
+  let allocated = 0;
+  Object.values(preview.skillAllocations).forEach(v => {
+    allocated += Number(v || 0);
+  });
+
+  preview.skillPointsRemaining = points - allocated;
+
+  /* ===== FEAT CALC START ===== */
+
+  preview.featsRequired = 0;
+  preview.autoClassFeat = null;
+  preview.featSelections = preview.featSelections || [];
+
+  // Advancement feat
+  if (preview.hasFeat) {
+    preview.featsRequired += 1;
+  }
+
+  // New class starting feat
+  if (preview.levelUpType === "new" && preview.selectedClassId) {
+
+    const newClass =
+      classes.find(c => c.id === preview.selectedClassId);
+
+    if (newClass && newClass.startingFeatName) {
+
+      preview.autoClassFeat = {
+        name: newClass.startingFeatName,
+        description: newClass.startingFeatDescription
+      };
+
+    }
+  }
+
+  /* ===== FEAT CALC END ===== */
+
+}
+
+/* ===== LEVEL UP STATE ENGINE END ===== */
+
+/* ===== LEVEL UP HP PREVIEW START ===== */
+
+function calculateLevelUpHP() {
+
+  if (!character || !character.levelUpInProgress) return;
+
+  recalculateLevelUpState();
   renderLevelUpHP();
 }
 
@@ -7196,15 +7377,9 @@ function calculateLevelUpSkillPoints() {
 
   if (!character || !character.levelUpInProgress) return;
 
+  recalculateLevelUpState();
+
   const preview = character.levelUpInProgress;
-
-  const intVal = Number(character.abilities?.INT?.value || 0);
-
-  let points = 1;
-  if (intVal >= 4 && intVal <= 7) points = 2;
-  if (intVal >= 8) points = 3;
-
-  preview.totalSkillPoints = points;
 
   if (!preview.skillAllocations) {
     preview.skillAllocations = {};
@@ -7214,8 +7389,8 @@ function calculateLevelUpSkillPoints() {
 
   preview.classSkillBonuses = {};
 
-  const levelUpType =
-    document.querySelector('input[name="levelUpType"]:checked')?.value;
+const levelUpType =
+  character.levelUpInProgress?.levelUpType || null;
 
   if (levelUpType === "new" && preview.selectedClassId) {
 
@@ -7227,7 +7402,6 @@ function calculateLevelUpSkillPoints() {
         .split(",")
         .map(s => s.trim());
 
-      // Collect existing class skills
       const existingSkillSet = new Set();
 
       (character.classes || []).forEach(c => {
@@ -7248,7 +7422,11 @@ function calculateLevelUpSkillPoints() {
     }
   }
 
-  renderLevelUpSkills();
+/* ===== LEVEL UP INITIAL RENDER CYCLE START ===== */
+renderLevelUpSkills();
+renderLevelUpABI();
+renderLevelUpFeats();
+/* ===== LEVEL UP INITIAL RENDER CYCLE END ===== */
 }
 
 function renderLevelUpSkills() {
@@ -7260,15 +7438,12 @@ function renderLevelUpSkills() {
 
   const skillKeys = Object.keys(character.skills);
 
-  let allocated = 0;
-  skillKeys.forEach(k => {
-    allocated += Number(preview.skillAllocations?.[k] || 0);
-  });
+
 
   let html = `
     <div style="margin-bottom:10px;">
       <strong>Skill Allocation</strong><br>
-      Points Remaining: <strong>${preview.totalSkillPoints - allocated}</strong> / ${preview.totalSkillPoints}
+      Points Remaining: <strong>${preview.skillPointsRemaining}</strong> / ${preview.skillPointsAvailable}
     </div>
     <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px;">
   `;
@@ -7282,7 +7457,7 @@ const classBonus = preview.classSkillBonuses?.[k] || 0;
 const effectiveTotal = currentBase + added + classBonus;
 
 const canIncrease =
-  allocated < preview.totalSkillPoints &&
+  preview.skillPointsRemaining > 0 &&
   added < 1; // only one manual increase per level
 
     html += `
@@ -7301,10 +7476,27 @@ const canIncrease =
 
   container.innerHTML = html;
 
-  const confirmBtn = document.getElementById("levelUpConfirmBtn");
-  if (confirmBtn) {
-    confirmBtn.disabled = (allocated !== preview.totalSkillPoints);
-  }
+const confirmBtn = document.getElementById("levelUpConfirmBtn");
+if (confirmBtn) {
+
+  const needsSkills = preview.skillPointsRemaining !== 0;
+
+  const needsClass = !preview.selectedClassId;
+
+  const needsABI =
+    preview.hasABI && !preview.abiSelection;
+
+  const needsFeats =
+    preview.featsRequired > 0 &&
+    (!preview.featSelections ||
+     preview.featSelections.filter(f => !!f).length < preview.featsRequired);
+
+  confirmBtn.disabled =
+    needsSkills ||
+    needsClass ||
+    needsABI ||
+    needsFeats;
+}
 
   container.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("click", function() {
@@ -7315,11 +7507,11 @@ const canIncrease =
       preview.skillAllocations[skill] =
         Number(preview.skillAllocations[skill] || 0);
 
-      if (dir === "+" &&
-          allocated < preview.totalSkillPoints &&
-          character.skills[skill].base +
-          preview.skillAllocations[skill] <
-          character.skills[skill].max) {
+if (dir === "+" &&
+    preview.skillPointsRemaining > 0 &&
+    character.skills[skill].base +
+    preview.skillAllocations[skill] <
+    character.skills[skill].max) {
 
         preview.skillAllocations[skill]++;
       }
@@ -7330,12 +7522,233 @@ const canIncrease =
         preview.skillAllocations[skill]--;
       }
 
-      renderLevelUpSkills();
+      recalculateLevelUpState();
+/* ===== LEVEL UP RENDER CYCLE START ===== */
+renderLevelUpSkills();
+renderLevelUpABI();
+renderLevelUpFeats();
+/* ===== LEVEL UP RENDER CYCLE END ===== */
     });
   });
 }
 
 /* ===== LEVEL UP SKILL PREVIEW END ===== */
+
+/* ===== LEVEL UP ABI PREVIEW START ===== */
+
+function renderLevelUpABI() {
+
+  const container = document.getElementById("levelUpABISection");
+  if (!container) return;
+  if (!character || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+
+  if (!preview.hasABI) {
+    container.innerHTML = "";
+    return;
+  }
+
+  preview.abiSelection = preview.abiSelection || null;
+
+  const abilityKeys = Object.keys(character.abilities || {});
+
+  let html = `
+    <div style="margin-bottom:10px;">
+      <strong>Ability Increase</strong><br>
+      Choose one ability to increase by +1
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px;">
+  `;
+
+  abilityKeys.forEach(key => {
+
+    const baseVal =
+      Number(character.abilities?.[key]?.value || 0);
+
+    const selected = preview.abiSelection === key;
+
+    html += `
+      <div
+        data-abi="${key}"
+        style="
+          border:2px solid ${selected ? "#8b7dbe" : "#634fa2"};
+background:${selected ? "#634fa2" : "#d8d2e7"};
+color:${selected ? "#d8d2e7" : "#634fa2"};
+          padding:8px;
+          border-radius:6px;
+          cursor:pointer;
+          text-align:center;
+        ">
+        <div style="font-size:12px;">${key}</div>
+        <div style="font-weight:bold;">
+          ${baseVal}${selected ? " → " + (baseVal + 1) : ""}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+
+  container.innerHTML = html;
+
+  container.querySelectorAll("[data-abi]").forEach(el => {
+    el.addEventListener("click", function() {
+
+      const ability = this.dataset.abi;
+
+      preview.abiSelection =
+        preview.abiSelection === ability ? null : ability;
+
+      renderLevelUpABI();
+    });
+  });
+
+}
+
+/* ===== LEVEL UP ABI PREVIEW END ===== */
+
+/* ===== LEVEL UP FEAT PREVIEW START ===== */
+
+function renderLevelUpFeats() {
+
+  const container = document.getElementById("levelUpFeatSection");
+  if (!container) return;
+  if (!character || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+
+  // If no feats required and no auto class feat, hide section
+  if (!preview.autoClassFeat && preview.featsRequired === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  preview.featSelections = preview.featSelections || [];
+
+  let html = `
+    <div style="margin-bottom:10px;">
+      <strong>Feats</strong>
+    </div>
+  `;
+
+  // ===== AUTO CLASS FEAT =====
+
+  if (preview.autoClassFeat) {
+
+    html += `
+      <div style="
+        border:2px solid #8b7dbe;
+        background:#634fa2;
+        color:#d8d2e7;
+        padding:10px;
+        border-radius:8px;
+        margin-bottom:12px;
+      ">
+        <div style="font-weight:bold;">
+          ${preview.autoClassFeat.name}
+        </div>
+        <div style="font-size:12px; margin-top:4px;">
+          ${preview.autoClassFeat.description}
+        </div>
+      </div>
+    `;
+  }
+
+  // ===== CHOSEN FEATS =====
+
+  for (let i = 0; i < preview.featsRequired; i++) {
+
+    const selectedId = preview.featSelections?.[i] || "";
+    const featDef = (window.feats || []).find(f => f.id === selectedId);
+
+    const bgColor = selectedId ? "#634fa2" : "#d8d2e7";
+    const textColor = selectedId ? "#d8d2e7" : "#634fa2";
+
+    html += `
+      <div style="margin-bottom:16px;">
+
+<select data-feat-index="${i}"
+  style="
+    width:100%;
+    background:${bgColor};
+    color:${textColor};
+    border:2px solid #8b7dbe;
+    padding:8px;
+    border-radius:8px;
+    font-weight:bold;
+  ">
+          <option value="" style="color:#634fa2;">Select a feat</option>
+          ${
+            (window.feats || []).map(f => `
+              <option value="${f.id}" 
+                ${selectedId === f.id ? "selected" : ""}
+                style="color:#000;">
+                ${f.name}
+              </option>
+            `).join("")
+          }
+        </select>
+
+        ${
+          featDef
+            ? `
+              <div style="
+                margin-top:8px;
+                padding:10px;
+                background:#634fa2;
+                color:#d8d2e7;
+                border:2px solid #8b7dbe;
+                border-radius:8px;
+                font-size:13px;
+              ">
+                ${featDef.featDescription}
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+
+  // Populate dropdowns
+  container.querySelectorAll("select").forEach(select => {
+
+    const index = Number(select.dataset.featIndex);
+
+    (window.feats || []).forEach(f => {
+
+      // Prevent duplicates (existing + selected)
+      const alreadyHas =
+        (character.feats || []).includes(f.id) ||
+        preview.featSelections.includes(f.id);
+
+      if (alreadyHas) return;
+
+      const option = document.createElement("option");
+      option.value = f.id;
+      option.textContent = f.name;
+
+      select.appendChild(option);
+    });
+
+    select.value = preview.featSelections[index] || "";
+
+    select.addEventListener("change", function() {
+
+      preview.featSelections[index] = this.value || null;
+
+      renderLevelUpFeats();
+    });
+
+  });
+
+}
+
+/* ===== LEVEL UP FEAT PREVIEW END ===== */
 
   </script>
 </body>
