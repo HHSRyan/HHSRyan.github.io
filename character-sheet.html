@@ -171,8 +171,19 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   color: #ffffff;
 }
 
-.conditionBtn {
+.conditionBtn,
+.resolveBtn {
   font-weight: bold;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.conditionBtn:focus,
+.conditionBtn:focus-visible,
+.resolveBtn:focus,
+.resolveBtn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* ===== EDITABLE FIELDS START ===== */
@@ -834,6 +845,7 @@ body.wizard-progress {
     </div>
   </div>
 <!-- CLOTHING (3 SLOTS) END -->
+
 <!-- ===== ITEM DETAILS PANEL START ===== -->
 <div style="margin-top:16px; border:4px solid #48752c; border-radius:12px; overflow:hidden;">
 
@@ -1714,23 +1726,28 @@ function findClothingSpace() {
 function placeItemInInventory(itemId, size) {
   if (!character || !character.inventory) return false;
 
+  const item = equipment.find(e => e.id === itemId);
+  if (!item) return false;
+
+  const finalSize = Number(size) || Number(item.slots) || 1;
+
   const pack = character.inventory.backpack;
   const clothing = character.inventory.clothing;
 
-  const start = findBackpackSpace(size);
+  const start = findBackpackSpace(finalSize);
 
   if (start !== -1) {
-    for (let j = 0; j < size; j++) {
+    for (let j = 0; j < finalSize; j++) {
       pack[start + j] = {
         itemId: itemId,
-        size: size,
+        size: finalSize,
         anchor: j === 0
       };
     }
     return { container: "backpack", index: start };
   }
 
-  if (size === 1) {
+  if (finalSize === 1) {
     const c = findClothingSpace();
     if (c !== -1) {
       clothing[c] = {
@@ -3063,6 +3080,7 @@ modal.style.alignItems = "stretch";
 <div id="levelUpABISection" style="margin-top:24px;"></div>
 <div id="levelUpSkillsSection" style="margin-top:24px;"></div>
 <div id="levelUpFeatSection" style="margin-top:24px;"></div>
+<div id="levelUpSpellSection" style="margin-top:24px;"></div>
 </div>
     `;
   })()}
@@ -3124,10 +3142,14 @@ else {
 
   character.levelUpInProgress = character.levelUpInProgress || {};
 
-  existingSelect.addEventListener("change", function() {
-    character.levelUpInProgress.selectedClassId = this.value;
-    calculateLevelUpHP();
-  });
+existingSelect.addEventListener("change", function() {
+  character.levelUpInProgress.selectedClassId = this.value;
+
+  recalculateLevelUpState();
+  calculateLevelUpHP();
+  calculateLevelUpSkillPoints();
+  renderLevelUpKnownSpells();
+});
 
 }
 
@@ -3223,8 +3245,9 @@ if (this.value === "existing") {
       }
 
       recalculateLevelUpState();
-      calculateLevelUpHP();
-      calculateLevelUpSkillPoints();
+calculateLevelUpHP();
+calculateLevelUpSkillPoints();
+renderLevelUpKnownSpells();
 
     } else {
 
@@ -3255,6 +3278,7 @@ select.addEventListener("change", function() {
   recalculateLevelUpState();
   calculateLevelUpHP();
   calculateLevelUpSkillPoints();
+  renderLevelUpKnownSpells();
 });
 
 /* ===== LEVEL UP HP WIRE END ===== */
@@ -3263,6 +3287,11 @@ select.addEventListener("change", function() {
 
 overlay.appendChild(modal);
 document.body.appendChild(overlay);
+
+/* ===== INITIAL LEVEL UP SPELL RENDER START ===== */
+recalculateLevelUpState();
+renderLevelUpKnownSpells();
+/* ===== INITIAL LEVEL UP SPELL RENDER END ===== */
 
 document.getElementById("levelUpCancelBtn").onclick = function() {
     overlay.remove();
@@ -3337,6 +3366,48 @@ document.getElementById("levelUpConfirmBtn").onclick = function() {
       character.feats.push(featDef.id);
     }
   }
+
+  // ===== APPLY SPELL SLOT INCREASES =====
+  if (state.spellSlotDelta) {
+
+    character.spellSlots = character.spellSlots || {};
+
+    Object.keys(state.spellSlotDelta).forEach(key => {
+
+      const increase = Number(state.spellSlotDelta[key] || 0);
+      if (!increase) return;
+
+      character.spellSlots[key] =
+        Number(character.spellSlots[key] || 0) + increase;
+
+    });
+  }
+
+  // ===== APPLY NEW KNOWN SPELLS =====
+
+  character.personalSpells =
+    character.personalSpells || [];
+
+  // --- WARLOCK SELECTED SPELLS ---
+  (state.newSpellSelections || [])
+    .filter(id => !!id)
+    .forEach(spellId => {
+
+      if (!character.personalSpells.includes(spellId)) {
+        character.personalSpells.push(spellId);
+      }
+
+    });
+
+  // --- PRIEST AUTO-GRANTED SPELLS ---
+  (state.newKnownSpellsAutoList || [])
+    .forEach(spellId => {
+
+      if (!character.personalSpells.includes(spellId)) {
+        character.personalSpells.push(spellId);
+      }
+
+    });
 
   character.pendingLevelUp = false;
   character.levelUpInProgress = null;
@@ -3610,6 +3681,9 @@ Critical Failure! The attack misses and causes a complication.
   col0.style.boxShadow = critStyle ? critStyle.split(";")[1].split(":")[1].trim() : "";
 
 /* ===== ATTACK ROLL TEMPLATE START ===== */
+
+const bodyPart = rollBodyPart();
+
 document.getElementById("rollCol0Body").innerHTML =
   "<div>"
   + "<div><strong><em>" + item.eqpName + " Attack</em></strong></div>"
@@ -3621,6 +3695,7 @@ document.getElementById("rollCol0Body").innerHTML =
   + ") = " + base + "</div>"
   + "<div><em>1d10 Roll</em> = " + d10 + "</div>"
   + "<div><strong>Attack Roll = " + total + "</strong></div>"
+  + "<div><strong>Body Part Hit: " + bodyPart + "</strong></div>"
   + "<div>Range: " + computeDistance(item.distance) + "</div>"
   + critText
   + (item.DMGorTAC
@@ -3639,7 +3714,22 @@ document.getElementById("rollCol0Body").innerHTML =
         })()
       : "<div>Damage: —</div>")
   + "</div>";
+
 /* ===== ATTACK ROLL TEMPLATE END ===== */
+
+/* ===== CONSUMES SELF HANDLING START ===== */
+if (item && (item.consumesSelf === true || item.consumesSelf === "TRUE")) {
+
+  if (!character.weaponAmmo) {
+    character.weaponAmmo = {};
+  }
+
+  character.weaponAmmo[item.id] = "THROWN";
+
+  update();
+  return;
+}
+/* ===== CONSUMES SELF HANDLING END ===== */
 }
 
 /* === AUTO-SCROLL ROLL / SPELL RESULTS (GLOBAL HOOK) === */
@@ -3730,7 +3820,30 @@ if (e.target.id === "editAlignment") {
 /* ===== DEITY DROPDOWN START ===== */
 if (e.target.id === "editDeity") {
 
+  if (!character) return;
+
+  /* ===== PRIEST LOCK START ===== */
+  const isPriest =
+    Array.isArray(character.classes) &&
+    character.classes.some(c =>
+      (c.classId || c.id || "").toLowerCase() === "priest"
+    );
+
+  if (isPriest) {
+    alert("A Priest cannot change their deity.");
+    return;
+  }
+  /* ===== PRIEST LOCK END ===== */
+
   const select = document.createElement("select");
+
+  /* ===== NONE OPTION START ===== */
+  const noneOpt = document.createElement("option");
+  noneOpt.value = "";
+  noneOpt.textContent = "None";
+  if (!character.deityId) noneOpt.selected = true;
+  select.appendChild(noneOpt);
+  /* ===== NONE OPTION END ===== */
 
   deities.forEach(d => {
     const opt = document.createElement("option");
@@ -3744,7 +3857,7 @@ if (e.target.id === "editDeity") {
   select.focus();
 
   select.addEventListener("change", () => {
-    character.deityId = select.value;
+    character.deityId = select.value || null;
 
     const deityObj = deities.find(d => d.id === character.deityId);
     if (deityObj && deityObj.alignment) {
@@ -4229,27 +4342,34 @@ if (cb) {
 /* ===== POPULATE CURRENT CONDITION EFFECTS UI START ===== */
 const box = document.getElementById("conditionDescription");
 if (box) {
-  const list = Array.isArray(character.conditions) ? character.conditions : [];
+
+  const list =
+    character.conditionStates && typeof character.conditionStates === "object"
+      ? Object.keys(character.conditionStates)
+      : [];
+
   if (!list.length) {
     box.innerHTML = `<em>No active conditions.</em>`;
   } else {
+
     box.innerHTML =
       `<div style="font-weight:bold; color:#48752c; margin-bottom:8px;">Active Conditions</div>` +
       list
-        .map((c, i) => {
-          let text = c;
+        .map(name => {
 
-if (c === "Winded") {
-            text = `<strong>Winded:</strong> You can only take <strong>ONE SMALL ACTION</strong> per round, and <strong>NO LARGE ACTION</strong> until resolved.<br>
-<strong>Res.:</strong> Successful skill check (+1 DIF if on yourself), short or full rest, any magical healing.`;
-          }
+          const def =
+            Array.isArray(conditionsData)
+              ? conditionsData.find(c => c.name === name || c.id === name)
+              : null;
 
-          return `<div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;">
-            <div style="flex:1;">${text}</div>
-            <button data-remove-condition="${i}" style="background:#634fa2; color:#d8d2e7; border:2px solid #8b7dbe; border-radius:6px; font-weight:bold;">
-              Resolve
-            </button>
-          </div>`;
+          const description = def?.description || "";
+
+          return `
+            <div style="margin-bottom:12px;">
+              <strong>${name}</strong><br>
+              ${description}
+            </div>
+          `;
         })
         .join("");
   }
@@ -4589,12 +4709,61 @@ function renderRow(w, columns) {
     const ordered = columns;
 
 const cells = ordered.map(col => {
-  if (col.key === "weapon") return `<div><button class="clickable" data-weapon="${w.id || w.eqpName}" data-type="${w.eqpType}" style="background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;">${w.eqpName}</button></div>`;    
+if (col.key === "weapon") {
+
+  const isThrown =
+    character.weaponAmmo &&
+    character.weaponAmmo[w.id] === "THROWN";
+
+  const label = isThrown
+    ? `${w.eqpName} - Thrown!`
+    : w.eqpName;
+
+  const styles = isThrown
+    ? "background:#d8d2e7; color:#634fa2; border:2px solid #d8d2e7; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;"
+    : "background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;";
+
+  return `<div>
+    <button class="clickable"
+      data-weapon="${w.id || w.eqpName}"
+      data-type="${w.eqpType}"
+      style="${styles}">
+      ${label}
+    </button>
+  </div>`;
+}
   if (col.key === "damage") return `<div>${w.DMGorTAC || ""}</div>`;
   if (col.key === "dtype") return `<div>${w.DMGTypeMaterial || w.DMGType || w.damageType || ""}</div>`;
   if (col.key === "range") return `<div>${computeDistance(w.distance)}</div>`;
   if (col.key === "misfire") return `<div>${w.Misfire || ""}</div>`;
-if (col.key === "ammo") return `<div><span id="ammo-${w.id || w.eqpName}" class="editable-field" data-ammo="${w.id || w.eqpName}" tabindex="0" style="display:inline-block; background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;">${(character.weaponAmmo && character.weaponAmmo[w.id || w.eqpName] != null) ? character.weaponAmmo[w.id || w.eqpName] : 10}</span></div>`;
+if (col.key === "ammo") {
+
+  const isThrown =
+    character.weaponAmmo &&
+    character.weaponAmmo[w.id] === "THROWN";
+
+  if (String(w.consumesSelf).toUpperCase() === "TRUE") {
+
+    if (isThrown) {
+      return `<div>
+<button
+  style="background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;"
+  onclick="event.stopPropagation(); delete character.weaponAmmo['${w.id}']; update();">
+  Pick Up
+</button>
+      </div>`;
+    }
+
+    return `<div></div>`;
+  }
+
+  const ammoValue =
+    (character.weaponAmmo && character.weaponAmmo[w.id || w.eqpName] != null)
+      ? character.weaponAmmo[w.id || w.eqpName]
+      : 10;
+
+  return `<div><span id="ammo-${w.id || w.eqpName}" class="editable-field" data-ammo="${w.id || w.eqpName}" tabindex="0" style="display:inline-block; background:#634fa2; color:#d8d2e7; border:2px solid #634fa2; border-radius:6px; padding:4px 8px; font-weight:bold; cursor:pointer;">${ammoValue}</span></div>`;
+}
   if (col.key === "weight") return `<div>${w.weight || ""}</div>`;
   return `<div></div>`;
 });
@@ -5141,7 +5310,7 @@ function renderEquipmentCategory(type, bodyId) {
   <td style="text-align:left;">
   ${
     e.eqpDesc
-      ? e.eqpType === "ammo" && e.capacityQuantity != null
+      ? e.eqpType === "ammo" && !e.consumesSelf && e.capacityQuantity != null
         ? `${e.eqpDesc} — Quantity: ${e.capacityQuantity}`
         : e.eqpDesc
       : ""
@@ -5915,11 +6084,24 @@ function getTotalLevel() {
 }
 
 function getXPThreshold(level) {
-  // Placeholder progression — replace with advancement.csv logic later
-  // Example: 100 XP per level
-  return level * 100;
-}
 
+  if (!window.advancement || !window.advancement.length) {
+    return Infinity;
+  }
+
+  const row = window.advancement.find(a =>
+    Number(a.totalLevel) === Number(level + 1)
+  );
+
+  if (!row) return Infinity;
+
+  const rawXP = String(row.XP || "0");
+
+  // Remove commas before converting to number
+  const parsedXP = Number(rawXP.replace(/,/g, ""));
+
+  return parsedXP;
+}
 function evaluateLevelUp() {
   if (!character) return;
 
@@ -5971,42 +6153,55 @@ if (character && !character.inventorySelection) {
   renderSpellcastingPanel();
   renderSelectedEquipment();
   renderContainers();
+renderItemDetailsTable();
   renderWeightMovementPanel();
 
   const dropBtn = document.getElementById("dropItemBtn");
   if (dropBtn) dropBtn.onclick = dropSelectedItem;
 
-  const equipBtn = document.getElementById("equipItemBtn");
-  if (equipBtn) equipBtn.onclick = function () {
+const equipBtn = document.getElementById("equipItemBtn");
+if (equipBtn) equipBtn.onclick = function () {
 
-    if (!character || !character.inventorySelection) return;
+  if (!character || !character.inventorySelection) return;
 
-    const sel = character.inventorySelection;
-    if (sel.container == null || sel.index == null) return;
+  const sel = character.inventorySelection;
+  if (sel.container == null || sel.index == null) return;
 
-    const containerArr = character.inventory?.[sel.container];
-    if (!Array.isArray(containerArr)) return;
+  const containerArr = character.inventory?.[sel.container];
+  if (!Array.isArray(containerArr)) return;
 
-    const slot = containerArr[sel.index];
-    if (!slot || !slot.anchor) return;
+  const slot = containerArr[sel.index];
+  if (!slot || !slot.anchor) return;
 
-    const itemId = slot.itemId;
-    if (!itemId) return;
+  const itemId = slot.itemId;
+  if (!itemId) return;
 
-    const size = slot.size || 1;
+  const item = equipment.find(e => e.id === itemId);
+  if (!item) return;
 
-    // Attempt equip first (this handles all confirmations and arm/leg overlays)
-    purchaseEquipment(itemId);
+  /* === ALLOW ONLY ARMOR OR WEAPONS === */
+  const isWeapon = ["mele","ha2h","rngd","guns","thrw"].includes(item.eqpType);
+  const isArmor  = item.eqpType === "armo";
 
-    // ALWAYS remove original container instance
-    for (let i = 0; i < size; i++) {
-      containerArr[sel.index + i] = null;
-    }
+  if (!isWeapon && !isArmor) {
+  alert((item.eqpName || "This item") + " cannot be equipped.");
+  return;
+}
 
-    character.inventorySelection = { container: null, index: null };
+  const size = slot.size || 1;
 
-    update();
-  };
+  // Attempt equip first (this handles all confirmations and arm/leg overlays)
+  purchaseEquipment(itemId);
+
+  // ALWAYS remove original container instance
+  for (let i = 0; i < size; i++) {
+    containerArr[sel.index + i] = null;
+  }
+
+  character.inventorySelection = { container: null, index: null };
+
+  update();
+};
   renderEquipmentBook();
 
 
@@ -6115,6 +6310,7 @@ if (e.gear)    html += `<div><strong>Starting Gear</strong> ${Array.isArray(e.ge
 
 
 }
+window.update = update;
 
 function populateCharacterSelect() {
   const sel = document.getElementById("characterSelect");
@@ -6315,10 +6511,11 @@ Promise.all([
   loadCSV(classAdvURL),
   loadCSV("advancement.csv"),
   loadCSV(spellbookURL).catch(() => []),
-  loadCSV(conditionsURL).catch(() => [])
+  loadCSV(conditionsURL).catch(() => []),
+  loadCSV("deityspells.csv")
 ])
 
-.then(([r, c, f, d, e, ca, adv, sb, cond]) => {
+.then(([r, c, f, d, e, ca, adv, sb, cond, deitySp]) => {
 
 races.splice(0, races.length, ...r);
 classes.splice(0, classes.length, ...c);
@@ -6327,8 +6524,17 @@ feats = f;
 window.feats = feats;
 
 deities = d;
+window.deities = deities;
 
 window.advancement = adv;
+window.deitySpells = deitySp;
+window.classAdvancement = ca;
+window.races = races;
+window.classes = classes;
+
+/* ===== DEBUG: EXPOSE EQUIPMENT START ===== */
+window.equipment = e;
+/* ===== DEBUG: EXPOSE EQUIPMENT END ===== */
 
 /* ===== HYDRATE AUTO-LOADED CHARACTER START ===== */
 if (character) {
@@ -6530,10 +6736,19 @@ if (v === "Weapons") renderWeapons();
 
     /* ===== LOADER TRACE START ===== */
 classAdv = ca;
-advancement = adv;
-spellbook = sb;
-conditionsData = cond;
+window.classAdv = classAdv;
 
+advancement = adv;
+window.advancement = advancement;
+
+spellbook = sb;
+window.spellbook = spellbook;
+
+conditionsData = cond;
+window.conditionsData = conditionsData;
+
+window.deitySpells = deitySp;
+/* ===== LOADER TRACE END ===== */
 /* ===== CONDITIONS DATA OVERRIDES START ===== */
 if (Array.isArray(conditionsData)) {
   const winded = conditionsData.find(c =>
@@ -6675,23 +6890,34 @@ if (e.target.id === "hp-current" && character) {
 }
 /* ===== HP EDITABLE FIELD END ===== */
 
- if (e.target.id === "conditionsButton" && character) {
+if (e.target.id === "conditionsButton" && character) {
+
   if (!Array.isArray(conditionsData) || !conditionsData.length) {
     alert("No conditions loaded.");
     return;
   }
 
   const names = conditionsData.map(c => c.name || c.id).join("\n");
-  const pick = prompt("Type a condition name to add.\nType '-' to resolve the last condition.\n\n" + names);
+  const pick = prompt(
+    "Type a condition name to add.\nType '-' to resolve the last condition.\n\n" + names
+  );
 
   if (!pick) return;
 
-  if (!Array.isArray(character.conditions)) character.conditions = [];
+  if (!character.conditionStates) character.conditionStates = {};
+
   if (pick === "-") {
-  character.conditions.pop();
-} else {
-  character.conditions.push(pick);
-}
+
+    const keys = Object.keys(character.conditionStates);
+    if (keys.length) {
+      delete character.conditionStates[keys[keys.length - 1]];
+    }
+
+  } else {
+
+    character.conditionStates[pick] = 0;
+
+  }
 
   update();
   return;
@@ -6914,14 +7140,14 @@ if (e.target.id === "roundNextBtn") {
 
   /* ===== PER ROUND EFFECTS START ===== */
 
-  // 1️⃣ Bleeding / Gushing
+  //  Bleeding / Gushing
   if (character.conditionStates && character.conditionStates["Bleeding"] !== undefined) {
     const idx = Number(character.conditionStates["Bleeding"]);
     if (idx === 0) character.hpCurrent -= 1;
     if (idx === 1) character.hpCurrent -= 2;
   }
 
-  // 2️⃣ HP-based Unconscious / Dying trigger
+  // HP-based Unconscious / Dying trigger
   const STR = Number(character.STR || 0);
   const END = Number(character.END || 0);
   const deathThreshold = -1 * (STR + END);
@@ -6931,19 +7157,19 @@ if (e.target.id === "roundNextBtn") {
     if (!character.isStabilized) character.isDying = true;
   }
 
-  // 3️⃣ Dying drain (stacks with bleeding)
+  //  Dying drain (stacks with bleeding)
   if (character.isDying && !character.isStabilized) {
     character.hpCurrent -= 1;
   }
 
-  // 4️⃣ Death threshold
+  // Death threshold
   if (character.hpCurrent <= deathThreshold) {
     character.isDead = true;
     character.isDying = false;
     character.isUnconscious = false;
   }
 
-  // 5️⃣ Crit unconscious countdown
+  //  Crit unconscious countdown
   if (character.unconsciousRounds > 0) {
     character.unconsciousRounds -= 1;
     if (character.unconsciousRounds <= 0 && character.hpCurrent > 0) {
@@ -6951,7 +7177,7 @@ if (e.target.id === "roundNextBtn") {
     }
   }
 
-  // 6️⃣ Clear states if healed above 0
+  //  Clear states if healed above 0
   if (character.hpCurrent > 0 && !character.isDead) {
     character.isDying = false;
     character.isStabilized = false;
@@ -7027,6 +7253,8 @@ const stage = list[idx];
 
 btn.style.background = stage.bg;
 btn.style.color = stage.fg;
+btn.style.setProperty("border", `2px solid ${stage.fg}`, "important");
+btn.style.fontWeight = "bold";
 btn.textContent = stage.name;
 
 const activeRow = document.getElementById("activeConditionsRow");
@@ -7051,14 +7279,7 @@ if (activeRow && btn.parentElement !== activeRow) {
   const active = Object.entries(character.conditionStates)
     .map(([k,i]) => stages[k][i].name);
 
-  const rows = active.map(n =>
-    conditionsData.find(c => (c.name || c.id) === n)
-  ).filter(r => r && r.description);
-
-  box.innerHTML =
-    "<ul style='margin:0; padding-left:18px;'>" +
-    rows.map(r => `<li>${r.description}</li>`).join("") +
-    "</ul>";
+update();
 
   return;
 }
@@ -7337,6 +7558,142 @@ function recalculateLevelUpState() {
     }
   }
 
+  /* ===== SPELL SLOT DELTA CALC START ===== */
+
+  preview.spellSlotDelta = null;
+
+  const classAdv = window.classAdvancement || [];
+
+  if (preview.selectedClassId && classAdv.length) {
+
+    const classLevels =
+      (character.classes || [])
+        .reduce((sum, c) => sum + (c.classId === preview.selectedClassId ? Number(c.level) || 0 : 0), 0);
+
+    const oldClassLevel = classLevels;
+    const newClassLevel =
+      preview.levelUpType === "new"
+        ? 1
+        : oldClassLevel + 1;
+
+    const prevRow = classAdv.find(row =>
+      row.classId === preview.selectedClassId &&
+      Number(row.level) === oldClassLevel
+    );
+
+    const nextRow = classAdv.find(row =>
+      row.classId === preview.selectedClassId &&
+      Number(row.level) === newClassLevel
+    );
+
+    if (nextRow) {
+
+      const delta = {};
+
+      for (let i = 1; i <= 5; i++) {
+
+        const key = "slot" + i;
+
+        const prevVal = Number(prevRow?.[key] || 0);
+        const nextVal = Number(nextRow?.[key] || 0);
+
+        if (nextVal > prevVal) {
+          delta[key] = nextVal - prevVal;
+        }
+      }
+
+      preview.spellSlotDelta =
+        Object.keys(delta).length ? delta : null;
+    }
+  }
+
+  /* ===== SPELL SLOT DELTA CALC END ===== */
+
+    /* ===== KNOWN SPELL PREVIEW CALC START ===== */
+
+  preview.newKnownSpellsAutoList = [];
+  preview.newKnownSpellsCount = 0;
+
+  const selectedClass = preview.selectedClassId;
+  const clsDef = classes.find(c => c.id === selectedClass);
+
+  if (clsDef) {
+
+// ===== RESET SPELL PREVIEW STATE =====
+preview.newKnownSpellsAutoList = [];
+preview.newKnownSpellsCount = 0;
+
+// Do NOT wipe selections if already set
+preview.newSpellSelections =
+  preview.newSpellSelections || [];
+  // ===== WARLOCK =====
+  if (clsDef.name === "Warlock") {
+
+    const cha = Number(character.abilities?.CHA?.value || 0);
+    const spellsToLearn = Math.max(0, Math.floor(cha / 2));
+
+    preview.newKnownSpellsCount = spellsToLearn;
+  }
+
+// ===== PRIEST =====
+else if (clsDef.name === "Priest") {
+
+  const existing =
+    (character.classes || [])
+      .find(c => c.classId === preview.selectedClassId);
+
+  const currentLevel = existing ? Number(existing.level) : 0;
+
+  const newLevel =
+    preview.levelUpType === "existing"
+      ? currentLevel + 1
+      : 1;
+
+  const deityId =
+    character.deityId;
+
+  const granted =
+    (window.deitySpells || [])
+      .filter(row =>
+        (row.deityId === "ALL" || row.deityId === deityId) &&
+        Number(row.level) === Number(newLevel)
+      )
+      .map(row => row.spellId);
+
+  preview.newKnownSpellsAutoList = granted || [];
+}
+
+// ===== WIZARD =====
+else if (clsDef.name === "Wizard") {
+
+  const existing =
+    (character.classes || [])
+      .find(c => c.classId === preview.selectedClassId);
+
+  const currentLevel = existing ? Number(existing.level) : 0;
+
+  const newLevel =
+    preview.levelUpType === "existing"
+      ? currentLevel + 1
+      : 1;
+
+  // Only grant spells when taking Wizard as a NEW class at level 1
+  if (preview.levelUpType === "new" && newLevel === 1) {
+
+    const intScore =
+      Number(character.abilities?.INT?.value || 0);
+
+    preview.newKnownSpellsCount = intScore;
+
+  } else {
+
+    preview.newKnownSpellsCount = 0;
+  }
+}
+  }
+
+  /* ===== KNOWN SPELL PREVIEW CALC END ===== */
+
   /* ===== FEAT CALC END ===== */
 
 }
@@ -7426,6 +7783,9 @@ const levelUpType =
 renderLevelUpSkills();
 renderLevelUpABI();
 renderLevelUpFeats();
+renderLevelUpSpells();
+renderLevelUpKnownSpells();
+updateLevelUpConfirmState();
 /* ===== LEVEL UP INITIAL RENDER CYCLE END ===== */
 }
 
@@ -7476,28 +7836,6 @@ const canIncrease =
 
   container.innerHTML = html;
 
-const confirmBtn = document.getElementById("levelUpConfirmBtn");
-if (confirmBtn) {
-
-  const needsSkills = preview.skillPointsRemaining !== 0;
-
-  const needsClass = !preview.selectedClassId;
-
-  const needsABI =
-    preview.hasABI && !preview.abiSelection;
-
-  const needsFeats =
-    preview.featsRequired > 0 &&
-    (!preview.featSelections ||
-     preview.featSelections.filter(f => !!f).length < preview.featsRequired);
-
-  confirmBtn.disabled =
-    needsSkills ||
-    needsClass ||
-    needsABI ||
-    needsFeats;
-}
-
   container.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("click", function() {
 
@@ -7527,6 +7865,9 @@ if (dir === "+" &&
 renderLevelUpSkills();
 renderLevelUpABI();
 renderLevelUpFeats();
+renderLevelUpSpells();
+renderLevelUpKnownSpells();
+updateLevelUpConfirmState();
 /* ===== LEVEL UP RENDER CYCLE END ===== */
     });
   });
@@ -7742,6 +8083,7 @@ function renderLevelUpFeats() {
       preview.featSelections[index] = this.value || null;
 
       renderLevelUpFeats();
+updateLevelUpConfirmState();
     });
 
   });
@@ -7749,6 +8091,453 @@ function renderLevelUpFeats() {
 }
 
 /* ===== LEVEL UP FEAT PREVIEW END ===== */
+
+/* ===== LEVEL UP CONFIRM STATE START ===== */
+
+function updateLevelUpConfirmState() {
+
+  const preview = character?.levelUpInProgress;
+  const confirmBtn = document.getElementById("levelUpConfirmBtn");
+  if (!preview || !confirmBtn) return;
+
+  const needsSkills = preview.skillPointsRemaining !== 0;
+  const needsClass = !preview.selectedClassId;
+  const needsABI = preview.hasABI && !preview.abiSelection;
+  const needsFeats =
+    preview.featsRequired > 0 &&
+    (!preview.featSelections ||
+     preview.featSelections.filter(f => !!f).length < preview.featsRequired);
+
+  confirmBtn.disabled =
+    needsSkills ||
+    needsClass ||
+    needsABI ||
+    needsFeats;
+}
+
+/* ===== LEVEL UP CONFIRM STATE END ===== */
+
+/* ===== LEVEL UP SPELL PREVIEW START ===== */
+
+function renderLevelUpSpells() {
+
+  const container = document.getElementById("levelUpSpellSection");
+  if (!container) return;
+  if (!character || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+
+  if (!preview.spellSlotDelta) {
+    container.innerHTML = "";
+    return;
+  }
+
+  let html = `
+    <div style="margin-bottom:10px;">
+      <strong>Spell Slot Increases</strong>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:6px;">
+  `;
+
+  for (let i = 1; i <= 5; i++) {
+
+    const key = "slot" + i;
+    const val = preview.spellSlotDelta[key] || 0;
+
+    if (val > 0) {
+
+      html += `
+        <div style="
+          border:2px solid #8b7dbe;
+          background:#634fa2;
+          color:#d8d2e7;
+          padding:8px;
+          border-radius:8px;
+          text-align:center;
+        ">
+          <div style="font-size:12px;">
+            Level ${i}
+          </div>
+          <div style="font-weight:bold;">
+            +${val}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  html += `</div>`;
+
+  container.innerHTML = html;
+}
+
+/* ===== LEVEL UP SPELL PREVIEW END ===== */
+
+/* ===== LEVEL UP KNOWN SPELL PREVIEW START ===== */
+
+function renderLevelUpKnownSpells() {
+
+  const container = document.getElementById("levelUpSpellSection");
+  if (!container) return;
+
+  container.innerHTML = ""; // Always clear previous class output
+
+  if (!character || !character.levelUpInProgress) return;
+
+  const preview = character.levelUpInProgress;
+  const clsDef = classes.find(c => c.id === preview.selectedClassId);
+  if (!clsDef) return;
+
+  let html = "";
+
+  // ===== WARLOCK =====
+  if (
+  (clsDef.name === "Warlock" && preview.newKnownSpellsCount > 0) ||
+  (clsDef.name === "Wizard" && preview.newKnownSpellsCount > 0)
+) {
+
+    preview.newSpellSelections =
+      preview.newSpellSelections || [];
+
+    const currentSpells = character.personalSpells || [];
+
+const warlockLevel = (() => {
+  const existing =
+    (character.classes || [])
+      .find(c => c.classId === preview.selectedClassId);
+
+  const currentLevel = existing ? Number(existing.level) : 0;
+
+  return preview.levelUpType === "existing"
+    ? currentLevel + 1
+    : 1;
+})();
+
+/* ===== CLASS SPELL FILTER START ===== */
+
+let availableSpells = [];
+
+if (clsDef.name === "Warlock") {
+
+  availableSpells =
+    (window.spellbook || []).filter(s => {
+
+      const spellLevel = Number(s.level || 0);
+
+      const isCantrip =
+        s.class === "CAN";
+
+      const isWarSpell =
+        s.class === "WAR" &&
+        spellLevel <= warlockLevel;
+
+      return (
+        (isCantrip || isWarSpell) &&
+        !currentSpells.includes(s.id) &&
+        !preview.newSpellSelections.includes(s.id)
+      );
+
+    });
+
+}
+else if (clsDef.name === "Wizard") {
+
+  availableSpells =
+    (window.spellbook || []).filter(s => {
+
+      const spellLevel = Number(s.level || 0);
+
+      const isCantrip =
+        s.class === "CAN";
+
+      const isWizSpell =
+        s.class === "WIZ" &&
+        spellLevel === 1;
+
+      return (
+        (isCantrip || isWizSpell) &&
+        !currentSpells.includes(s.id) &&
+        !preview.newSpellSelections.includes(s.id)
+      );
+
+    });
+
+}
+
+/* ===== CLASS SPELL FILTER END ===== */
+
+    const selectedSpells =
+      (preview.newSpellSelections || [])
+        .filter(id => !!id)
+        .map(id =>
+          (window.spellbook || [])
+            .find(s => s.id === id)
+        )
+        .filter(s => !!s);
+
+    html += `
+      <div style="margin-top:20px;">
+        <strong>New Spells Selected (${selectedSpells.length} / ${preview.newKnownSpellsCount})</strong>
+      </div>
+
+      <div style="
+        border:2px solid #8b7dbe;
+        border-radius:10px;
+        padding:12px;
+        margin-top:8px;
+        background:#d8d2e7;
+        color:#634fa2;
+      ">
+        ${
+          selectedSpells.length
+            ? selectedSpells.map(s => `
+                <div style="margin-bottom:16px;">
+
+                  <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                  ">
+                    <strong>${s.name}</strong>
+                    <button data-remove-spell="${s.id}"
+                      style="
+                        background:#634fa2;
+                        color:#d8d2e7;
+                        border:2px solid #8b7dbe;
+                        border-radius:6px;
+                        padding:4px 8px;
+                        cursor:pointer;
+                      ">
+                      Remove
+                    </button>
+                  </div>
+
+                  <div style="margin-top:6px; font-size:14px;">
+                    ${s.effectText || ""}
+                  </div>
+
+                </div>
+              `).join("")
+            : "<div>No spells selected yet</div>"
+        }
+      </div>
+    `;
+
+    html += `
+      <div style="margin-top:20px;">
+        <strong>Spellbook</strong>
+      </div>
+      <div style="
+        border:2px solid #8b7dbe;
+        border-radius:10px;
+        padding:12px;
+        margin-top:8px;
+        background:#d8d2e7;
+        color:#634fa2;
+      ">
+        ${
+          currentSpells.length
+? currentSpells.map(id => {
+    const spell = (window.spellbook || [])
+      .find(s => s.id === id);
+
+    if (!spell) return "";
+
+    return `
+      <div style="margin-bottom:10px;">
+        <strong>
+          ${spell.name} (${spell.class} ${spell.level})
+        </strong><br>
+        <div style="font-size:13px;">
+          ${spell.effectText || ""}
+        </div>
+      </div>
+    `;
+  }).join("")
+            : "<div>No known spells</div>"
+        }
+      </div>
+
+      <div style="margin-top:20px;">
+        <strong>Book of Magic</strong><br>
+        Choose ${preview.newKnownSpellsCount} new spells.
+      </div>
+      <div style="
+        border:2px solid #8b7dbe;
+        border-radius:10px;
+        padding:12px;
+        margin-top:8px;
+        background:#634fa2;
+        color:#d8d2e7;
+        max-height:200px;
+        overflow-y:auto;
+      ">
+        ${
+availableSpells.map(s => `
+  <div style="margin-bottom:16px;">
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    ">
+      <div>
+        <strong>${s.name}</strong>
+        <span style="font-size:12px; margin-left:8px;">
+          (${s.class} ${s.level})
+        </span>
+      </div>
+
+      <button data-add-spell="${s.id}"
+        style="
+          background:#d8d2e7;
+          color:#634fa2;
+          border:2px solid #8b7dbe;
+          border-radius:6px;
+          padding:4px 8px;
+          cursor:pointer;
+        ">
+        Add
+      </button>
+    </div>
+
+    <div style="
+      margin-top:6px;
+      font-size:14px;
+    ">
+      ${s.effectText || ""}
+    </div>
+
+  </div>
+`).join("")
+        }
+      </div>
+    `;
+  }
+
+  // ===== PRIEST =====
+  if (clsDef.name === "Priest" && preview.newKnownSpellsAutoList?.length) {
+
+    const deityDef =
+      (deities || [])
+        .find(d => d.id === character.deityId);
+
+    const deityName =
+      deityDef?.name || "Your deity";
+
+const grantedSpells =
+  preview.newKnownSpellsAutoList.map(id => {
+
+    const spell =
+      (window.spellbook || [])
+        .find(s => s.id === id);
+
+    if (!spell) return "";
+
+    const effect = spell.effectText || "";
+    const formula = spell.damageFormula || "";
+
+    return `
+      <div style="margin-bottom:12px;">
+        <strong>${spell.name}</strong><br>
+        ${effect}
+        ${formula ? `<br><em>${formula}</em>` : ""}
+      </div>
+    `;
+
+  }).join("");
+
+    html += `
+      <div style="
+        margin-top:20px;
+        border:2px solid #8b7dbe;
+        background:#634fa2;
+        color:#d8d2e7;
+        padding:12px;
+        border-radius:10px;
+      ">
+        <strong>${deityName} grants you the following spells:</strong>
+        <div style="margin-top:8px;">
+          ${grantedSpells || "<div>No spells granted.</div>"}
+        </div>
+      </div>
+    `;
+  }
+
+// ===== WIZARD =====
+if (clsDef.name === "Wizard") {
+
+  if (preview.newKnownSpellsCount > 0) {
+
+html += `
+  <div style="
+    margin-top:20px;
+    border:2px solid #8b7dbe;
+    background:#d8d2e7;
+    color:#634fa2;
+    padding:12px;
+    border-radius:10px;
+  ">
+    A Wizard begins their journey with INT number of spells in their spellbook.
+    <br>
+    Choose <strong>${preview.newKnownSpellsCount}</strong> spell${preview.newKnownSpellsCount === 1 ? "" : "s"}.
+  </div>
+`;
+
+  } else {
+
+    html += `
+      <div style="
+        margin-top:20px;
+        border:2px solid #8b7dbe;
+        background:#d8d2e7;
+        color:#634fa2;
+        padding:12px;
+        border-radius:10px;
+      ">
+        A Wizard only adds new spells to their spellbook through study,
+        and does not add entries to their spellbook at level up.
+      </div>
+    `;
+  }
+}
+
+  container.innerHTML = html;
+
+// ===== WARLOCK ADD HANDLER =====
+  container.querySelectorAll("[data-add-spell]")
+    .forEach(btn => {
+
+      btn.addEventListener("click", function() {
+
+        const spellId = this.dataset.addSpell;
+
+        preview.newSpellSelections =
+          preview.newSpellSelections || [];
+
+        // Prevent duplicates
+        if (preview.newSpellSelections.includes(spellId)) {
+          return;
+        }
+
+        // Enforce cap
+        if (
+          preview.newSpellSelections.length >=
+          preview.newKnownSpellsCount
+        ) {
+          return;
+        }
+
+        preview.newSpellSelections.push(spellId);
+
+        renderLevelUpKnownSpells();
+        updateLevelUpConfirmState();
+      });
+
+    });
+}
+
+/* ===== LEVEL UP KNOWN SPELL PREVIEW END ===== */
 
   </script>
 </body>

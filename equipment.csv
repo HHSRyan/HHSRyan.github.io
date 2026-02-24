@@ -1,215 +1,215 @@
-id,eqpName,eqpType,weight,hands,slots,cost,eqpDesc,Misfire,capacityQuantity,DMGorTAC,DMGTypeMaterial,Area,Effect,Save,Notes,distance
-alac,Acid Flask,alch,1,,1,5 oz silver,Glass flask filled with corrosive chemical compounds.,,,1d6 Acid,,Impact square + adjacent squares,Interacts with materials and armor per Acid rules.,DC12+LVL Dodge,,
-albu,Burnbomb,alch,1,,1,5 oz silver,Crude incendiary device that bursts into flame on impact.,,,1d6 Fire,,Impact square + adjacent squares,Ignites flammable objects and materials.,DC12+LVL Dodge,,
-alco,Corrosive Solvent,alch,0.5,,1,4 oz silver,Industrial-strength chemical used to weaken metal and bindings.,,,,,,Reduces the difficulty of forcing or picking a lock; single-use; cannot be used as a weapon.,—,,
-alfl,Flare,alch,0.5,,1,2 oz silver,Alchemical ignition stick producing intense flame and light.,,,,,,Produces bright light for 1 minute (4 rounds); visible at long distances; may ignite flammable materials; can be thrown or placed.,—,,
-alfr,Frost Flask,alch,1,,1,5 oz silver,Volatile cold compound that rapidly freezes surfaces.,,,1d6 Ice,,Impact square + adjacent squares,Targets are knocked Prone.,DC12+LVL Dodge,,
-algl,Glowstick,alch,0,,1,1 oz silver,Sealed chemical light source that glows without heat.,,,,,,Provides dim light for 1 hour; waterproof; does not ignite materials.,—,,
-alsm,Smoke Flask,alch,1,,1,3 oz silver,Flask of reactive chemicals that rapidly generate dense smoke.,,,,,Impact square + adjacent squares,Blocks normal vision for 1 minute (4 rounds); no damage or conditions.,—,,
-alsu,Sunburst,alch,0.5,,1,6 oz silver,Alchemical flash charge that emits a blinding burst of light.,,,,,Impact square + adjacent squares,Targets are Blinded for 1 round.,DC12+LVL Dodge,,
-alta,Tarbomb,alch,1,,1,5 oz silver,Heavy flask of sticky pitch that bursts outward on impact.,,,,,Impact square + adjacent squares,Targets cannot move on their next turn.,DC12+LVL Dodge,,
-amar,Arrows,ammo,1,,2,1 oz silver,Standard bow ammunition,,10,,Bolt,,,,,
-ambo,Bolts,ammo,1.5,,2,1 oz silver,Standard Autobow ammunition,,10,,Bolt,,,,,
-amsl,Sling Stones,ammo,2,,1,1 oz silver,Standard sling ammunition,,20,,Bludgeoning,,,,,
-amca,Cartridges,ammo,0.5,,1,2 oz silver,Standard firearm ammunition,,6,,Bullet,,,,,
-amsc,Scatter Cartridges,ammo,0.5,,1,2 oz silver,Shot-style cartridges,,4,,Bullet,,,,,
-amci,Cinderslugs,ammo,0.5,,1,3 oz silver,Cartridges with alchemical burn,,6,1 F,Bullet,,Fire,,,
-amco,Coldsteel Rounds,ammo,0.5,,1,3 oz silver,Cartridges with alchemical freeze,,6,1 I,Bullet,,Ice,,,
-amst,Stormshot,ammo,0.5,,1,4 oz silver,Cartridges with alchmeical shock,,6,1 E,Bullet,,Electricity,,,
-amro,Rotshot,ammo,0.5,,1,4 oz silver,Cartridges with alchemical acid,,6,1 A,Bullet,,Acid,,,
-ampi,Pitch-Tip Bolts,ammo,0.75,,2,3 oz silver,Bolts with alchemical burn,,5,1 F,Bolt,,Fire,,,
-amwh,White Frost Arrows,ammo,0.5,,2,3 oz silver,Arrows with alchemical freeze,,5,1 I,Bolt,,Ice,,,
-amsp,Sparkshot Arrows,ammo,0.5,,2,3 oz silver,Arrows with alchemical shock,,5,1 E,Bolt,,Electricity,,,
-amme,Melting Bolts,ammo,0.75,,2,3 oz silver,Bolts with alchemical acid,,5,1 A ,Bolt,,Acid,,,
-amba,Barbed Arrows,ammo,0.3,,2,3 oz silver,Arrows with barbs that cause Bleed DMG,,3,,Bullet,,Bleeding,Toughness 12 + Attacker LVL,,
-amfl,Flashbang Rounds,ammo,0.3,,1,3 oz silver,Cartirdges with extra bright flash,,3,,Bullet,,Blinded,Dodge 12 + Attacker LVL,,
-amsa,Sawtooth Rounds,ammo,0.3,,1,3 oz silver,Cartridges with carved heads that cause additional Bleed DMG,,3,,Bolt,,Bleeding,Toughness 12 + Attacker LVL,,
-amsu,Sun Bolts,ammo,0.4,,2,3 oz silver,Bolts with alchmical brightness,,3,,Bolt,,Blinded,Dodge 12 + Attacker LVL,,
-amta,Tainted Rounds,ammo,0.3,,1,3 oz silver,Poisoned cartridges,,3,,Bullet,,Poisoned,Resist 12 + Attacker LVL,,
-amve,Venom-Dipped Arrows,ammo,0.3,,2,3 oz silver,Poisoned arrows,,3,,Bolt,,Poisoned,Resist 12 + Attacker LVL,,
-arar,Armwrap Guard,armr,1,,,1 oz silver,Quilted wraps protecting forearms and elbows,,,1,Textile,Arms,,,,
-arbl,Ballistic Leggings,armr,3,,,3 oz silver,Reinforced ballistic panels layered into trousers,,,2,Ballistic,Legs,,,,
-arba,Ballistic Sleeves,armr,2,,,3 oz silver,Scavenged ballistic fabric stitched into sleeves,,,2,Ballistic,Arms,,,,
-arcb,Arm Rings,armr,4,,,3 oz silver,Linked metal rings protecting forearms,,,2,Link,Arms,,,,
-arcc,Chain Coif,armr,4,,,3 oz silver,Flexible metal links protecting head and neck,,,2,Link,Head,,,,
-arcl,Chain Leggings,armr,5,,,4 oz silver,Linked armor protecting thighs and calves,,,2,Link,Legs,,,,
-ardr,Deadlands Runner Pack*,armr,14,,,12 oz silver,Armor Pack,,,0,Pack,Pack,,,,
-arsu,Executive Protection Pack,armr,8,,,9 oz silver,Armor Pack,,,0,Pack,Pack,,,,
-arlh,Skin Cap,armr,1,,,1 oz silver,Simple padded or layered cloth cap,,,1,Textile,Head,,,,
-arlc,Skin Coat,armr,5,,,3 oz silver,Heavy layered coat with sewn reinforcement,,,2,Textile,Torso,,,,
-arld,Skin Hood,armr,2,,,1 oz silver,Hood with reinforced lining,,,1,Textile,Head,,,,
-arlj,Skin Vest,armr,4,,,2 oz silver,Fitted reinforced garment,,,2,Textile,Torso,,,,
-arle,Skin Drape,armr,3,,,1 oz silver,Draped shoulder-and-chest garment,,,1,Textile,Torso,,,,
-arme,Knightface,armr,7,,,5 oz silver,Solid metal helmet,,,3,Metal,Head,,,,
-arph,Padded Mask,armr,2,,,2 oz silver,Quilted or layered textile helm,,,2,Textile,Head,,,,
-arpr,Padded Robes,armr,4,,,1 oz silver,Thick layered robes,,,1,Textile,Torso,,,,
-arpt,Padded Trousers,armr,2,,,1 oz silver,Thick quilted pants,,,1,Textile,Legs,,,,
-arpv,Padded Vest,armr,4,,,2 oz silver,Quilted torso protection,,,2,Textile,Torso,,,,
-arrc,Reinforced Coat,armr,6,,,5 oz silver,Coat reinforced with scavenged ballistic materials,,,3,Ballistic,Torso,,,,
-arrg,Strong Jacket,armr,6,,,5 oz silver,Dense padded armor with internal reinforcement,,,3,Ballistic,Torso,,,,
-arrh,Strong Hood,armr,3,,,3 oz silver,Hood reinforced with scavenged ballistic layers,,,2,Ballistic,Head,,,,
-arro,Roadsign Chestprotecta,armr,9,,,5 oz silver,Torso armor cut from traffic or industrial signage,,,3,Metal,Torso,,,,
-arss,Scavenger Survival Pack,armr,9,,,5 oz silver,Armor Pack,,,0,Pack,Pack,,,,
-arsk,Scrapmetal Knightface,armr,5,,,3 oz silver,Crude metal plates riveted together,,,2,Metal,Head,,,,
-arsh,Scrap Plate Helm,armr,5,,,4 oz silver,Crude metal helmet made from salvaged plates and scrap.,,,1,Metal,Head,,,,
-arse,Street Enforcer Pack,armr,21,,,13 oz silver,Armor Pack,,,0,Pack,Pack,,,,
-arbr,Plated Coat,armr,10,,,5 oz silver,"Layered metal plates sewn into a heavy coat, offering solid torso protection.",,,2,Link,Torso,,,,
-arrl,Reinforced Skin Sleeves,armr,4,,,3 oz silver,Hardened leather sleeves strapped over the arms.,,,1,Textile,Arms,,,,
-arsp,Scrap Plate Greaves,armr,6,,,4 oz silver,Improvised metal greaves scavenged from scrap.,,,1,Metal,Legs,,,,
-arre,Reinforced Buckler,armr,3,,,3 oz silver,Small metal shield meant to deflect blows rather than fully block them.,,,1,Metal,Arms,,,,
-arsl,Scrap Shield,armr,8,,,5 oz silver,Heavy shield built from road signs and thick scrap metal.,,,2,Metal,Arms,,,,
-arde,Deadlands Runner Pack,arpk,,,,,Ballistic Leggings|Ballistic Sleeves|Reinforced Coat|Reinforced Hood,,,,,,,,,
-arex,Executive Protection Pack,arpk,,,,,Ballistic Sleeves|Executive Vice President Suit|Reinforced Hood,,,,,,,,,
-arsc,Scavenger Survival Pack,arpk,,,,,Armwrap Guard|Padded Helm|Padded Trousers|Padded Vest,,,,,,,,,
-arst,Street Enforcer Pack,arpk,,,,,Chain Bracers|Chain Coif|Chain Leggings|Scrapplate Vest,,,,,,,,,
-clas,Ashcloak,clth,3,,,3 oz silver,"Long, soot-stained cloak common among scavengers and travelers.",,,1,Textile,,,,,
-clca,Canvas Duster,clth,7,,,6 oz silver,Heavy coat made from tent fabric or industrial canvas.,,,2,Textile,,,,,
-cldu,Dust Robes,clth,4,,,3 oz silver,"Loose, layered robes worn in dry and harsh regions.",,,1,Textile,,,,,
-clex,Executive Relics Suit,clth,4,,,12 oz silver,Preserved or meticulously restored pre-Fall suit worn as a symbol of authority.,,,1,Textile,,,,,
-clfa,Faded Fatigues,clth,4,,,4 oz silver,"Pre-Fall military or utility clothing, heavily worn.",,,1,Textile,,,,,
-clgi,Gilded Authority Attire,clth,6,,,15 oz silver,Tailored formal wear with rare fabrics and subtle ornamentation signaling wealth and power.,,,2,Textile,,,,,
-clho,Hooded Wraps,clth,2,,,2 oz silver,"Cloth wraps covering head, neck, and shoulders.",,,1,Textile,,,,,
-clpa,Patchwork Coat,clth,6,,,3 oz silver,Coat assembled from multiple mismatched fabrics.,,,1,Textile,,,,,
-clrc,Reinforced Cold-Weather Clothes,clth,9,,,7 oz silver,Insulated reinforced clothing for cold and exposed regions.,,,2,Textile,,,,,
-clrd,Reinforced Dustwear,clth,7,,,6 oz silver,Reinforced wraps and layers designed to keep out ash and grit.,,,2,Textile,,,,,
-clrs,Reinforced Scavenger Gear,clth,7,,,5 oz silver,Patchwork clothing reinforced with scrap and thick stitching.,,,2,Textile,,,,,
-clrt,Reinforced Traveler’s Clothes,clth,7,,,6 oz silver,Layered travel clothing reinforced at seams and joints.,,,2,Textile,,,,,
-clre,Reinforced Workwear,clth,7,,,6 oz silver,Heavy-duty reinforced labor clothing built to take abuse.,,,2,Textile,,,,,
-clro,Road Skins,clth,8,,,6 oz silver,Hardened work clothes scavenged from transport crews.,,,2,Textile,,,,,
-clsc,Scrapworker Overalls,clth,6,,,4 oz silver,Utility overalls favored by mechanics and builders.,,,1,Textile,,,,,
-clst,Street Clothes,clth,3,,,1 oz silver,"Simple everyday garments, patched and worn from constant use.",,,0,Textile,,,,,
-clwa,Deadlands Poncho,clth,3,,,2 oz silver,Waterproofed poncho made from tarp or treated cloth.,,,1,Textile,,,,,
-coch,Chest Holster,cont,1,,1,1 oz silver,Quickdraw chest rig,,,,,,,,,
-cofa,Fanny Pack,cont,1,,3,2 oz silver,A small waist-worn pouch worn at the front or side of the body. Holds up to three 1-slot items for immediate access without opening a backpack.,,,,,,,,,
-cofi,Field Satchel,cont,3,,6,4 oz silver,"A shoulder-worn bag used for carrying documents, tools, or compact gear. Favored by scouts and messengers who need fast access while moving.",,,,,,,,,
-cohi,Hip Holster,cont,1,,1,1 oz silver,Quickdraw sidearm,,,,,,,,,
-copo,Potion Bandolier,cont,2,,9,3 oz silver,Worn container that consolidates potions; 3 potions per slot while worn.,,,,,,,,,
-cosh,Shield Sling,cont,1,,1,1 oz silver,Carry shield,,,,,,,,,
-cosn,Snoogans Sack (Magical),cont,4,,12,15 oz silver,A magically expanded container whose interior space is far larger than its exterior. Items stored inside do not add to Total Weight; only the sack’s own weight counts. Accessing contents requires opening the sack.,,,,,,,,,
-cosp,Spear Case,cont,2,,4,3 oz silver,Long weapon container,,,,,,,,,
-coto,Tome Case,cont,3,,6,3 oz silver,Reinforced case that consolidates tomes; 2 tomes per slot while stored.,,,,,,,,,
-cowe,Weapon Sling,cont,1,,1,1 oz silver,Carry long weapon,,,,,,,,,
-geba,Battery,genr,0,,0,3 oz silver,Salvaged or refurbished battery used to power battery-operated equipment; moderately rare and difficult to replace.,,,,,,,,,
-gebl,Battery Lantern,genr,4,,2,7 oz silver,Battery-powered lantern that provides steady light for approximately 8 hours before the battery is depleted.,,,,,,,,,
-geco,Component Bag,genr,1,,1,1 oz silver,Holds all negligible spell components; components stored inside do not occupy slots individually.,,,,,,,,,
-gecr,Crowbar,genr,5,,2,3 oz silver,"Sturdy metal bar used for leverage; reduces Difficulty by 1 when forcing something open, and reduces Difficulty by 2 when attempting to break a lock with a STR check.",,,,,,,,,
-gedi,Disguise Materials,genr,1,,1,1 oz silver,"Pigments, cloth pieces, padding, and accessories used to alter appearance; grants +2 to Bluff checks to pass as someone else.",,,,,,,,,
-gefi,First Aid Supplies,genr,1,,1,1 oz silver,Bandages and salves used to end non-fear conditions; applying during combat requires a Large Action.,,,,,,,,,
-gela,Lantern,genr,2,,2,1 oz silver,"Provides steady illumination, casting light out to 30 feet.",,,,,,,,,
-gels,Lockpick Set (10),genr,1,,1,3 oz silver,"Set of ten lockpicks; whenever a Lockpick skill check fails, one pick breaks.",,,,,,,,,
-gelo,Lockpick,genr,0.1,,1,1 oz silver,"Fine tools used to manipulate locks, traps, and small mechanisms.",,,,,,,,5 Lockpicks fit in 1 slot,
-gema,Manacles,genr,4,,1,5 oz silver,Metal restraints designed to secure wrists or ankles.,,,,,,,,,
-gero,Rope (50 ft),genr,8,,2,3 oz silver,"Heavy-duty rope used for climbing, hauling, or securing objects.",,,,,,,,,
-gesi,Signal Flare,genr,0.5,,1,2 oz silver,"Bright flare visible up to 1 mile line-of-sight, used for signaling or marking locations.",,,,,,,,,
-geto,Torch,genr,1,,1,1 oz silver,Pitch-soaked torch that provides bright light for approximately 30 minutes before burning out.,,,,,,,,,
-getr,Tracking Tools,genr,1.5,,1,1 oz silver,"Measuring string, chalk, and observation aids used to follow tracks and disturbed terrain.",,,,,,,,,
-gewh,Whistle,genr,0,,0,1 oz silver,Loud signaling whistle audible up to 500 ft in open terrain.,,,,,,,,,
-gubl,Blunderbuß,guns,8,2,3,8 oz silver,Scatter firearm,2,1,1d8,Bullets and Bolts,,,,,15
-guco,BFG,guns,8,2,4,10 oz silver,Short double-barrel scatter firearm designed for brutal close-range power.,2,2,1d8+1,Bullets and Bolts,,,,,50
-gude,Lil'Pop Pop,guns,1,1,1,4 oz silver,"Tiny, easily concealed single-shot pistol that is unreliable but discreet.",3,1,1d4,Bullets and Bolts,,,,,30
-gule,Lever Longun,guns,8,2,3,12 oz silver,Compact repeating firearm with smooth cycling and moderate range.,1,6,1d8,Bullets and Bolts,,,,,100
-gulo,Longun,guns,9,2,4,20 oz silver,Long-barreled single-shot rifle built for accuracy at extended range.,1,1,1d8+1,Bullets and Bolts,,,,,150
-gupe,Pepperer,guns,3,1,2,6 oz silver,Multi-barrel rotating handgun with short range and heavy trigger pull.,2,4,1d6+1,Bullets and Bolts,,,,,25
-gupi,Handgun,guns,3,1,1,7 oz silver,Common sidearm valued for reliability and ease of use.,1,6,1d6+1,Bullets and Bolts,,,,,60
-guri,Shoulder Gun,guns,9,2,3,9 oz silver,"Simple, sturdy long gun with solid range and stopping power.",1,1,1d8,Bullets and Bolts,,,,,80
-haun,Unarmed,ha2h,0,1,0,0,Anyone that is untrained attempting to hit.,,,1d2,Bludgeoning,,,,,
-habr,Knuckleduster,ha2h,1,1,1,2 oz silver,Metal knuckle guards that harden punches without increasing reach.,,,1,Bludgeoning,,,,,
-hakn,Love Spikes,ha2h,1,1,1,2 oz silver,Spiked knuckles designed to puncture flesh at close range.,,,1,Piercing/Slashing,,,,,
-kibe,Beast Handling Kit,kits,4,,2,7 oz silver,"Difficulty −1 when calming, restraining, or transporting animals or mutated creatures. Includes 3 sedative doses and 2 restraint cords. Sedative: spend one to attempt to calm or subdue a creature without combat; on a failure it becomes Drowsy. Restraint cord: spend one to bind a creature, preventing escape until broken.",,,,,,,,,
-kico,Command Kit,kits,3,,2,8 oz silver,"Once per encounter, grant +1 to one ally’s next roll. Includes 5 signal markers; spend one to apply the bonus to an additional ally in the same encounter.",,,,,,,,,
-kiex,Exploration Kit,kits,4,,2,6 oz silver,"Difficulty −1 when exploring ruins, tunnels, or unstable structures. Includes 5 probe charges; spend one to automatically detect one hazard without a roll.",,,,,,,,,
-kifi,First Aid Kit,kits,2,,2,5 oz silver,End non-fear Conditions on a target. Includes 5 medical charges; spend one to also restore 1d6 HP or stabilize a dying target.,,,,,,,,,
-kiri,Ritual Kit,kits,3,,2,9 oz silver,Required to attempt ritual spellcasting safely. Includes 5 ritual components; spend one to prevent a ritual mishap or backlash.,,,,,,,,,
-kisc,Scout’s Kit,kits,3,,2,6 oz silver,Difficulty −1 to Sneak or Perception when observing unseen. Includes 5 smoke pellets; spend one to gain automatic concealment for one round.,,,,,,,,,
-kisu,Survival Kit,kits,4,,2,7 oz silver,"Difficulty −1 to Survival when foraging, camping, or navigating. Includes 5 survival charges; spend one to avoid environmental damage or fatigue for one scene.",,,,,,,,,
-kith,Thief’s Toolkit,kits,3,,2,8 oz silver,Required for lockpicking and trap manipulation. Includes 10 lockpicks; spend one to reroll a failed lock or trap check.,,,,,,,,,
-kitr,Tracking Kit,kits,3,,2,6 oz silver,Difficulty −1 to Survival/Tracking when following trails. Includes 5 tracking tags; spend one to extend a trail for one additional day even in bad conditions.,,,,,,,,,
-mewr,BadAxe,mele,5,1,4,10 oz silver,Heavy fighting axe,,,1d8,Piercing/Slashing,,,,,
-meca,Splitter,mele,7,2,4,12 oz silver,Broad axe for powerful swings,,,1d8+1,Piercing/Slashing,,,,,
-mema,Maul,mele,9,2,4,12 oz silver,Heavy crushing weapon,,,1d8+1,Bludgeoning,,,,,
-mewa,War Pick,mele,4,1,4,10 oz silver,Narrow pick head,,,1d8,Piercing/Slashing,,,,,
-megl,Poky Stick,mele,8,2,4,12 oz silver,Long polearm,,,1d8,Piercing/Slashing,,,,,
-mehe,Heavy Club,mele,6,1,3,4 oz silver,Reinforced blunt weapon,,,1d6+1,Bludgeoning,,,,,
-mecl,Thickstick,mele,4,1,3,2 oz silver,Heavy cudgel or reinforced stick used for blunt force attacks.,,,1d6,Bludgeoning,,,,,
-mefi,Ramblade,mele,1,1,1,4 oz silver,Short blade suited for stabbing or quick slashing in close combat.,,,1d4+1,Piercing/Slashing,,,,,
-meda,Shank,mele,1,1,1,3 oz silver,Short blade suited for stabbing or quick slashing in close combat.,,,1d4,Piercing/Slashing,,,,,
-meha,Lilaxe,mele,3,1,2,3 oz silver,One-handed axe usable as both a weapon and a practical tool.,,,1d6,Piercing/Slashing,,,,,
-melo,Bigblade,mele,4,2,4,8 oz silver,Balanced long sword capable of thrusting or slashing attacks.,,,1d8,Piercing/Slashing,,,,,
-mepi,Pipe Hammer,mele,5,2,2,4 oz silver,Improvised hammer weapon assembled from scrap materials.,,,1d6,Bludgeoning,,,,,
-mesh,Lilblade,mele,2,1,2,4 oz silver,"Machete-length blade used for fast, aggressive strikes.",,,1d6,Piercing/Slashing,,,,,
-mesp,Poky Long Stick,mele,5,2,4,3 oz silver,Long thrusting weapon that keeps enemies at bay.,,,1d6,Piercing/Slashing,,,,,
-mest,Stick,mele,5,2,4,1 oz silver,Solid pole used for sweeping strikes and defensive spacing.,,,1d6,Bludgeoning,,,,,
-metr,Trained Unarmed Attack,mele,0,1,0,0,"Represents formal combat training in strikes, grapples, and body mechanics; available only to classes trained for unarmed fighting (such as knights and brawlers).",,,1d6,Bludgeoning,,,,,
-poan,Any Cantrip Spell,potn,0.5,,1,2 oz silver,Allows the effects of any cantrip spell to be applied as a potion.,,,,,,,,,
-pomi,Minor Heal,potn,0.5,,1,3 oz silver,Restores health to the drinker as per the effects of Minor Heal.,,,,,,,,,
-poma,Marked by the Divine,potn,0.5,,1,3 oz silver,"Applies the effects of Marked by the Divine, placing a visible divine mark upon the target.",,,,,,,,,
-posl,Slick,potn,0.5,,1,2 oz silver,"Applies the effects of Slick, coating an area in a dangerously slippery substance.",,,,,,,,,
-pomo,Moderate Heal,potn,0.5,,1,5 oz silver,Restores health to the drinker as per the effects of Moderate Heal.,,,,,,,,,
-poel,Elemental Ward,potn,0.5,,1,5 oz silver,"Applies the effects of Elemental Ward, granting protection against elemental harm.",,,,,,,,,
-posi,Sight Beyond Light,potn,0.5,,1,5 oz silver,"Applies the effects of Sight Beyond Light, granting vision in total darkness.",,,,,,,,,
-pofr,Frank’s Lament,potn,0.5,,1,3 oz silver,"Applies the effects of Frank’s Lament, dealing damage while inflicting crushing supernatural sorrow.",,,,,,,,,
-powe,Weight of Damnation,potn,0.5,,1,3 oz silver,"Applies the effects of Weight of Damnation, imposing crushing spiritual weight on the target.",,,,,,,,,
-pobl,Blinded by the Light,potn,0.5,,1,4 oz silver,"Applies the effects of Blinded by the Light, overwhelming the target’s senses with searing light.",,,,,,,,,
-poth,They’re Going to Get You,potn,0.5,,1,4 oz silver,"Applies the effects of They’re Going to Get You, invoking paranoia and the sense of imminent pursuit.",,,,,,,,,
-pova,Vacuum of Sound,potn,0.5,,1,4 oz silver,"Applies the effects of Vacuum of Sound, creating an unnatural zone of silence.",,,,,,,,,
-rncr,Autobow,rngd,6,2,3,5 oz silver,Mechanical bow that fires bolts with steady force and accuracy.,,,1d6,Piercing/Slashing,,,,,
-rnha,Lil'Autobow,rngd,3,1,2,6 oz silver,Compact Autobow intended for short-range shots.,,,1d4,Piercing/Slashing,,,,,
-rnhe,Big Autobow,rngd,9,2,3,9 oz silver,"High-tension Autobow capable of powerful, penetrating shots.",,,1d8,Piercing/Slashing,,,,,
-rnlo,Bigbow,rngd,3,2,4,7 oz silver,Tall bow requiring strength and training to use effectively.,,,1d8,Piercing/Slashing,,,,,
-rnre,Curvy Bow,rngd,3,2,4,5 oz silver,Compact bow with curved limbs for ease of handling.,,,1d6,Piercing/Slashing,,,,,
-rnsh,Lilbow,rngd,2,2,3,4 oz silver,Light bow designed for quick shots at short distances.,,,1d6,Piercing/Slashing,,,,,
-rnsl,Rock Chucker,rngd,1,1,1,1 oz silver,Simple cord sling used to hurl stones with surprising force.,,,1d3,Bludgeoning,,,,,STR x 10ft (max 40ft.)
-rnne,Net,thrw,4,1,1,8 oz silver,Weighted net,,,1d4,Bludgeoning,,,,,STR × 10 ft (max 80 ft)
-rnim,Improvised Thrown Object,thrw,1,1,0,0,"Rocks, scrap, or debris thrown in desperation or opportunity.",,,1 HP,Bludgeoning,,,,,STR × 5 ft (max 40 ft)
-rnja,Throwy Poky,thrw,3,1,4,2 oz silver,Balanced throwing spear built for distance and penetration.,,,1d6,Piercing/Slashing,,,,,STR × 5 ft (max 40 ft)
-rnta,Tossaxe,thrw,3,1,3,2 oz silver,Balanced axe designed to be hurled accurately.,,,1d6,Piercing/Slashing,,,,,STR × 5 ft (max 40 ft)
-rntk,Tossblades,thrw,1,1,2,2 oz silver,"Small, balanced knives intended for throwing at close range.",,,1d3+1,Piercing/Slashing,,,,,STR × 5 ft (max 40 ft)
-toan,Any Cantrip Spell,tome,1,,2,5 oz silver,Allows casting or scribing of any cantrip spell.,,,,,,,,,STR × 5 ft (max 40 ft)
-tobe,Be Still,tome,1,,2,5 oz silver,"Allows casting or scribing of Be Still, forcibly immobilizing the target through divine stillness.",,,,,,,,,
-tobl,Blinded by the Light,tome,1,,2,8 oz silver,"Allows casting or scribing of Blinded by the Light, overwhelming the target’s senses with searing light.",,,,,,,,,
-toel,Elemental Ward,tome,1,,2,8 oz silver,"Allows casting or scribing of Elemental Ward, granting protection against elemental harm.",,,,,,,,,
-tofr,Frank’s Lament,tome,1,,2,6 oz silver,"Allows casting or scribing of Frank’s Lament, a spell that deals damage while inflicting crushing supernatural sorrow.",,,,,,,,,
-toma,Marked by the Divine,tome,1,,2,15 oz silver,"Allows casting or scribing of Marked by the Divine, placing a visible divine mark upon the target.",,,,,,,,,
-tomi,Minor Heal,tome,1,,2,15 oz silver,"Allows casting or scribing of Minor Heal, restoring a small amount of health to the target.",,,,,,,,,
-tomo,Moderate Heal,tome,1,,2,14 oz silver,"Allows casting or scribing of Moderate Heal, restoring a moderate amount of health to the target.",,,,,,,,,
-tosl,Slick,tome,1,,2,9 oz silver,"Allows casting or scribing of Slick, coating an area in a dangerously slippery substance.",,,,,,,,,
-tote,Telepathy,tome,1,,2,9 oz silver,"Allows casting or scribing of Telepathy, enabling silent mental communication between minds.",,,,,,,,,
-toth,They’re Going to Get You,tome,1,,2,11 oz silver,"Allows casting or scribing of They’re Going to Get You, invoking paranoia and the sense of imminent pursuit.",,,,,,,,,
-tova,Vacuum of Sound,tome,1,,2,11 oz silver,"Allows casting or scribing of Vacuum of Sound, creating an unnatural zone of silence.",,,,,,,,,
-towe,Weight of Damnation,tome,1,,2,12 oz silver,"Allows casting or scribing of Weight of Damnation, imposing crushing spiritual weight on the target.",,,,,,,,,
-impm,Improvised Melee Weapon,mele,0,1,0,0,"Broken tools, scrap, furniture, or debris used as a weapon; effectiveness and suitability are at the GM’s discretion.",,,1d3,Bludgeoning,,,,,
-ntrl001,Insect Bite,ntrl,0,0,0,0,Natural insect bite,0,0,1d4+TR,Piercing/Slashing,0,0,0,0,5
-ntrl002,Incisors,ntrl,0,0,0,0,Natural gnawing bite,0,0,1d4+TR,Piercing/Slashing,0,0,0,0,5
-ntrl003,Leg Swipe,ntrl,0,0,0,0,Natural limb strike,0,0,1d4,Bludgeoning,0,0,0,0,5
-ntrl004,Pincers,ntrl,0,0,0,0,Natural pincer attack,0,0,1d4+2,Piercing/Slashing,0,0,0,0,5
-ntrl005,Sting,ntrl,0,0,0,0,Natural stinger attack,0,0,1d6+TR +P,Piercing/Slashing,0,0,0,0,10
-ntrl006,Swarm Bites,ntrl,0,0,0,0,Swarm natural attack,0,0,1d6,Piercing/Slashing,0,0,0,0,5
-ntrl007,Undead Chomp,ntrl,0,0,0,0,Natural undead bite,0,0,1d6+TR,Piercing/Slashing,0,0,0,0,5
-ntrl008,Undead Swipe,ntrl,0,0,0,0,Natural undead swipe,0,0,1d4+TR,Piercing/Slashing,0,0,0,0,5
-ntrl009,Animal Bite,ntrl,0,0,0,0,Natural bite attack,0,0,1d6+TR,Piercing/Slashing,0,0,0,0,5
-ntrl010,Animal Claws,ntrl,0,0,0,0,Natural claw attack,0,0,1d6,Piercing/Slashing,0,0,0,0,5
-ntrl011,Elemental Smack,ntrl,0,0,0,0,Natural elemental hit,0,0,1d8+2 F,Fire,0,0,0,0,5
-ntrl012,Body Whip,ntrl,0,0,0,0,Natural body strike,0,0,1d8+2,Bludgeoning,0,0,0,0,5
-ntrl013,Arm Lashing,ntrl,0,0,0,0,Natural limb strike,0,0,1d6+2,Bludgeoning,0,0,0,0,5
-ntrl014,Crush,ntrl,0,0,0,0,Natural crush attack,0,0,1d6+2,Bludgeoning,0,0,0,0,5
-ntrl015,Tongue Whip,ntrl,0,0,0,0,Natural tongue strike,0,0,1d8,Bludgeoning,0,0,0,0,10
-ntrl016,Beak,ntrl,0,0,0,0,Natural beak attack,0,0,1d8+3,Piercing/Slashing,0,0,0,0,5
-ntrl017,Talons,ntrl,0,0,0,0,Natural talon attack,0,0,1d8,Piercing/Slashing,0,0,0,0,5
-ntrl018,Stone Sheath,ntrl,0,0,0,0,Stone Layer of protection,0,0,2,Textile,0,0,0,0,0
-ntrl019,Thick Hide,ntrl,0,0,0,0,Naturally thick hide,0,0,1,Textile,0,0,0,0,0
-ntrl020,Thick Skull,ntrl,0,0,0,0,Natrually thick bone,0,0,1,Textile,0,0,0,0,0
-ntrl021,Elemental Shield,ntrl,0,0,0,0,A shield made of the element the spawn is made of,0,0,1,Textile,0,0,0,0,0
-ntrl022,Cranial Dome,ntrl,0,0,0,0,A naturally grown clear dome,0,0,2,Metal,0,0,0,0,0
-ntrl023,Exposed Brain,ntrl,0,0,0,0,An exposed brain,0,0,-1,Textile,0,0,0,0,0
-ntrl024,Hardened Jaw,ntrl,0,0,0,0,An extremely hard jaw built for crushing stone,0,0,2,Textile,0,0,0,0,0
-ntrl025,Frogtooth,ntrl,0,0,0,0,"Not teeth exactly, but still hurts a lot",0,0,1d6+TR,Bludgeoning,0,0,0,0,0
-ntrl026,Lashing Arm,ntrl,0,0,0,0,A long arm used like a whip.,0,0,1d6+2,Bludgeoning,0,0,0,0,0
-npc001,Cult Uniform,clth,4,0,1,0,The heavy robes of the cult,0,0,1,Textile,0,0,0,0,0
-npc002,Gravedigger's Coat,clth,3,0,1,0,A heavy leather coat,0,0,1,Textile,0,0,0,0,0
-npc003,Reinforced Cult Uniform,clth,5,0,1,0,Reinfoced cult clothing,0,0,2,Textile,0,0,0,0,0
-npc004,Reinforced Skin Sleeve,clth,5,0,1,0,Reinforced leather,0,0,3,Textile,0,0,0,0,0
-npc005,Reinforced Rags,clth,3,0,1,0,Rags with some reinforcement,0,0,1,Textile,0,0,0,0,0
-npc006,Reinforced Robes,clth,3,0,1,0,A reinforced robe,0,0,1,Textile,0,0,0,0,0
-npc007,Sharpened Shovel,mele,3,2,3,5 oz silver,A gravediggers shovel that has been sharpened on both sides.,0,0,1d8+1,Piercing/Slashing,0,0,0,0,0
-npc008,Steel Ball,thrw,0.5,1,1,10 oz silver,"A metal ball about the size of a baseball, perfectly chrome and shiny",,,1d4+TR,Bludgeoning,0,0,0,0,0
-npc009,Phantastic Ball,thrw,0.5,1,1,20 oz silver,"A metal ball about the size of a baseball, perfectly chrome and shiny, with blades that pop out before impact",,,1d8+TR,Piercing/Slashing,0,0,0,0,0
+id,eqpName,eqpType,consumesSelf,weight,hands,slots,cost,eqpDesc,Misfire,capacityQuantity,DMGorTAC,DMGTypeMaterial,Area,Effect,Save,Notes,distance
+alac,Acid Flask,alch,FALSE,1,,1,5 oz silver,Glass flask filled with corrosive chemical compounds.,,,1d6 Acid,,Impact square + adjacent squares,Interacts with materials and armor per Acid rules.,DC12+LVL Dodge,,
+albu,Burnbomb,alch,FALSE,1,,1,5 oz silver,Crude incendiary device that bursts into flame on impact.,,,1d6 Fire,,Impact square + adjacent squares,Ignites flammable objects and materials.,DC12+LVL Dodge,,
+alco,Corrosive Solvent,alch,FALSE,0.5,,1,4 oz silver,Industrial-strength chemical used to weaken metal and bindings.,,,,,,Reduces the difficulty of forcing or picking a lock; single-use; cannot be used as a weapon.,—,,
+alfl,Flare,alch,FALSE,0.5,,1,2 oz silver,Alchemical ignition stick producing intense flame and light.,,,,,,Produces bright light for 1 minute (4 rounds); visible at long distances; may ignite flammable materials; can be thrown or placed.,—,,
+alfr,Frost Flask,alch,FALSE,1,,1,5 oz silver,Volatile cold compound that rapidly freezes surfaces.,,,1d6 Ice,,Impact square + adjacent squares,Targets are knocked Prone.,DC12+LVL Dodge,,
+algl,Glowstick,alch,FALSE,0,,1,1 oz silver,Sealed chemical light source that glows without heat.,,,,,,Provides dim light for 1 hour; waterproof; does not ignite materials.,—,,
+alsm,Smoke Flask,alch,FALSE,1,,1,3 oz silver,Flask of reactive chemicals that rapidly generate dense smoke.,,,,,Impact square + adjacent squares,Blocks normal vision for 1 minute (4 rounds); no damage or conditions.,—,,
+alsu,Sunburst,alch,FALSE,0.5,,1,6 oz silver,Alchemical flash charge that emits a blinding burst of light.,,,,,Impact square + adjacent squares,Targets are Blinded for 1 round.,DC12+LVL Dodge,,
+alta,Tarbomb,alch,FALSE,1,,1,5 oz silver,Heavy flask of sticky pitch that bursts outward on impact.,,,,,Impact square + adjacent squares,Targets cannot move on their next turn.,DC12+LVL Dodge,,
+amar,Arrows,ammo,FALSE,1,,2,1 oz silver,Standard bow ammunition,,10,,Bolt,,,,,
+ambo,Bolts,ammo,FALSE,1.5,,2,1 oz silver,Standard Autobow ammunition,,10,,Bolt,,,,,
+amsl,Sling Stones,ammo,FALSE,2,,1,1 oz silver,Standard sling ammunition,,20,,Bludgeoning,,,,,
+amca,Cartridges,ammo,FALSE,0.5,,1,2 oz silver,Standard firearm ammunition,,6,,Bullet,,,,,
+amsc,Scatter Cartridges,ammo,FALSE,0.5,,1,2 oz silver,Shot-style cartridges,,4,,Bullet,,,,,
+amci,Cinderslugs,ammo,FALSE,0.5,,1,3 oz silver,Cartridges with alchemical burn,,6,1 F,Bullet,,Fire,,,
+amco,Coldsteel Rounds,ammo,FALSE,0.5,,1,3 oz silver,Cartridges with alchemical freeze,,6,1 I,Bullet,,Ice,,,
+amst,Stormshot,ammo,FALSE,0.5,,1,4 oz silver,Cartridges with alchmeical shock,,6,1 E,Bullet,,Electricity,,,
+amro,Rotshot,ammo,FALSE,0.5,,1,4 oz silver,Cartridges with alchemical acid,,6,1 A,Bullet,,Acid,,,
+ampi,Pitch-Tip Bolts,ammo,FALSE,0.75,,2,3 oz silver,Bolts with alchemical burn,,5,1 F,Bolt,,Fire,,,
+amwh,White Frost Arrows,ammo,FALSE,0.5,,2,3 oz silver,Arrows with alchemical freeze,,5,1 I,Bolt,,Ice,,,
+amsp,Sparkshot Arrows,ammo,FALSE,0.5,,2,3 oz silver,Arrows with alchemical shock,,5,1 E,Bolt,,Electricity,,,
+amme,Melting Bolts,ammo,FALSE,0.75,,2,3 oz silver,Bolts with alchemical acid,,5,1 A ,Bolt,,Acid,,,
+amba,Barbed Arrows,ammo,FALSE,0.3,,2,3 oz silver,Arrows with barbs that cause Bleed DMG,,3,,Bullet,,Bleeding,Toughness 12 + Attacker LVL,,
+amfl,Flashbang Rounds,ammo,FALSE,0.3,,1,3 oz silver,Cartirdges with extra bright flash,,3,,Bullet,,Blinded,Dodge 12 + Attacker LVL,,
+amsa,Sawtooth Rounds,ammo,FALSE,0.3,,1,3 oz silver,Cartridges with carved heads that cause additional Bleed DMG,,3,,Bolt,,Bleeding,Toughness 12 + Attacker LVL,,
+amsu,Sun Bolts,ammo,FALSE,0.4,,2,3 oz silver,Bolts with alchmical brightness,,3,,Bolt,,Blinded,Dodge 12 + Attacker LVL,,
+amta,Tainted Rounds,ammo,FALSE,0.3,,1,3 oz silver,Poisoned cartridges,,3,,Bullet,,Poisoned,Resist 12 + Attacker LVL,,
+amve,Venom-Dipped Arrows,ammo,FALSE,0.3,,2,3 oz silver,Poisoned arrows,,3,,Bolt,,Poisoned,Resist 12 + Attacker LVL,,
+arar,Armwrap Guard,armr,FALSE,1,,,1 oz silver,Quilted wraps protecting forearms and elbows,,,1,Textile,Arms,,,,
+arbl,Ballistic Leggings,armr,FALSE,3,,,3 oz silver,Reinforced ballistic panels layered into trousers,,,2,Ballistic,Legs,,,,
+arba,Ballistic Sleeves,armr,FALSE,2,,,3 oz silver,Scavenged ballistic fabric stitched into sleeves,,,2,Ballistic,Arms,,,,
+arcb,Arm Rings,armr,FALSE,4,,,3 oz silver,Linked metal rings protecting forearms,,,2,Link,Arms,,,,
+arcc,Chain Topper,armr,FALSE,4,,,3 oz silver,Flexible metal links protecting head and neck,,,2,Link,Head,,,,
+arcl,Chain Leggings,armr,FALSE,5,,,4 oz silver,Linked armor protecting thighs and calves,,,2,Link,Legs,,,,
+ardr,Deadlands Runner Pack*,armr,FALSE,14,,,12 oz silver,Armor Pack,,,0,Pack,Pack,,,,
+arsu,Executive Protection Pack,armr,FALSE,8,,,9 oz silver,Armor Pack,,,0,Pack,Pack,,,,
+arlh,Skin Cap,armr,FALSE,1,,,1 oz silver,Simple padded or layered cloth cap,,,1,Textile,Head,,,,
+arlc,Skin Coat,armr,FALSE,5,,,3 oz silver,Heavy layered coat with sewn reinforcement,,,2,Textile,Torso,,,,
+arld,Skin Hood,armr,FALSE,2,,,1 oz silver,Hood with reinforced lining,,,1,Textile,Head,,,,
+arlj,Skin Vest,armr,FALSE,4,,,2 oz silver,Fitted reinforced garment,,,2,Textile,Torso,,,,
+arle,Skin Drape,armr,FALSE,3,,,1 oz silver,Draped shoulder-and-chest garment,,,1,Textile,Torso,,,,
+arme,Knightface,armr,FALSE,7,,,5 oz silver,Solid metal helmet,,,3,Metal,Head,,,,
+arph,Padded Mask,armr,FALSE,2,,,2 oz silver,Quilted or layered textile helm,,,2,Textile,Head,,,,
+arpr,Padded Robes,armr,FALSE,4,,,1 oz silver,Thick layered robes,,,1,Textile,Torso,,,,
+arpt,Padded Trousers,armr,FALSE,2,,,1 oz silver,Thick quilted pants,,,1,Textile,Legs,,,,
+arpv,Padded Vest,armr,FALSE,4,,,2 oz silver,Quilted torso protection,,,2,Textile,Torso,,,,
+arrc,Reinforced Coat,armr,FALSE,6,,,5 oz silver,Coat reinforced with scavenged ballistic materials,,,3,Ballistic,Torso,,,,
+arrg,Strong Jacket,armr,FALSE,6,,,5 oz silver,Dense padded armor with internal reinforcement,,,3,Ballistic,Torso,,,,
+arrh,Strong Hood,armr,FALSE,3,,,3 oz silver,Hood reinforced with scavenged ballistic layers,,,2,Ballistic,Head,,,,
+arro,Roadsign Chestprotecta,armr,FALSE,9,,,5 oz silver,Torso armor cut from traffic or industrial signage,,,3,Metal,Torso,,,,
+arss,Scavenger Survival Pack,armr,FALSE,9,,,5 oz silver,Armor Pack,,,0,Pack,Pack,,,,
+arsk,Scrapmetal Knightface,armr,FALSE,5,,,3 oz silver,Crude metal plates riveted together,,,2,Metal,Head,,,,
+arsh,Scrap Plate Helm,armr,FALSE,5,,,4 oz silver,Crude metal helmet made from salvaged plates and scrap.,,,1,Metal,Head,,,,
+arse,Street Enforcer Pack,armr,FALSE,21,,,13 oz silver,Armor Pack,,,0,Pack,Pack,,,,
+arbr,Plated Coat,armr,FALSE,10,,,5 oz silver,"Layered metal plates sewn into a heavy coat, offering solid torso protection.",,,2,Link,Torso,,,,
+arrl,Reinforced Skin Sleeves,armr,FALSE,4,,,3 oz silver,Hardened leather sleeves strapped over the arms.,,,1,Textile,Arms,,,,
+arsp,Scrap Plate Greaves,armr,FALSE,6,,,4 oz silver,Improvised metal greaves scavenged from scrap.,,,1,Metal,Legs,,,,
+arre,Reinforced Buckler,armr,FALSE,3,,,3 oz silver,Small metal shield meant to deflect blows rather than fully block them.,,,1,Metal,Arms,,,,
+arsl,Scrap Shield,armr,FALSE,8,,,5 oz silver,Heavy shield built from road signs and thick scrap metal.,,,2,Metal,Arms,,,,
+arde,Deadlands Runner Pack,arpk,FALSE,,,,,Ballistic Leggings|Ballistic Sleeves|Reinforced Coat|Reinforced Hood,,,,,,,,,
+arex,Executive Protection Pack,arpk,FALSE,,,,,Ballistic Sleeves|Executive Vice President Suit|Reinforced Hood,,,,,,,,,
+arsc,Scavenger Survival Pack,arpk,FALSE,,,,,Armwrap Guard|Padded Helm|Padded Trousers|Padded Vest,,,,,,,,,
+arst,Street Enforcer Pack,arpk,FALSE,,,,,Chain Bracers|Chain Coif|Chain Leggings|Scrapplate Vest,,,,,,,,,
+clas,Ashcloak,clth,FALSE,3,,,3 oz silver,"Long, soot-stained cloak common among scavengers and travelers.",,,1,Textile,,,,,
+clca,Canvas Duster,clth,FALSE,7,,,6 oz silver,Heavy coat made from tent fabric or industrial canvas.,,,2,Textile,,,,,
+cldu,Dust Robes,clth,FALSE,4,,,3 oz silver,"Loose, layered robes worn in dry and harsh regions.",,,1,Textile,,,,,
+clex,Executive Relics Suit,clth,FALSE,4,,,12 oz silver,Preserved or meticulously restored pre-Fall suit worn as a symbol of authority.,,,1,Textile,,,,,
+clfa,Faded Fatigues,clth,FALSE,4,,,4 oz silver,"Pre-Fall military or utility clothing, heavily worn.",,,1,Textile,,,,,
+clgi,Gilded Authority Attire,clth,FALSE,6,,,15 oz silver,Tailored formal wear with rare fabrics and subtle ornamentation signaling wealth and power.,,,2,Textile,,,,,
+clho,Hooded Wraps,clth,FALSE,2,,,2 oz silver,"Cloth wraps covering head, neck, and shoulders.",,,1,Textile,,,,,
+clpa,Patchwork Coat,clth,FALSE,6,,,3 oz silver,Coat assembled from multiple mismatched fabrics.,,,1,Textile,,,,,
+clrc,Reinforced Cold-Weather Clothes,clth,FALSE,9,,,7 oz silver,Insulated reinforced clothing for cold and exposed regions.,,,2,Textile,,,,,
+clrd,Reinforced Dustwear,clth,FALSE,7,,,6 oz silver,Reinforced wraps and layers designed to keep out ash and grit.,,,2,Textile,,,,,
+clrs,Reinforced Scavenger Gear,clth,FALSE,7,,,5 oz silver,Patchwork clothing reinforced with scrap and thick stitching.,,,2,Textile,,,,,
+clrt,Reinforced Traveler’s Clothes,clth,FALSE,7,,,6 oz silver,Layered travel clothing reinforced at seams and joints.,,,2,Textile,,,,,
+clre,Reinforced Workwear,clth,FALSE,7,,,6 oz silver,Heavy-duty reinforced labor clothing built to take abuse.,,,2,Textile,,,,,
+clro,Road Skins,clth,FALSE,8,,,6 oz silver,Hardened work clothes scavenged from transport crews.,,,2,Textile,,,,,
+clsc,Scrapworker Overalls,clth,FALSE,6,,,4 oz silver,Utility overalls favored by mechanics and builders.,,,1,Textile,,,,,
+clst,Street Clothes,clth,FALSE,3,,,1 oz silver,"Simple everyday garments, patched and worn from constant use.",,,0,Textile,,,,,
+clwa,Deadlands Poncho,clth,FALSE,3,,,2 oz silver,Waterproofed poncho made from tarp or treated cloth.,,,1,Textile,,,,,
+coch,Chest Holster,cont,FALSE,1,,1,1 oz silver,Quickdraw chest rig,,,,,,,,,
+cofa,Fanny Pack,cont,FALSE,1,,3,2 oz silver,A small waist-worn pouch worn at the front or side of the body. Holds up to three 1-slot items for immediate access without opening a backpack.,,,,,,,,,
+cofi,Field Satchel,cont,FALSE,3,,6,4 oz silver,"A shoulder-worn bag used for carrying documents, tools, or compact gear. Favored by scouts and messengers who need fast access while moving.",,,,,,,,,
+cohi,Hip Holster,cont,FALSE,1,,1,1 oz silver,Quickdraw sidearm,,,,,,,,,
+copo,Potion Bandolier,cont,FALSE,2,,9,3 oz silver,Worn container that consolidates potions; 3 potions per slot while worn.,,,,,,,,,
+cosh,Shield Sling,cont,FALSE,1,,1,1 oz silver,Carry shield,,,,,,,,,
+cosn,Snoogans Sack (Magical),cont,FALSE,4,,12,15 oz silver,A magically expanded container whose interior space is far larger than its exterior. Items stored inside do not add to Total Weight; only the sack’s own weight counts. Accessing contents requires opening the sack.,,,,,,,,,
+cosp,Spear Case,cont,FALSE,2,,4,3 oz silver,Long weapon container,,,,,,,,,
+coto,Tome Case,cont,FALSE,3,,6,3 oz silver,Reinforced case that consolidates tomes; 2 tomes per slot while stored.,,,,,,,,,
+cowe,Weapon Sling,cont,FALSE,1,,1,1 oz silver,Carry long weapon,,,,,,,,,
+geba,Battery,genr,FALSE,0,,0,3 oz silver,Salvaged or refurbished battery used to power battery-operated equipment; moderately rare and difficult to replace.,,,,,,,,,
+gebl,Battery Lantern,genr,FALSE,4,,2,7 oz silver,Battery-powered lantern that provides steady light for approximately 8 hours before the battery is depleted.,,,,,,,,,
+geco,Component Bag,genr,FALSE,1,,1,1 oz silver,Holds all negligible spell components; components stored inside do not occupy slots individually.,,,,,,,,,
+gecr,Crowbar,genr,FALSE,5,,2,3 oz silver,"Sturdy metal bar used for leverage; reduces Difficulty by 1 when forcing something open, and reduces Difficulty by 2 when attempting to break a lock with a STR check.",,,,,,,,,
+gedi,Disguise Materials,genr,FALSE,1,,1,1 oz silver,"Pigments, cloth pieces, padding, and accessories used to alter appearance; grants +2 to Bluff checks to pass as someone else.",,,,,,,,,
+gefi,First Aid Supplies,genr,FALSE,1,,1,1 oz silver,Bandages and salves used to end non-fear conditions; applying during combat requires a Large Action.,,,,,,,,,
+gela,Lantern,genr,FALSE,2,,2,1 oz silver,"Provides steady illumination, casting light out to 30 feet.",,,,,,,,,
+gels,Lockpick Set (10),genr,FALSE,1,,1,3 oz silver,"Set of ten lockpicks; whenever a Lockpick skill check fails, one pick breaks.",,,,,,,,,
+gelo,Lockpick,genr,FALSE,0.1,,1,1 oz silver,"Fine tools used to manipulate locks, traps, and small mechanisms.",,,,,,,,5 Lockpicks fit in 1 slot,
+gema,Manacles,genr,FALSE,4,,1,5 oz silver,Metal restraints designed to secure wrists or ankles.,,,,,,,,,
+gero,Rope (50 ft),genr,FALSE,8,,2,3 oz silver,"Heavy-duty rope used for climbing, hauling, or securing objects.",,,,,,,,,
+gesi,Signal Flare,genr,FALSE,0.5,,1,2 oz silver,"Bright flare visible up to 1 mile line-of-sight, used for signaling or marking locations.",,,,,,,,,
+geto,Torch,genr,FALSE,1,,1,1 oz silver,Pitch-soaked torch that provides bright light for approximately 30 minutes before burning out.,,,,,,,,,
+getr,Tracking Tools,genr,FALSE,1.5,,1,1 oz silver,"Measuring string, chalk, and observation aids used to follow tracks and disturbed terrain.",,,,,,,,,
+gewh,Whistle,genr,FALSE,0,,0,1 oz silver,Loud signaling whistle audible up to 500 ft in open terrain.,,,,,,,,,
+gubl,Blunderbuß,guns,FALSE,8,2,3,8 oz silver,Scatter firearm,2,1,1d8,Bullets and Bolts,,,,,15
+guco,BFG,guns,FALSE,8,2,4,10 oz silver,Short double-barrel scatter firearm designed for brutal close-range power.,2,2,1d8+1,Bullets and Bolts,,,,,50
+gude,Lil'Pop Pop,guns,FALSE,1,1,1,4 oz silver,"Tiny, easily concealed single-shot pistol that is unreliable but discreet.",3,1,1d4,Bullets and Bolts,,,,,30
+gule,Lever Longun,guns,FALSE,8,2,3,12 oz silver,Compact repeating firearm with smooth cycling and moderate range.,1,6,1d8,Bullets and Bolts,,,,,100
+gulo,Longun,guns,FALSE,9,2,4,20 oz silver,Long-barreled single-shot rifle built for accuracy at extended range.,1,1,1d8+1,Bullets and Bolts,,,,,150
+gupe,Pepperer,guns,FALSE,3,1,2,6 oz silver,Multi-barrel rotating handgun with short range and heavy trigger pull.,2,4,1d6+1,Bullets and Bolts,,,,,25
+gupi,Handgun,guns,FALSE,3,1,1,7 oz silver,Common sidearm valued for reliability and ease of use.,1,6,1d6+1,Bullets and Bolts,,,,,60
+guri,Shoulder Gun,guns,FALSE,9,2,3,9 oz silver,"Simple, sturdy long gun with solid range and stopping power.",1,1,1d8,Bullets and Bolts,,,,,80
+haun,Unarmed,ha2h,FALSE,0,1,0,0,Anyone that is untrained attempting to hit.,,,1d2,Bludgeoning,,,,,
+habr,Knuckleduster,ha2h,FALSE,1,1,1,2 oz silver,Metal knuckle guards that harden punches without increasing reach.,,,1,Bludgeoning,,,,,
+hakn,Love Spikes,ha2h,FALSE,1,1,1,2 oz silver,Spiked knuckles designed to puncture flesh at close range.,,,1,Piercing/Slashing,,,,,
+kibe,Beast Handling Kit,kits,FALSE,4,,2,7 oz silver,"Difficulty −1 when calming, restraining, or transporting animals or mutated creatures. Includes 3 sedative doses and 2 restraint cords. Sedative: spend one to attempt to calm or subdue a creature without combat; on a failure it becomes Drowsy. Restraint cord: spend one to bind a creature, preventing escape until broken.",,,,,,,,,
+kico,Command Kit,kits,FALSE,3,,2,8 oz silver,"Once per encounter, grant +1 to one ally’s next roll. Includes 5 signal markers; spend one to apply the bonus to an additional ally in the same encounter.",,,,,,,,,
+kiex,Exploration Kit,kits,FALSE,4,,2,6 oz silver,"Difficulty −1 when exploring ruins, tunnels, or unstable structures. Includes 5 probe charges; spend one to automatically detect one hazard without a roll.",,,,,,,,,
+kifi,First Aid Kit,kits,FALSE,2,,2,5 oz silver,End non-fear Conditions on a target. Includes 5 medical charges; spend one to also restore 1d6 HP or stabilize a dying target.,,,,,,,,,
+kiri,Ritual Kit,kits,FALSE,3,,2,9 oz silver,Required to attempt ritual spellcasting safely. Includes 5 ritual components; spend one to prevent a ritual mishap or backlash.,,,,,,,,,
+kisc,Scout’s Kit,kits,FALSE,3,,2,6 oz silver,Difficulty −1 to Sneak or Perception when observing unseen. Includes 5 smoke pellets; spend one to gain automatic concealment for one round.,,,,,,,,,
+kisu,Survival Kit,kits,FALSE,4,,2,7 oz silver,"Difficulty −1 to Survival when foraging, camping, or navigating. Includes 5 survival charges; spend one to avoid environmental damage or fatigue for one scene.",,,,,,,,,
+kith,Thief’s Toolkit,kits,FALSE,3,,2,8 oz silver,Required for lockpicking and trap manipulation. Includes 10 lockpicks; spend one to reroll a failed lock or trap check.,,,,,,,,,
+kitr,Tracking Kit,kits,FALSE,3,,2,6 oz silver,Difficulty −1 to Survival/Tracking when following trails. Includes 5 tracking tags; spend one to extend a trail for one additional day even in bad conditions.,,,,,,,,,
+mewr,BadAxe,mele,FALSE,5,1,4,10 oz silver,Heavy fighting axe,,,1d8,Piercing/Slashing,,,,,
+meca,Splitter,mele,FALSE,7,2,4,12 oz silver,Broad axe for powerful swings,,,1d8+1,Piercing/Slashing,,,,,
+mema,Maul,mele,FALSE,9,2,4,12 oz silver,Heavy crushing weapon,,,1d8+1,Bludgeoning,,,,,
+mewa,War Pick,mele,FALSE,4,1,4,10 oz silver,Narrow pick head,,,1d8,Piercing/Slashing,,,,,
+megl,Poky Stick,mele,FALSE,8,2,4,12 oz silver,Long polearm,,,1d8,Piercing/Slashing,,,,,
+mehe,Heavy Club,mele,FALSE,6,1,3,4 oz silver,Reinforced blunt weapon,,,1d6+1,Bludgeoning,,,,,
+mecl,Thickstick,mele,FALSE,4,1,3,2 oz silver,Heavy cudgel or reinforced stick used for blunt force attacks.,,,1d6,Bludgeoning,,,,,
+mefi,Ramblade,mele,FALSE,1,1,1,4 oz silver,Short blade suited for stabbing or quick slashing in close combat.,,,1d4+1,Piercing/Slashing,,,,,
+meda,Shank,mele,FALSE,1,1,1,3 oz silver,Short blade suited for stabbing or quick slashing in close combat.,,,1d4,Piercing/Slashing,,,,,
+meha,Lilaxe,mele,FALSE,3,1,2,3 oz silver,One-handed axe usable as both a weapon and a practical tool.,,,1d6,Piercing/Slashing,,,,,
+melo,Bigblade,mele,FALSE,4,2,4,8 oz silver,Balanced long sword capable of thrusting or slashing attacks.,,,1d8,Piercing/Slashing,,,,,
+mepi,Pipe Hammer,mele,FALSE,5,2,2,4 oz silver,Improvised hammer weapon assembled from scrap materials.,,,1d6,Bludgeoning,,,,,
+mesh,Lilblade,mele,FALSE,2,1,2,4 oz silver,"Machete-length blade used for fast, aggressive strikes.",,,1d6,Piercing/Slashing,,,,,
+mesp,Poky Long Stick,mele,FALSE,5,2,4,3 oz silver,Long thrusting weapon that keeps enemies at bay.,,,1d6,Piercing/Slashing,,,,,
+mest,Stick,mele,FALSE,5,2,4,1 oz silver,Solid pole used for sweeping strikes and defensive spacing.,,,1d6,Bludgeoning,,,,,
+metr,Trained Unarmed Attack,mele,FALSE,0,1,0,0,"Represents formal combat training in strikes, grapples, and body mechanics; available only to classes trained for unarmed fighting (such as knights and brawlers).",,,1d6,Bludgeoning,,,,,
+poan,Any Cantrip Spell,potn,TRUE,0.5,,1,2 oz silver,Allows the effects of any cantrip spell to be applied as a potion.,,,,,,,,,
+pomi,Minor Heal,potn,TRUE,0.5,,1,3 oz silver,Restores health to the drinker as per the effects of Minor Heal.,,,,,,,,,
+poma,Marked by the Divine,potn,TRUE,0.5,,1,3 oz silver,"Applies the effects of Marked by the Divine, placing a visible divine mark upon the target.",,,,,,,,,
+posl,Slick,potn,TRUE,0.5,,1,2 oz silver,"Applies the effects of Slick, coating an area in a dangerously slippery substance.",,,,,,,,,
+pomo,Moderate Heal,potn,TRUE,0.5,,1,5 oz silver,Restores health to the drinker as per the effects of Moderate Heal.,,,,,,,,,
+poel,Elemental Ward,potn,TRUE,0.5,,1,5 oz silver,"Applies the effects of Elemental Ward, granting protection against elemental harm.",,,,,,,,,
+posi,Sight Beyond Light,potn,TRUE,0.5,,1,5 oz silver,"Applies the effects of Sight Beyond Light, granting vision in total darkness.",,,,,,,,,
+pofr,Frank’s Lament,potn,TRUE,0.5,,1,3 oz silver,"Applies the effects of Frank’s Lament, dealing damage while inflicting crushing supernatural sorrow.",,,,,,,,,
+powe,Weight of Damnation,potn,TRUE,0.5,,1,3 oz silver,"Applies the effects of Weight of Damnation, imposing crushing spiritual weight on the target.",,,,,,,,,
+pobl,Blinded by the Light,potn,TRUE,0.5,,1,4 oz silver,"Applies the effects of Blinded by the Light, overwhelming the target’s senses with searing light.",,,,,,,,,
+poth,They’re Going to Get You,potn,TRUE,0.5,,1,4 oz silver,"Applies the effects of They’re Going to Get You, invoking paranoia and the sense of imminent pursuit.",,,,,,,,,
+pova,Vacuum of Sound,potn,TRUE,0.5,,1,4 oz silver,"Applies the effects of Vacuum of Sound, creating an unnatural zone of silence.",,,,,,,,,
+rncr,Autobow,rngd,TRUE,6,2,3,5 oz silver,Mechanical bow that fires bolts with steady force and accuracy.,,,1d6,Piercing/Slashing,,,,,
+rnha,Lil'Autobow,rngd,FALSE,3,1,2,6 oz silver,Compact Autobow intended for short-range shots.,,,1d4,Piercing/Slashing,,,,,
+rnhe,Big Autobow,rngd,FALSE,9,2,3,9 oz silver,"High-tension Autobow capable of powerful, penetrating shots.",,,1d8,Piercing/Slashing,,,,,
+rnlo,Bigbow,rngd,FALSE,3,2,4,7 oz silver,Tall bow requiring strength and training to use effectively.,,,1d8,Piercing/Slashing,,,,,
+rnre,Curvy Bow,rngd,FALSE,3,2,4,5 oz silver,Compact bow with curved limbs for ease of handling.,,,1d6,Piercing/Slashing,,,,,
+rnsh,Lilbow,rngd,FALSE,2,2,3,4 oz silver,Light bow designed for quick shots at short distances.,,,1d6,Piercing/Slashing,,,,,
+rnsl,Rock Chucker,rngd,FALSE,1,1,1,1 oz silver,Simple cord sling used to hurl stones with surprising force.,,,1d3,Bludgeoning,,,,,STR x 10ft (max 40ft.)
+rnne,Net,thrw,TRUE,4,1,1,8 oz silver,Weighted net,,,1d4,Bludgeoning,,,,,STR × 10 ft (max 80 ft)
+rnim,Improvised Thrown Object,thrw,TRUE,1,1,0,0,"Rocks, scrap, or debris thrown in desperation or opportunity.",,,1 HP,Bludgeoning,,,,,STR × 5 ft (max 40 ft)
+rnja,Throwy Poky,thrw,TRUE,3,1,4,2 oz silver,Balanced throwing spear built for distance and penetration.,,,1d6,Piercing/Slashing,,,,,STR × 5 ft (max 40 ft)
+rnta,Tossaxe,thrw,TRUE,3,1,3,2 oz silver,Balanced axe designed to be hurled accurately.,,,1d6,Piercing/Slashing,,,,,STR × 5 ft (max 40 ft)
+rntk,Tossblades,thrw,TRUE,1,1,2,2 oz silver,"Small, balanced knives intended for throwing at close range.",,,1d3+1,Piercing/Slashing,,,,,STR × 5 ft (max 40 ft)
+toan,Any Cantrip Spell,tome,TRUE,1,,2,5 oz silver,Allows casting or scribing of any cantrip spell.,,,,,,,,,STR × 5 ft (max 40 ft)
+tobe,Be Still,tome,TRUE,1,,2,5 oz silver,"Allows casting or scribing of Be Still, forcibly immobilizing the target through divine stillness.",,,,,,,,,
+tobl,Blinded by the Light,tome,TRUE,1,,2,8 oz silver,"Allows casting or scribing of Blinded by the Light, overwhelming the target’s senses with searing light.",,,,,,,,,
+toel,Elemental Ward,tome,TRUE,1,,2,8 oz silver,"Allows casting or scribing of Elemental Ward, granting protection against elemental harm.",,,,,,,,,
+tofr,Frank’s Lament,tome,TRUE,1,,2,6 oz silver,"Allows casting or scribing of Frank’s Lament, a spell that deals damage while inflicting crushing supernatural sorrow.",,,,,,,,,
+toma,Marked by the Divine,tome,TRUE,1,,2,15 oz silver,"Allows casting or scribing of Marked by the Divine, placing a visible divine mark upon the target.",,,,,,,,,
+tomi,Minor Heal,tome,TRUE,1,,2,15 oz silver,"Allows casting or scribing of Minor Heal, restoring a small amount of health to the target.",,,,,,,,,
+tomo,Moderate Heal,tome,TRUE,1,,2,14 oz silver,"Allows casting or scribing of Moderate Heal, restoring a moderate amount of health to the target.",,,,,,,,,
+tosl,Slick,tome,TRUE,1,,2,9 oz silver,"Allows casting or scribing of Slick, coating an area in a dangerously slippery substance.",,,,,,,,,
+tote,Telepathy,tome,TRUE,1,,2,9 oz silver,"Allows casting or scribing of Telepathy, enabling silent mental communication between minds.",,,,,,,,,
+toth,They’re Going to Get You,tome,TRUE,1,,2,11 oz silver,"Allows casting or scribing of They’re Going to Get You, invoking paranoia and the sense of imminent pursuit.",,,,,,,,,
+tova,Vacuum of Sound,tome,TRUE,1,,2,11 oz silver,"Allows casting or scribing of Vacuum of Sound, creating an unnatural zone of silence.",,,,,,,,,
+towe,Weight of Damnation,tome,TRUE,1,,2,12 oz silver,"Allows casting or scribing of Weight of Damnation, imposing crushing spiritual weight on the target.",,,,,,,,,
+impm,Improvised Melee Weapon,mele,TRUE,0,1,0,0,"Broken tools, scrap, furniture, or debris used as a weapon; effectiveness and suitability are at the GM’s discretion.",,,1d3,Bludgeoning,,,,,
+ntrl001,Insect Bite,ntrl,FALSE,0,0,0,0,Natural insect bite,0,0,1d4+TR,Piercing/Slashing,0,0,0,0,5
+ntrl002,Incisors,ntrl,FALSE,0,0,0,0,Natural gnawing bite,0,0,1d4+TR,Piercing/Slashing,0,0,0,0,5
+ntrl003,Leg Swipe,ntrl,FALSE,0,0,0,0,Natural limb strike,0,0,1d4,Bludgeoning,0,0,0,0,5
+ntrl004,Pincers,ntrl,FALSE,0,0,0,0,Natural pincer attack,0,0,1d4+2,Piercing/Slashing,0,0,0,0,5
+ntrl005,Sting,ntrl,FALSE,0,0,0,0,Natural stinger attack,0,0,1d6+TR +P,Piercing/Slashing,0,0,0,0,10
+ntrl006,Swarm Bites,ntrl,FALSE,0,0,0,0,Swarm natural attack,0,0,1d6,Piercing/Slashing,0,0,0,0,5
+ntrl007,Undead Chomp,ntrl,FALSE,0,0,0,0,Natural undead bite,0,0,1d6+TR,Piercing/Slashing,0,0,0,0,5
+ntrl008,Undead Swipe,ntrl,FALSE,0,0,0,0,Natural undead swipe,0,0,1d4+TR,Piercing/Slashing,0,0,0,0,5
+ntrl009,Animal Bite,ntrl,FALSE,0,0,0,0,Natural bite attack,0,0,1d6+TR,Piercing/Slashing,0,0,0,0,5
+ntrl010,Animal Claws,ntrl,FALSE,0,0,0,0,Natural claw attack,0,0,1d6,Piercing/Slashing,0,0,0,0,5
+ntrl011,Elemental Smack,ntrl,FALSE,0,0,0,0,Natural elemental hit,0,0,1d8+2 F,Fire,0,0,0,0,5
+ntrl012,Body Whip,ntrl,FALSE,0,0,0,0,Natural body strike,0,0,1d8+2,Bludgeoning,0,0,0,0,5
+ntrl013,Arm Lashing,ntrl,FALSE,0,0,0,0,Natural limb strike,0,0,1d6+2,Bludgeoning,0,0,0,0,5
+ntrl014,Crush,ntrl,FALSE,0,0,0,0,Natural crush attack,0,0,1d6+2,Bludgeoning,0,0,0,0,5
+ntrl015,Tongue Whip,ntrl,FALSE,0,0,0,0,Natural tongue strike,0,0,1d8,Bludgeoning,0,0,0,0,10
+ntrl016,Beak,ntrl,FALSE,0,0,0,0,Natural beak attack,0,0,1d8+3,Piercing/Slashing,0,0,0,0,5
+ntrl017,Talons,ntrl,FALSE,0,0,0,0,Natural talon attack,0,0,1d8,Piercing/Slashing,0,0,0,0,5
+ntrl018,Stone Sheath,ntrl,FALSE,0,0,0,0,Stone Layer of protection,0,0,2,Textile,0,0,0,0,0
+ntrl019,Thick Hide,ntrl,FALSE,0,0,0,0,Naturally thick hide,0,0,1,Textile,0,0,0,0,0
+ntrl020,Thick Skull,ntrl,FALSE,0,0,0,0,Natrually thick bone,0,0,1,Textile,0,0,0,0,0
+ntrl021,Elemental Shield,ntrl,FALSE,0,0,0,0,A shield made of the element the spawn is made of,0,0,1,Textile,0,0,0,0,0
+ntrl022,Cranial Dome,ntrl,FALSE,0,0,0,0,A naturally grown clear dome,0,0,2,Metal,0,0,0,0,0
+ntrl023,Exposed Brain,ntrl,FALSE,0,0,0,0,An exposed brain,0,0,-1,Textile,0,0,0,0,0
+ntrl024,Hardened Jaw,ntrl,FALSE,0,0,0,0,An extremely hard jaw built for crushing stone,0,0,2,Textile,0,0,0,0,0
+ntrl025,Frogtooth,ntrl,FALSE,0,0,0,0,"Not teeth exactly, but still hurts a lot",0,0,1d6+TR,Bludgeoning,0,0,0,0,0
+ntrl026,Lashing Arm,ntrl,FALSE,0,0,0,0,A long arm used like a whip.,0,0,1d6+2,Bludgeoning,0,0,0,0,0
+npc001,Cult Uniform,clth,FALSE,4,0,1,0,The heavy robes of the cult,0,0,1,Textile,0,0,0,0,0
+npc002,Gravedigger's Coat,clth,FALSE,3,0,1,0,A heavy leather coat,0,0,1,Textile,0,0,0,0,0
+npc003,Reinforced Cult Uniform,clth,FALSE,5,0,1,0,Reinfoced cult clothing,0,0,2,Textile,0,0,0,0,0
+npc004,Reinforced Skin Sleeve,clth,FALSE,5,0,1,0,Reinforced leather,0,0,3,Textile,0,0,0,0,0
+npc005,Reinforced Rags,clth,FALSE,3,0,1,0,Rags with some reinforcement,0,0,1,Textile,0,0,0,0,0
+npc006,Reinforced Robes,clth,FALSE,3,0,1,0,A reinforced robe,0,0,1,Textile,0,0,0,0,0
+npc007,Sharpened Shovel,mele,FALSE,3,2,3,5 oz silver,A gravediggers shovel that has been sharpened on both sides.,0,0,1d8+1,Piercing/Slashing,0,0,0,0,0
+npc008,Steel Ball,thrw,TRUE,0.5,1,1,10 oz silver,"A metal ball about the size of a baseball, perfectly chrome and shiny",,,1d4+TR,Bludgeoning,0,0,0,0,0
+npc009,Phantastic Ball,thrw,TRUE,0.5,1,1,20 oz silver,"A metal ball about the size of a baseball, perfectly chrome and shiny, with blades that pop out before impact",,,1d8+TR,Piercing/Slashing,0,0,0,0,0
